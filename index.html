@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#ff593d" />
+  <link rel="icon" href="data:," />
+  <title>Buoy — Your local AI operating partner</title>
+  <meta name="description" content="Buoy helps Oceanside businesses cut software costs, modernize customer operations, equip their teams with AI, improve their digital presence, and earn more repeat business." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #102f35;
+      --paper: #fff8ec;
+      --orange: #ff593d;
+      --yellow: #ffd448;
+      --aqua: #a7e6da;
+      --blue: #b9dff1;
+      --line: rgba(16,47,53,.23);
+      --shadow: 0 18px 50px rgba(16,47,53,.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Bricolage Grotesque", system-ui, sans-serif;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, a { font: inherit; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topline {
+      background: var(--ink);
+      color: white;
+      font: 500 12px/1.3 "DM Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-note { font-weight: 700; font-size: 15px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { text-decoration: none; font-size: 14px; font-weight: 700; }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 22px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--orange);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
+    .button.dark { background: var(--ink); color: white; box-shadow: 4px 4px 0 var(--orange); }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .8fr);
+      gap: clamp(48px, 8vw, 110px);
+      align-items: center;
+      min-height: 720px;
+      padding: 82px 0 88px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 9px;
+      align-items: center;
+      font: 500 12px/1.3 "DM Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 20px;
+    }
+    .eyebrow::before { content: ""; width: 36px; height: 3px; background: var(--orange); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      font-size: clamp(54px, 7.1vw, 104px);
+      line-height: .89;
+      letter-spacing: -.065em;
+      margin-bottom: 28px;
+      max-width: 790px;
+      text-wrap: balance;
+    }
+    .hero-copy > p {
+      max-width: 620px;
+      font-size: clamp(19px, 2.1vw, 25px);
+      line-height: 1.35;
+      margin-bottom: 30px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .micro { font: 500 12px/1.45 "DM Mono", monospace; max-width: 210px; }
+    .demo-stage {
+      position: relative;
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+    }
+    .sun {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: 2px solid var(--ink);
+      right: 0;
+      top: 26px;
+    }
+    .wave {
+      position: absolute;
+      left: -10%; right: -20%; bottom: 28px;
+      height: 180px;
+      background: var(--aqua);
+      border: 2px solid var(--ink);
+      border-radius: 50% 55% 0 0 / 32% 38% 0 0;
+      transform: rotate(-3deg);
+    }
+    .phone {
+      position: relative;
+      z-index: 2;
+      width: min(325px, 86%);
+      background: var(--ink);
+      padding: 11px;
+      border: 2px solid var(--ink);
+      border-radius: 36px;
+      box-shadow: 12px 14px 0 rgba(16,47,53,.18);
+      transform: rotate(3deg);
+    }
+    .screen {
+      background: #fffdf7;
+      border-radius: 27px;
+      padding: 22px 18px 20px;
+      min-height: 462px;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen-head { display: flex; justify-content: space-between; font: 500 10px/1.3 "DM Mono", monospace; margin-bottom: 27px; }
+    .screen-title { text-align: center; font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .screen-sub { text-align: center; font-size: 11px; opacity: .68; margin-bottom: 24px; }
+    .bubble { max-width: 86%; padding: 12px 14px; border-radius: 18px; font-size: 13px; line-height: 1.35; margin-bottom: 10px; }
+    .bubble.in { background: #e8eceb; align-self: flex-start; border-bottom-left-radius: 5px; }
+    .bubble.out { background: var(--aqua); align-self: flex-end; border-bottom-right-radius: 5px; }
+    .status-card { margin-top: auto; border: 1px solid var(--line); padding: 13px; border-radius: 14px; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; }
+    .status-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--orange); display: grid; place-items: center; font-weight: 900; }
+    .status-card strong { display: block; font-size: 12px; }
+    .status-card span { font: 400 10px/1.4 "DM Mono", monospace; opacity: .68; }
+    .float-tag {
+      position: absolute;
+      z-index: 3;
+      top: 38px;
+      left: -4px;
+      background: white;
+      border: 2px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+      padding: 11px 14px;
+      border-radius: 8px;
+      font: 500 11px/1.3 "DM Mono", monospace;
+      transform: rotate(-5deg);
+    }
+    .ticker { overflow: hidden; border-block: 2px solid var(--ink); background: var(--orange); }
+    .ticker-inner {
+      width: max-content;
+      display: flex;
+      gap: 34px;
+      padding: 15px 0;
+      font-size: 19px;
+      font-weight: 800;
+      animation: drift 25s linear infinite;
+    }
+    .ticker-inner span::after { content: "✦"; margin-left: 34px; }
+    @keyframes drift { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .ticker-inner { animation: none; } }
+    .section { padding: clamp(78px, 10vw, 130px) 0; }
+    .section-head { display: grid; grid-template-columns: .75fr 1.25fr; gap: 44px; align-items: start; margin-bottom: 62px; }
+    .section-head h2 { font-size: clamp(42px, 5vw, 72px); line-height: .98; letter-spacing: -.045em; margin: 0; text-wrap: balance; }
+    .section-head p { font-size: 20px; max-width: 600px; margin: 8px 0 0; }
+    .flow {
+      counter-reset: steps;
+      border-top: 2px solid var(--ink);
+    }
+    .flow-row {
+      counter-increment: steps;
+      display: grid;
+      grid-template-columns: 90px 1fr 1.1fr;
+      gap: 28px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+    }
+    .flow-row::before { content: "0" counter(steps); font: 500 16px/1.3 "DM Mono", monospace; color: var(--orange); }
+    .flow-row h3 { font-size: clamp(25px, 2.8vw, 36px); line-height: 1.05; margin: 0; letter-spacing: -.025em; }
+    .flow-row p { margin: 0; font-size: 17px; max-width: 520px; }
+    .why-now {
+      background: var(--orange);
+      border-block: 2px solid var(--ink);
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: clamp(40px, 8vw, 110px);
+      align-items: start;
+    }
+    .why-grid h2 {
+      font-size: clamp(48px, 6.4vw, 88px);
+      line-height: .92;
+      letter-spacing: -.055em;
+      margin: 0;
+      text-wrap: balance;
+    }
+    .why-copy { max-width: 720px; }
+    .why-copy p { font-size: clamp(18px, 2vw, 22px); line-height: 1.48; margin-bottom: 24px; }
+    .why-copy p:last-child {
+      margin: 34px 0 0;
+      padding-top: 26px;
+      border-top: 2px solid var(--ink);
+      font-weight: 700;
+    }
+    .start-small { background: var(--ink); color: white; }
+    .start-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: clamp(38px, 8vw, 100px); align-items: start; }
+    .start-grid > div:first-child { position: sticky; top: 36px; }
+    .start-grid h2 { font-size: clamp(46px, 6vw, 82px); line-height: .95; letter-spacing: -.05em; }
+    .start-grid > div > p { font-size: 20px; max-width: 530px; color: rgba(255,255,255,.82); }
+    .stack { display: grid; gap: 13px; }
+    .stack-item {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 15px;
+      align-items: center;
+      background: white;
+      color: var(--ink);
+      border-radius: 13px;
+      padding: 18px;
+      transform: rotate(var(--r, 0deg));
+    }
+    .stack-item:nth-child(4n + 1) { --r: .65deg; background: white; }
+    .stack-item:nth-child(4n + 2) { --r: -1deg; background: var(--aqua); }
+    .stack-item:nth-child(4n + 3) { --r: .75deg; background: var(--yellow); }
+    .stack-item:nth-child(4n) { --r: -.55deg; background: var(--blue); }
+    .stack-icon { width: 52px; height: 52px; border: 2px solid var(--ink); border-radius: 50%; display: grid; place-items: center; font: 700 14px/1 "DM Mono", monospace; }
+    .stack-item strong { display: block; font-size: 17px; }
+    .stack-item small { display: block; font: 400 11px/1.4 "DM Mono", monospace; margin-top: 3px; }
+    .stack-item b { font: 500 11px/1.3 "DM Mono", monospace; text-transform: uppercase; }
+    .local { background: var(--blue); }
+    .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 9vw, 120px); align-items: end; }
+    .local h2 { font-size: clamp(48px, 7vw, 88px); line-height: .92; letter-spacing: -.055em; max-width: 720px; }
+    .local-copy { font-size: 20px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 26px; }
+    .chip { background: var(--paper); border: 1px solid var(--ink); border-radius: 999px; padding: 9px 14px; font: 500 12px/1.2 "DM Mono", monospace; }
+    .offer { background: var(--yellow); }
+    .offer-shell { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: stretch; }
+    .offer-copy { padding: 18px 0; }
+    .offer-copy h2 { font-size: clamp(46px, 6vw, 78px); line-height: .95; letter-spacing: -.05em; max-width: 730px; }
+    .offer-copy > p { font-size: 19px; max-width: 590px; }
+    .offer-list { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 12px; }
+    .offer-list li { display: flex; gap: 12px; align-items: baseline; font-weight: 700; }
+    .offer-list li::before { content: "→"; color: var(--orange); }
+    .price-card { background: var(--paper); border: 2px solid var(--ink); padding: clamp(26px, 4vw, 44px); box-shadow: 9px 9px 0 var(--ink); display: flex; flex-direction: column; justify-content: space-between; }
+    .price-kicker { font: 500 12px/1.3 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .06em; }
+    .price { font-size: clamp(60px, 7vw, 92px); font-weight: 800; letter-spacing: -.065em; line-height: 1; margin: 24px 0 6px; }
+    .price small { font-size: 17px; letter-spacing: 0; }
+    .terms { font: 400 12px/1.55 "DM Mono", monospace; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 26px; }
+    .value-anchor { margin: 26px 0 0; padding: 18px 20px; background: var(--orange); border: 2px solid var(--ink); font-size: 18px; font-weight: 800; line-height: 1.35; transform: rotate(-.7deg); }
+    .reply-note { margin-top: 28px; padding: 16px 18px; background: var(--aqua); border: 1px solid var(--ink); font-weight: 700; }
+    .guarantee {
+      margin-top: 28px;
+      padding: 22px;
+      background: var(--aqua);
+      border: 2px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+      transform: rotate(.45deg);
+    }
+    .guarantee-kicker { font: 500 11px/1.3 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
+    .guarantee h3 { font-size: clamp(25px, 2.6vw, 34px); line-height: 1; letter-spacing: -.035em; margin: 10px 0 12px; }
+    .guarantee-main { font-size: 17px; font-weight: 800; line-height: 1.35; margin-bottom: 12px; }
+    .guarantee-fair { font: 400 11px/1.5 "DM Mono", monospace; margin: 0; }
+    .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 56px; }
+    .faq-grid h2 { font-size: clamp(42px, 5vw, 70px); letter-spacing: -.045em; line-height: 1; }
+    details { border-top: 1px solid var(--line); padding: 22px 0; }
+    details:last-child { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; list-style: none; font-size: 19px; font-weight: 800; padding-right: 34px; position: relative; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; position: absolute; right: 2px; top: -3px; font: 500 28px/1 "DM Mono", monospace; }
+    details[open] summary::after { content: "–"; }
+    details p { margin: 15px 45px 0 0; max-width: 680px; }
+    footer { background: var(--orange); border-top: 2px solid var(--ink); padding: 42px 0; }
+    .footer-line { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
+    .footer-line strong { font-size: clamp(30px, 4vw, 54px); letter-spacing: -.04em; line-height: 1; max-width: 720px; }
+    .footer-line span { font: 500 11px/1.5 "DM Mono", monospace; text-align: right; }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 62px 0 76px; }
+      .hero-copy { text-align: left; }
+      .demo-stage { min-height: 500px; }
+      .section-head, .why-grid, .start-grid, .local-grid, .offer-shell, .faq-grid { grid-template-columns: 1fr; }
+      .start-grid > div:first-child { position: static; }
+      .section-head { gap: 20px; }
+      .flow-row { grid-template-columns: 62px 1fr; }
+      .flow-row p { grid-column: 2; }
+      .nav-links a:not(.button) { display: none; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 28px, 1180px); }
+      .topline { font-size: 10px; }
+      .nav { min-height: 62px; }
+      .nav-note { font-size: 13px; }
+      .nav .button { min-height: 42px; padding: 0 16px; font-size: 13px; box-shadow: 3px 3px 0 var(--ink); }
+      h1 { font-size: clamp(50px, 17vw, 72px); }
+      .hero-copy > p { font-size: 18px; }
+      .hero-actions { align-items: flex-start; flex-direction: column; }
+      .button { width: 100%; }
+      .demo-stage { min-height: 460px; }
+      .sun { width: 300px; height: 300px; right: -44px; }
+      .phone { width: 280px; }
+      .screen { min-height: 420px; }
+      .float-tag { top: 25px; left: 0; }
+      .section { padding: 72px 0; }
+      .flow-row { grid-template-columns: 44px 1fr; gap: 14px; padding: 28px 0; }
+      .flow-row p { font-size: 15px; }
+      .stack-item { grid-template-columns: 44px 1fr; }
+      .stack-icon { width: 44px; height: 44px; }
+      .stack-item b { grid-column: 2; }
+      .price-card { box-shadow: 6px 6px 0 var(--ink); }
+      .footer-line { align-items: flex-start; flex-direction: column; }
+      .footer-line span { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">Oceanside first · 10 founding spots</div>
+
+  <header class="wrap nav" aria-label="Primary navigation">
+    <div class="nav-note">Practical AI. Local support.</div>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#opportunities">What we fix</a>
+      <a class="button" href="#founding">Founding offer</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow">Your local AI operating partner</div>
+        <h1 id="hero-title">Run a sharper business with AI.</h1>
+        <p>Buoy becomes your shop’s AI employee — cutting busywork, catching missed revenue, and improving the way your team works for a small monthly retainer.</p>
+        <div class="hero-actions">
+          <a class="button dark" href="#opportunities">See where AI fits <span aria-hidden="true">↓</span></a>
+          <div class="micro">We find the highest-value move, build it, train your team, and keep improving it.</div>
+        </div>
+      </div>
+
+      <div class="demo-stage" aria-label="Illustration of a missed-call text-back conversation">
+        <div class="sun" aria-hidden="true"></div>
+        <div class="wave" aria-hidden="true"></div>
+        <div class="float-tag">ONE POSSIBLE FIRST WIN</div>
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-head"><span>BUOY DEMO</span><span>● ONLINE</span></div>
+            <div class="screen-title">Customer follow-up</div>
+            <div class="screen-sub">Missed call → useful next step</div>
+            <div class="bubble out">Sorry we missed you — are you looking to book service, get a quote, or talk to someone?</div>
+            <div class="bubble in">A quote. My car is making a grinding sound.</div>
+            <div class="bubble out">Got it. I’ll have the shop call you first thing tomorrow. What’s the best time?</div>
+            <div class="status-card">
+              <div class="status-dot">✓</div>
+              <div><strong>Callback captured</strong><span>Owner review queued</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-inner">
+        <span>AFTER HOURS</span><span>LEAN STACK</span><span>FULL PICTURE</span><span>AI CREW</span><span>GET FOUND</span><span>REGULARS</span><span>FIVE STARS</span><span>QUOTE RESCUE</span><span>FULL BOOK</span><span>CALL INTEL</span>
+        <span>AFTER HOURS</span><span>LEAN STACK</span><span>FULL PICTURE</span><span>AI CREW</span><span>GET FOUND</span><span>REGULARS</span><span>FIVE STARS</span><span>QUOTE RESCUE</span><span>FULL BOOK</span><span>CALL INTEL</span>
+      </div>
+    </div>
+
+    <section class="section wrap" id="how" aria-labelledby="how-title">
+      <div class="section-head">
+        <h2 id="how-title">Make AI useful, not ornamental.</h2>
+        <p>No giant “AI transformation.” Buoy works like an AI employee: we learn how the business runs, choose the best build-or-buy moves, and make them stick with the people doing the work.</p>
+      </div>
+      <div class="flow">
+        <article class="flow-row">
+          <h3>Find the drag</h3>
+          <p>A focused audit maps software spend, scattered customer context, repetitive work, weak handoffs, and missed opportunities to bring customers back.</p>
+        </article>
+        <article class="flow-row">
+          <h3>Build, buy, or connect</h3>
+          <p>We decide what deserves a lightweight custom tool, what should stay in your current stack, and what can be removed altogether.</p>
+        </article>
+        <article class="flow-row">
+          <h3>Ship it with your team</h3>
+          <p>We implement the workflow, train the people using it, measure the result, and improve it in the real world.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section why-now" aria-labelledby="why-now-title">
+      <div class="wrap why-grid">
+        <h2 id="why-now-title">Why now: the agents are coming.</h2>
+        <div class="why-copy">
+          <p>Personal AI agents — Muse, Instinct, and everything behind them — are about to change how your customers find you. Soon they won't Google "plumber near me" and compare listings. They'll say "find me a good plumber for tomorrow morning" — and the agent will decide.</p>
+          <p>Agents choose the way the best customers do, only faster and more ruthlessly: most reviews, best responses, fastest answer, easiest booking. The shops that win the agent's pick are the shops already winning the human's pick. Same game, higher stakes.</p>
+          <p>Here's what most shops miss: <strong>AI becoming a commodity is exactly why you move first.</strong> In two years every shop can buy an AI receptionist — the tools won't be the advantage. <em>Having run them for two years</em> will be. Two years of captured after-hours calls. Two years of five-star reviews compounding. Two years of workflows your competitors start from zero on. You can't buy that late.</p>
+          <p>Right now in Oceanside, almost nobody has done any of this. We audited 152 local shops — the median digital score was 10 out of 25. The window is open. It won't stay open.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section start-small" id="opportunities" aria-labelledby="start-title">
+      <div class="wrap start-grid">
+        <div>
+          <div class="eyebrow">Where Buoy gets to work</div>
+          <h2 id="start-title">Ten jobs for your new AI employee.</h2>
+          <p>We audit all ten, put a stake in the fastest win, and improve the rest in a practical order. The names are simple; the work behind them is specific to your shop.</p>
+        </div>
+        <div class="stack" aria-label="Ten AI services for local businesses">
+          <div class="stack-item">
+            <div class="stack-icon">01</div>
+            <div><strong>After Hours</strong><small>Answer calls and texts after closing, capture the need, and book or route the next step.</small></div>
+            <b>Stay open</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">02</div>
+            <div><strong>Lean Stack</strong><small>Cut redundant subscriptions and replace software bloat with simpler tools built around your work.</small></div>
+            <b>Spend less</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">03</div>
+            <div><strong>Full Picture</strong><small>Bring every customer, job, message, follow-up, and next step into one useful view.</small></div>
+            <b>Know more</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">04</div>
+            <div><strong>AI Crew</strong><small>Onboard the whole team to AI tools connected to the systems and knowledge they already use.</small></div>
+            <b>Work better</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">05</div>
+            <div><strong>Get Found</strong><small>Modernize your website and socials for SEO, GEO, and the AI agents searching on customers’ behalf.</small></div>
+            <b>Show up</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">06</div>
+            <div><strong>Regulars</strong><small>Bring customers back with useful content, timely follow-up, and automated reward programs.</small></div>
+            <b>Earn repeats</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">07</div>
+            <div><strong>Five Stars</strong><small>Request reviews after every completed job, draft owner-approved replies, and alert the team instantly when a bad review lands.</small></div>
+            <b>Build trust</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">08</div>
+            <div><strong>Quote Rescue</strong><small>Run thoughtful follow-up sequences on open estimates that never turned into booked work.</small></div>
+            <b>Recover work</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">09</div>
+            <div><strong>Full Book</strong><small>Send smart appointment reminders and automatically offer cancelled slots to the waitlist.</small></div>
+            <b>Fill the day</b>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">10</div>
+            <div><strong>Call Intel</strong><small>Transcribe and score every call, flag missed opportunities, and hand the team a clean callback list.</small></div>
+            <b>Catch misses</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section local" id="fit" aria-labelledby="fit-title">
+      <div class="wrap local-grid">
+        <h2 id="fit-title">Broad capability. Local accountability.</h2>
+        <div class="local-copy">
+          <p>Buoy works across industries because the underlying problems repeat: too many tools, scattered customer knowledge, slow follow-up, and a team that hasn’t had time to turn AI into a daily advantage.</p>
+          <p>You get a dedicated Slack channel, hands-on implementation, and onsite training in Oceanside and North County when the work needs it.</p>
+          <div class="chips" aria-label="Example business types">
+            <span class="chip">Home services</span>
+            <span class="chip">Auto</span>
+            <span class="chip">Health &amp; wellness</span>
+            <span class="chip">Professional services</span>
+            <span class="chip">Local retail</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section offer" id="founding" aria-labelledby="offer-title">
+      <div class="wrap offer-shell">
+        <div class="offer-copy">
+          <div class="eyebrow">Founding 10</div>
+          <h2 id="offer-title">Your AI employee, minus the payroll.</h2>
+          <p>We map the full opportunity, rank it by value and effort, then put a stake in the project most likely to pay for itself fast.</p>
+          <div class="value-anchor">A part-time office manager can cost $2,500+/month. Buoy works across ten revenue and operations jobs for a fraction of that.</div>
+          <ul class="offer-list">
+            <li>Full audit across all ten service areas</li>
+            <li>Build-vs-buy roadmap with clear priorities</li>
+            <li>Fastest-payoff system installed first</li>
+            <li>Month-one improvements across every applicable area</li>
+            <li>Dedicated Slack support channel</li>
+            <li>Team onboarding and quarterly onsite training</li>
+            <li>Monthly performance review and next-best move</li>
+          </ul>
+        </div>
+        <aside class="price-card" aria-label="Founding client pricing">
+          <div>
+            <div class="price-kicker">Founding client rate</div>
+            <div class="price">$595<small>/month</small></div>
+            <p>Locked for 12 months for the first 10 local businesses.</p>
+          </div>
+          <div>
+            <div class="guarantee">
+              <div class="guarantee-kicker">Measurable upside. A clear backstop.</div>
+              <h3>The Buoy Guarantee</h3>
+              <p class="guarantee-main">If we haven’t delivered at least 2× your fees in measurable recovered revenue within your first 90 days, month three is free.</p>
+              <p class="guarantee-fair">All we ask: give us the access we need and approve things on time so we can do our best work.</p>
+            </div>
+            <div class="terms">$250 initial audit, fully credited toward month one · Three-month pilot, then month-to-month · Usage-based software costs scoped before install</div>
+            <div class="reply-note">Interested? Reply to the email or message that brought you here with your business name and best callback time.</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section wrap" aria-labelledby="faq-title">
+      <div class="faq-grid">
+        <div>
+          <div class="eyebrow">Straight answers</div>
+          <h2 id="faq-title">Before you ask.</h2>
+        </div>
+        <div>
+          <details>
+            <summary>What can Buoy actually help with?</summary>
+            <p>Buoy covers ten practical services: After Hours, Lean Stack, Full Picture, AI Crew, Get Found, Regulars, Five Stars, Quote Rescue, Full Book, and Call Intel. We audit the whole operation, then tailor the work to the opportunities that can create the most value for your shop.</p>
+          </details>
+          <details>
+            <summary>Is this replacing my staff?</summary>
+            <p>No. “AI employee” means Buoy takes on repetitive, trackable work across the operation. Your people keep the judgment, relationships, and customer moments that need a human.</p>
+          </details>
+          <details>
+            <summary>Does AI talk directly to customers?</summary>
+            <p>Only where you approve it. We start with narrow instructions, clear escalation rules, and human review for anything sensitive or unusual.</p>
+          </details>
+          <details>
+            <summary>Do I need to replace my current software?</summary>
+            <p>Maybe less of it. The audit starts with what you already use, then separates what should be kept, connected, rebuilt simply, or removed. A new subscription has to earn its place.</p>
+          </details>
+          <details>
+            <summary>Why only 10 founding businesses?</summary>
+            <p>The first group gets unusually close support while the service is refined around real local operations. Keeping it small protects the quality of the work.</p>
+          </details>
+          <details>
+            <summary>What happens after the three-month pilot?</summary>
+            <p>You can continue month-to-month at the locked founding rate. If it isn’t useful, we stop — no long agency contract.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-line">
+      <strong>Don’t let good work drift away.</strong>
+      <span>OCEANSIDE, CALIFORNIA<br />FOUNDING 10 · 2026</span>
+    </div>
+  </footer>
+</body>
+</html>
