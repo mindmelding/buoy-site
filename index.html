@@ -8,75 +8,27 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <title>Buoy:Your local AI operating partner</title>
+  <title>Buoy: Your local AI operating partner</title>
   <meta name="description" content="Buoy helps Oceanside businesses cut software costs, modernize customer operations, equip their teams with AI, improve their digital presence, and earn more repeat business." />
+  <link rel="canonical" href="https://buoydesk.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Buoy" />
+  <meta property="og:url" content="https://buoydesk.com/" />
+  <meta property="og:title" content="Buoy: Your local AI operating partner" />
+  <meta property="og:description" content="The AI employee for Oceanside and North County service businesses. Catch missed calls, rescue dead quotes, cut software bloat, and earn more repeat business for one monthly retainer." />
+  <meta property="og:image" content="https://buoydesk.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The Buoy logo: an orange buoy with a flag floating on two waves." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Buoy: Your local AI operating partner" />
+  <meta name="twitter:description" content="The AI employee for Oceanside and North County service businesses. One monthly retainer, ten revenue and operations jobs." />
+  <meta name="twitter:image" content="https://buoydesk.com/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    :root {
-      --ink: #102f35;
-      --paper: #fff8ec;
-      --orange: #ff593d;
-      --yellow: #ffd448;
-      --aqua: #a7e6da;
-      --blue: #b9dff1;
-      --line: rgba(16,47,53,.23);
-      --shadow: 0 18px 50px rgba(16,47,53,.12);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      overflow-x: hidden;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: "Bricolage Grotesque", system-ui, sans-serif;
-      line-height: 1.45;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, a { font: inherit; }
-    a { color: inherit; }
-    :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
-    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-    .topline {
-      background: var(--ink);
-      color: white;
-      font: 500 12px/1.3 "DM Mono", monospace;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      text-align: center;
-      padding: 10px 16px;
-    }
-    .nav {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-note { font-weight: 700; font-size: 15px; }
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { text-decoration: none; font-size: 14px; font-weight: 700; }
-    .button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      min-height: 52px;
-      padding: 0 22px;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      background: var(--orange);
-      color: var(--ink);
-      text-decoration: none;
-      font-weight: 800;
-      box-shadow: 4px 4px 0 var(--ink);
-      transition: transform .16s ease, box-shadow .16s ease;
-    }
-    .button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
-    .button.dark { background: var(--ink); color: white; box-shadow: 4px 4px 0 var(--orange); }
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(360px, .8fr);
@@ -85,17 +37,6 @@
       min-height: 720px;
       padding: 82px 0 88px;
     }
-    .eyebrow {
-      display: inline-flex;
-      gap: 9px;
-      align-items: center;
-      font: 500 12px/1.3 "DM Mono", monospace;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 20px;
-    }
-    .eyebrow::before { content: ""; width: 36px; height: 3px; background: var(--orange); }
-    h1, h2, h3, p { margin-top: 0; }
     h1 {
       font-size: clamp(54px, 7.1vw, 104px);
       line-height: .89;
@@ -110,8 +51,7 @@
       line-height: 1.35;
       margin-bottom: 30px;
     }
-    .hero-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-    .micro { font: 500 12px/1.45 "DM Mono", monospace; max-width: 210px; }
+    .micro { max-width: 210px; }
     .demo-stage {
       position: relative;
       min-height: 520px;
@@ -163,7 +103,7 @@
     .bubble.in { background: #e8eceb; align-self: flex-start; border-bottom-left-radius: 5px; }
     .bubble.out { background: var(--aqua); align-self: flex-end; border-bottom-right-radius: 5px; }
     .status-card { margin-top: auto; border: 1px solid var(--line); padding: 13px; border-radius: 14px; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; }
-    .status-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--orange); display: grid; place-items: center; font-weight: 900; }
+    .status-dot { width: 34px; height: 34px; border-radius: 50%; background: var(--orange); display: grid; place-items: center; font-weight: 800; }
     .status-card strong { display: block; font-size: 12px; }
     .status-card span { font: 400 10px/1.4 "DM Mono", monospace; opacity: .68; }
     .float-tag {
@@ -191,27 +131,7 @@
     }
     .ticker-inner span::after { content: "✦"; margin-left: 34px; }
     @keyframes drift { to { transform: translateX(-50%); } }
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .ticker-inner { animation: none; } }
-    .section { padding: clamp(78px, 10vw, 130px) 0; }
-    .section-head { display: grid; grid-template-columns: .75fr 1.25fr; gap: 44px; align-items: start; margin-bottom: 62px; }
-    .section-head h2 { font-size: clamp(42px, 5vw, 72px); line-height: .98; letter-spacing: -.045em; margin: 0; text-wrap: balance; }
-    .section-head p { font-size: 20px; max-width: 600px; margin: 8px 0 0; }
-    .flow {
-      counter-reset: steps;
-      border-top: 2px solid var(--ink);
-    }
-    .flow-row {
-      counter-increment: steps;
-      display: grid;
-      grid-template-columns: 90px 1fr 1.1fr;
-      gap: 28px;
-      padding: 34px 0;
-      border-bottom: 1px solid var(--line);
-      align-items: start;
-    }
-    .flow-row::before { content: "0" counter(steps); font: 500 16px/1.3 "DM Mono", monospace; color: var(--orange); }
-    .flow-row h3 { font-size: clamp(25px, 2.8vw, 36px); line-height: 1.05; margin: 0; letter-spacing: -.025em; }
-    .flow-row p { margin: 0; font-size: 17px; max-width: 520px; }
+    @media (prefers-reduced-motion: reduce) { .ticker-inner { animation: none; } }
     .why-now {
       background: var(--orange);
       border-block: 2px solid var(--ink);
@@ -231,36 +151,25 @@
     }
     .why-copy { max-width: 720px; }
     .why-copy p { font-size: clamp(18px, 2vw, 22px); line-height: 1.48; margin-bottom: 24px; }
-    .why-copy p:last-child {
-      margin: 34px 0 0;
-      padding-top: 26px;
-      border-top: 2px solid var(--ink);
-      font-weight: 700;
+    .stat-callout {
+      margin-top: 34px;
+      padding: 26px 28px;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 7px 7px 0 var(--ink);
+      transform: rotate(-.5deg);
     }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 18px; }
+    .stat-row strong { display: block; font-size: clamp(44px, 5vw, 64px); line-height: 1; letter-spacing: -.05em; }
+    .stat-row small { display: block; font: 500 12px/1.4 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .06em; margin-top: 8px; }
+    .stat-callout p { font-size: 18px; font-weight: 700; margin: 0; }
     .start-small { background: var(--ink); color: white; }
     .start-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: clamp(38px, 8vw, 100px); align-items: start; }
     .start-grid > div:first-child { position: sticky; top: 36px; }
     .start-grid h2 { font-size: clamp(46px, 6vw, 82px); line-height: .95; letter-spacing: -.05em; }
     .start-grid > div > p { font-size: 20px; max-width: 530px; color: rgba(255,255,255,.82); }
-    .stack { display: grid; gap: 13px; }
-    .stack-item {
-      display: grid;
-      grid-template-columns: 52px 1fr auto;
-      gap: 15px;
-      align-items: center;
-      background: white;
-      color: var(--ink);
-      border-radius: 13px;
-      padding: 18px;
-      transform: rotate(var(--r, 0deg));
-    }
-    .stack-item:nth-child(4n + 1) { --r: .65deg; background: white; }
-    .stack-item:nth-child(4n + 2) { --r: -1deg; background: var(--aqua); }
-    .stack-item:nth-child(4n + 3) { --r: .75deg; background: var(--yellow); }
-    .stack-item:nth-child(4n) { --r: -.55deg; background: var(--blue); }
-    .stack-icon { width: 52px; height: 52px; border: 2px solid var(--ink); border-radius: 50%; display: grid; place-items: center; font: 700 14px/1 "DM Mono", monospace; }
-    .stack-item strong { display: block; font-size: 17px; }
-    .stack-item small { display: block; font: 400 11px/1.4 "DM Mono", monospace; margin-top: 3px; }
+    .stack-item { grid-template-columns: 52px 1fr auto; padding: 18px; }
+    .stack-item small { font-size: 11px; }
     .stack-item b { font: 500 11px/1.3 "DM Mono", monospace; text-transform: uppercase; }
     .local { background: var(--blue); }
     .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 9vw, 120px); align-items: end; }
@@ -277,12 +186,12 @@
     .offer-list li { display: flex; gap: 12px; align-items: baseline; font-weight: 700; }
     .offer-list li::before { content: "→"; color: var(--orange); }
     .price-card { background: var(--paper); border: 2px solid var(--ink); padding: clamp(26px, 4vw, 44px); box-shadow: 9px 9px 0 var(--ink); display: flex; flex-direction: column; justify-content: space-between; }
-    .price-kicker { font: 500 12px/1.3 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .06em; }
-    .price { font-size: clamp(60px, 7vw, 92px); font-weight: 800; letter-spacing: -.065em; line-height: 1; margin: 24px 0 6px; }
-    .price small { font-size: 17px; letter-spacing: 0; }
     .terms { font: 400 12px/1.55 "DM Mono", monospace; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 26px; }
     .value-anchor { margin: 26px 0 0; padding: 18px 20px; background: var(--orange); border: 2px solid var(--ink); font-size: 18px; font-weight: 800; line-height: 1.35; transform: rotate(-.7deg); }
-    .reply-note { margin-top: 28px; padding: 16px 18px; background: var(--aqua); border: 1px solid var(--ink); font-weight: 700; }
+    .offer-cta { margin-top: 28px; display: grid; gap: 14px; }
+    .offer-cta .button { width: 100%; }
+    .offer-cta p { margin: 0; font: 400 12px/1.55 "DM Mono", monospace; text-align: center; }
+    .offer-cta p a { text-decoration: underline; }
     .guarantee {
       margin-top: 28px;
       padding: 22px;
@@ -291,61 +200,99 @@
       box-shadow: 5px 5px 0 var(--ink);
       transform: rotate(.45deg);
     }
-    .guarantee-kicker { font: 500 11px/1.3 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
     .guarantee h3 { font-size: clamp(25px, 2.6vw, 34px); line-height: 1; letter-spacing: -.035em; margin: 10px 0 12px; }
     .guarantee-main { font-size: 17px; font-weight: 800; line-height: 1.35; margin-bottom: 12px; }
-    .guarantee-fair { font: 400 11px/1.5 "DM Mono", monospace; margin: 0; }
-    .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 56px; }
-    .faq-grid h2 { font-size: clamp(42px, 5vw, 70px); letter-spacing: -.045em; line-height: 1; }
-    details { border-top: 1px solid var(--line); padding: 22px 0; }
-    details:last-child { border-bottom: 1px solid var(--line); }
-    summary { cursor: pointer; list-style: none; font-size: 19px; font-weight: 800; padding-right: 34px; position: relative; }
-    summary::-webkit-details-marker { display: none; }
-    summary::after { content: "+"; position: absolute; right: 2px; top: -3px; font: 500 28px/1 "DM Mono", monospace; }
-    details[open] summary::after { content: "–"; }
-    details p { margin: 15px 45px 0 0; max-width: 680px; }
-    footer { background: var(--orange); border-top: 2px solid var(--ink); padding: 42px 0; }
-    .footer-line { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
-    .footer-line strong { font-size: clamp(30px, 4vw, 54px); letter-spacing: -.04em; line-height: 1; max-width: 720px; }
-    .footer-line span { font: 500 11px/1.5 "DM Mono", monospace; text-align: right; }
-    .footer-line a { color: inherit; }
     @media (max-width: 850px) {
       .hero { grid-template-columns: 1fr; min-height: auto; padding: 62px 0 76px; }
       .hero-copy { text-align: left; }
       .demo-stage { min-height: 500px; }
-      .section-head, .why-grid, .start-grid, .local-grid, .offer-shell, .faq-grid { grid-template-columns: 1fr; }
+      .why-grid, .start-grid, .local-grid, .offer-shell { grid-template-columns: 1fr; }
       .start-grid > div:first-child { position: static; }
-      .section-head { gap: 20px; }
-      .flow-row { grid-template-columns: 62px 1fr; }
-      .flow-row p { grid-column: 2; }
-      .nav-links a:not(.button) { display: none; }
     }
     @media (max-width: 560px) {
-      .wrap { width: min(100% - 28px, 1180px); }
-      .topline { font-size: 10px; }
-      .nav { min-height: 62px; }
-      .nav-note { font-size: 13px; }
-      .nav .button { min-height: 42px; padding: 0 16px; font-size: 13px; box-shadow: 3px 3px 0 var(--ink); }
       h1 { font-size: clamp(50px, 17vw, 72px); }
       .hero-copy > p { font-size: 18px; }
-      .hero-actions { align-items: flex-start; flex-direction: column; }
-      .button { width: 100%; }
       .demo-stage { min-height: 460px; }
       .sun { width: 300px; height: 300px; right: -44px; }
       .phone { width: 280px; }
       .screen { min-height: 420px; }
       .float-tag { top: 25px; left: 0; }
-      .section { padding: 72px 0; }
-      .flow-row { grid-template-columns: 44px 1fr; gap: 14px; padding: 28px 0; }
-      .flow-row p { font-size: 15px; }
+      .stat-row { grid-template-columns: 1fr; gap: 14px; }
       .stack-item { grid-template-columns: 44px 1fr; }
-      .stack-icon { width: 44px; height: 44px; }
       .stack-item b { grid-column: 2; }
       .price-card { box-shadow: 6px 6px 0 var(--ink); }
-      .footer-line { align-items: flex-start; flex-direction: column; }
-      .footer-line span { text-align: left; }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://buoydesk.com/#business",
+        "name": "Buoy",
+        "url": "https://buoydesk.com",
+        "logo": "https://buoydesk.com/buoy-logo.png",
+        "image": "https://buoydesk.com/og-image.png",
+        "email": "hello@buoydesk.com",
+        "sameAs": ["https://www.linkedin.com/company/buoy-desk"],
+        "description": "Buoy helps Oceanside businesses cut software costs, modernize customer operations, equip their teams with AI, improve their digital presence, and earn more repeat business.",
+        "address": { "@type": "PostalAddress", "addressLocality": "Oceanside", "addressRegion": "CA", "addressCountry": "US" },
+        "areaServed": [
+          { "@type": "City", "name": "Oceanside", "address": { "@type": "PostalAddress", "addressRegion": "CA", "addressCountry": "US" } },
+          { "@type": "AdministrativeArea", "name": "North County San Diego" }
+        ],
+        "priceRange": "$595/month founding rate",
+        "makesOffer": [
+          {
+            "@type": "Offer",
+            "name": "Founding client monthly retainer",
+            "price": "595",
+            "priceCurrency": "USD",
+            "description": "Locked for 12 months for the first 10 local businesses. Three-month pilot, then month-to-month.",
+            "url": "https://buoydesk.com/#founding"
+          },
+          {
+            "@type": "Offer",
+            "name": "The Buoy AI Audit",
+            "price": "100",
+            "priceCurrency": "USD",
+            "description": "A ten-area diagnostic with a written report, missed-revenue estimate, prioritized roadmap, and 45-minute walkthrough. Fully credited toward month one.",
+            "url": "https://buoydesk.com/audit.html"
+          }
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "AI operations services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "After Hours", "description": "Answer calls and texts after closing, capture the need, and book or route the next step." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Lean Stack", "description": "Cut redundant subscriptions and replace software bloat with simpler tools built around your work." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full Picture", "description": "Bring every customer, job, message, follow-up, and next step into one useful view." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Crew", "description": "Onboard the whole team to AI tools connected to the systems and knowledge they already use." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Get Found", "description": "Modernize your website and socials for SEO, GEO, and the AI agents searching on customers' behalf." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Regulars", "description": "Bring customers back with useful content, timely follow-up, and automated reward programs." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Five Stars", "description": "Request reviews after every completed job, draft owner-approved replies, and alert the team instantly when a bad review lands." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Quote Rescue", "description": "Run thoughtful follow-up sequences on open estimates that never turned into booked work." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full Book", "description": "Send smart appointment reminders and automatically offer cancelled slots to the waitlist." } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Call Intel", "description": "Transcribe and score every call, flag missed opportunities, and hand the team a clean callback list." } }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://buoydesk.com/#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "What can Buoy actually help with?", "acceptedAnswer": { "@type": "Answer", "text": "Buoy covers ten practical services: After Hours, Lean Stack, Full Picture, AI Crew, Get Found, Regulars, Five Stars, Quote Rescue, Full Book, and Call Intel. We audit the whole operation, then tailor the work to the opportunities that can create the most value for your shop." } },
+          { "@type": "Question", "name": "Is this replacing my staff?", "acceptedAnswer": { "@type": "Answer", "text": "No. \"AI employee\" means Buoy takes on repetitive, trackable work across the operation. Your people keep the judgment, relationships, and customer moments that need a human." } },
+          { "@type": "Question", "name": "Does AI talk directly to customers?", "acceptedAnswer": { "@type": "Answer", "text": "Only where you approve it. We start with narrow instructions, clear escalation rules, and human review for anything sensitive or unusual." } },
+          { "@type": "Question", "name": "Do I need to replace my current software?", "acceptedAnswer": { "@type": "Answer", "text": "Maybe less of it. The audit starts with what you already use, then separates what should be kept, connected, rebuilt simply, or removed. A new subscription has to earn its place." } },
+          { "@type": "Question", "name": "Why only 10 founding businesses?", "acceptedAnswer": { "@type": "Answer", "text": "The first group gets unusually close support while the service is refined around real local operations. Keeping it small protects the quality of the work." } },
+          { "@type": "Question", "name": "What happens after the three-month pilot?", "acceptedAnswer": { "@type": "Answer", "text": "You can continue month-to-month at the locked founding rate. If it isn't useful, we stop. No long agency contract." } }
+        ]
+      }
+    ]
+  }
+  </script>
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.","-assets.i.")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toArray=u.toArray||function(){return 0},u.toString=u.toString||function(){return"posthog"},u._i.push([i,s,a]),n=["capture","register","register_once","unregister","unregister_once","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatureFlags","updateEarlyAccessFeatureEnrollment","getEarlyAccessFeatures","on","onFeatureFlags","onSessionId","getSurveys","getActiveMatchingSurveys","renderSurvey","cancelSurvey","identify","alias","setPersonProperties","group","setPersonPropertiesForFlags","resetPersonPropertiesForFlags","setGroupPropertiesForFlags","resetGroupPropertiesForFlags","resetGroups","captureException"],o=0;o<n.length;o++)g(u,n[o]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_caPb9oiPzotm63WauXSQ82paS6Mludia7a5UaVqFPk7', {api_host: 'https://us.i.posthog.com', person_profiles: 'identified_only'});
@@ -359,9 +306,8 @@
     <nav class="nav-links">
       <a href="#how">How it works</a>
       <a href="#opportunities">What we fix</a>
-      <a href="audit.html">$100 AI audit</a>
-      <a class="book-cta" href="https://calendly.com/sean-mancillas/buoy-meeting-1" target="_blank" rel="noopener">Book a call</a>
-      <a class="button" href="#founding">Founding offer</a>
+      <a href="#founding">Founding offer</a>
+      <a class="button" href="audit.html">$100 AI audit</a>
     </nav>
   </header>
 
@@ -370,11 +316,11 @@
       <div class="hero-copy">
         <div class="eyebrow">Your local AI operating partner</div>
         <h1 id="hero-title">Run a sharper business with AI.</h1>
-        <p>Buoy becomes your shop’s AI employee,cutting busywork, catching missed revenue, and improving the way your team works for a small monthly retainer.</p>
+        <p>Buoy becomes your shop’s AI employee: cutting busywork, catching missed revenue, and improving the way your team works, all for a small monthly retainer.</p>
         <div class="hero-actions">
-          <a class="button dark book-cta" href="https://calendly.com/sean-mancillas/buoy-meeting-1" target="_blank" rel="noopener">Book a call</a>
+          <a class="button dark book-cta" href="audit.html">Book your $100 audit</a>
           <a class="button" href="#opportunities">See where AI fits <span aria-hidden="true">↓</span></a>
-          <div class="micro">We find the highest-value move, build it, train your team, and keep improving it.</div>
+          <div class="micro">Start with the audit. It is credited to month one if you continue.</div>
         </div>
       </div>
 
@@ -387,7 +333,7 @@
             <div class="screen-head"><span>BUOY DEMO</span><span>● ONLINE</span></div>
             <div class="screen-title">Customer follow-up</div>
             <div class="screen-sub">Missed call → useful next step</div>
-            <div class="bubble out">Sorry we missed you.Are you looking to book service, get a quote, or talk to someone?</div>
+            <div class="bubble out">Sorry we missed you. Are you looking to book service, get a quote, or talk to someone?</div>
             <div class="bubble in">A quote. My car is making a grinding sound.</div>
             <div class="bubble out">Got it. I’ll have the shop call you first thing tomorrow. What’s the best time?</div>
             <div class="status-card">
@@ -431,10 +377,16 @@
       <div class="wrap why-grid">
         <h2 id="why-now-title">Why now: the agents are coming.</h2>
         <div class="why-copy">
-          <p>Personal AI agents,Muse, Instinct, and everything behind them,are about to change how your customers find you. Soon they won't Google "plumber near me" and compare listings. They'll say "find me a good plumber for tomorrow morning".And the agent will decide.</p>
+          <p>Personal AI agents, the assistants built into phones, browsers, and search, are about to change how your customers find you. Soon they won't Google "plumber near me" and compare listings. They'll say "find me a good plumber for tomorrow morning." And the agent will decide.</p>
           <p>Agents choose the way the best customers do, only faster and more ruthlessly: most reviews, best responses, fastest answer, easiest booking. The shops that win the agent's pick are the shops already winning the human's pick. Same game, higher stakes.</p>
-          <p>Here's what most shops miss: <strong>AI becoming a commodity is exactly why you move first.</strong> In two years every shop can buy an AI receptionist.The tools won't be the advantage. <em>Having run them for two years</em> will be. Two years of captured after-hours calls. Two years of five-star reviews compounding. Two years of workflows your competitors start from zero on. You can't buy that late.</p>
-          <p>Right now in Oceanside, almost nobody has done any of this. We audited 152 local shops:the median digital score was 10 out of 25. The window is open. It won't stay open.</p>
+          <p>Here's what most shops miss: <strong>AI becoming a commodity is exactly why you move first.</strong> In two years every shop can buy an AI receptionist. The tools won't be the advantage. <em>Having run them for two years</em> will be. Two years of captured after-hours calls. Two years of five-star reviews compounding. Two years of workflows your competitors start from zero on. You can't buy that late.</p>
+          <div class="stat-callout" aria-label="Local audit findings">
+            <div class="stat-row">
+              <div><strong>152</strong><small>Oceanside shops audited</small></div>
+              <div><strong>10<span style="font-size:.5em;letter-spacing:0;"> / 25</span></strong><small>Median digital score</small></div>
+            </div>
+            <p>Right now in Oceanside, almost nobody has done any of this. The window is open. It won't stay open. Ask for your shop's score on the intro call.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -549,7 +501,10 @@
               <p class="guarantee-fair">All we ask: give us the access we need and approve things on time so we can do our best work.</p>
             </div>
             <div class="terms">$100 founding audit, fully credited toward month one · Three-month pilot, then month-to-month · Usage-based software costs scoped before install</div>
-            <div class="reply-note">Interested? Reply to the email or message that brought you here with your business name and best callback time.</div>
+            <div class="offer-cta">
+              <a class="button dark" href="audit.html">Start with the $100 audit</a>
+              <p>Prefer email? Write to <a href="mailto:hello@buoydesk.com">hello@buoydesk.com</a> with your business name and best callback time.</p>
+            </div>
           </div>
         </aside>
       </div>
@@ -584,7 +539,7 @@
           </details>
           <details>
             <summary>What happens after the three-month pilot?</summary>
-            <p>You can continue month-to-month at the locked founding rate. If it isn’t useful, we stop.No long agency contract.</p>
+            <p>You can continue month-to-month at the locked founding rate. If it isn’t useful, we stop. No long agency contract.</p>
           </details>
         </div>
       </div>
@@ -594,7 +549,7 @@
   <footer>
     <div class="wrap footer-line">
       <strong>Don’t let good work drift away.</strong>
-      <span>OCEANSIDE, CALIFORNIA<br />FOUNDING 10 · 2026<br /><a href="https://www.linkedin.com/company/buoy-desk" target="_blank" rel="noopener">LINKEDIN ↗</a></span>
+      <span>OCEANSIDE, CALIFORNIA<br />FOUNDING 10 · 2026<br /><a href="mailto:hello@buoydesk.com">HELLO@BUOYDESK.COM</a> · <a href="https://www.linkedin.com/company/buoy-desk" target="_blank" rel="noopener">LINKEDIN ↗</a><br /><a href="audit.html">$100 AI AUDIT</a> · <a href="privacy.html">PRIVACY</a></span>
     </div>
   </footer>
 </body>

@@ -8,86 +8,27 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <title>The $100 AI Audit - Buoy</title>
+  <title>The $100 AI Audit: find the money your shop is leaving on the table | Buoy</title>
   <meta name="description" content="The Buoy AI Audit: a ten-area diagnostic that finds the missed calls, dead quotes, and busywork costing your shop revenue every week. $100, credited to month one." />
+  <link rel="canonical" href="https://buoydesk.com/audit.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Buoy" />
+  <meta property="og:url" content="https://buoydesk.com/audit.html" />
+  <meta property="og:title" content="The $100 AI Audit from Buoy" />
+  <meta property="og:description" content="A ten-area diagnostic of your shop: missed calls, dead quotes, no-shows, reviews, and software spend, mapped and ranked so you know what to fix first. $100, credited to month one." />
+  <meta property="og:image" content="https://buoydesk.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The Buoy logo: an orange buoy with a flag floating on two waves." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The $100 AI Audit from Buoy" />
+  <meta name="twitter:description" content="Find the missed calls, dead quotes, and busywork costing your shop revenue every week. $100, credited to month one." />
+  <meta name="twitter:image" content="https://buoydesk.com/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    :root {
-      --ink: #102f35;
-      --paper: #fff8ec;
-      --orange: #ff593d;
-      --yellow: #ffd448;
-      --aqua: #a7e6da;
-      --blue: #b9dff1;
-      --line: rgba(16,47,53,.23);
-      --shadow: 0 18px 50px rgba(16,47,53,.12);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      overflow-x: hidden;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: "Bricolage Grotesque", system-ui, sans-serif;
-      line-height: 1.45;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, a { font: inherit; }
-    a { color: inherit; }
-    :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
-    .wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
-    .topline {
-      background: var(--ink);
-      color: white;
-      font: 500 12px/1.3 "DM Mono", monospace;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      text-align: center;
-      padding: 10px 16px;
-    }
-    .nav {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-note { font-weight: 700; font-size: 15px; }
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { text-decoration: none; font-size: 14px; font-weight: 700; }
-    .button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      min-height: 52px;
-      padding: 0 22px;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      background: var(--orange);
-      color: var(--ink);
-      text-decoration: none;
-      font-weight: 800;
-      box-shadow: 4px 4px 0 var(--ink);
-      transition: transform .16s ease, box-shadow .16s ease;
-    }
-    .button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ink); }
-    .button.dark { background: var(--ink); color: white; box-shadow: 4px 4px 0 var(--orange); }
-    .eyebrow {
-      display: inline-flex;
-      gap: 9px;
-      align-items: center;
-      font: 500 12px/1.3 "DM Mono", monospace;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      margin-bottom: 20px;
-    }
-    .eyebrow::before { content: ""; width: 36px; height: 3px; background: var(--orange); }
-    h1, h2, h3, p { margin-top: 0; }
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(340px, .8fr);
@@ -103,8 +44,6 @@
       text-wrap: balance;
     }
     .hero-copy > p { max-width: 600px; font-size: clamp(19px, 2.1vw, 24px); line-height: 1.35; margin-bottom: 30px; }
-    .hero-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-    .micro { font: 500 12px/1.45 "DM Mono", monospace; max-width: 220px; }
     .price-card {
       background: var(--paper);
       border: 2px solid var(--ink);
@@ -112,9 +51,6 @@
       box-shadow: 9px 9px 0 var(--ink);
       transform: rotate(.6deg);
     }
-    .price-kicker { font: 500 12px/1.3 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .06em; }
-    .price { font-size: clamp(60px, 7vw, 92px); font-weight: 800; letter-spacing: -.065em; line-height: 1; margin: 24px 0 6px; }
-    .price small { font-size: 17px; letter-spacing: 0; }
     .price-card ul { list-style: none; margin: 26px 0; padding: 0; display: grid; gap: 10px; font-weight: 700; }
     .price-card ul li::before { content: "→"; color: var(--orange); margin-right: 10px; }
     .credit-note {
@@ -125,10 +61,6 @@
       font-weight: 800;
       transform: rotate(-.5deg);
     }
-    .section { padding: clamp(78px, 10vw, 130px) 0; }
-    .section-head { display: grid; grid-template-columns: .75fr 1.25fr; gap: 44px; align-items: start; margin-bottom: 62px; }
-    .section-head h2 { font-size: clamp(42px, 5vw, 72px); line-height: .98; letter-spacing: -.045em; margin: 0; text-wrap: balance; }
-    .section-head p { font-size: 20px; max-width: 600px; margin: 8px 0 0; }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
     .card {
       background: white;
@@ -143,63 +75,30 @@
     .card:nth-child(4n) { transform: rotate(-.5deg); background: var(--blue); }
     .card h3 { font-size: 21px; letter-spacing: -.02em; margin-bottom: 10px; }
     .card p { margin: 0; font-size: 16px; }
-    .flow { counter-reset: steps; border-top: 2px solid var(--ink); }
-    .flow-row {
-      counter-increment: steps;
-      display: grid;
-      grid-template-columns: 90px 1fr 1.1fr;
-      gap: 28px;
-      padding: 34px 0;
-      border-bottom: 1px solid var(--line);
-      align-items: start;
-    }
-    .flow-row::before { content: "0" counter(steps); font: 500 16px/1.3 "DM Mono", monospace; color: var(--orange); }
-    .flow-row h3 { font-size: clamp(25px, 2.8vw, 36px); line-height: 1.05; margin: 0; letter-spacing: -.025em; }
-    .flow-row p { margin: 0; font-size: 17px; max-width: 520px; }
     .ten { background: var(--ink); color: white; }
     .ten-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(38px, 8vw, 100px); align-items: start; }
-    .ten-grid h2 { font-size: clamp(46px, 6vw, 82px); line-height: .95; letter-spacing: -.05em; margin: 0; }
+    .ten-grid h2 { font-size: clamp(46px, 6vw, 82px); line-height: .95; letter-spacing: -.05em; margin: 0 0 20px; }
     .ten-grid > div > p { font-size: 20px; max-width: 530px; color: rgba(255,255,255,.82); }
-    .stack { display: grid; gap: 13px; }
-    .stack-item {
+    .next {
       display: grid;
-      grid-template-columns: 52px 1fr;
-      gap: 15px;
-      align-items: center;
-      background: white;
-      color: var(--ink);
-      border-radius: 13px;
-      padding: 16px 18px;
-      transform: rotate(var(--r, 0deg));
+      grid-template-columns: 1.1fr .9fr;
+      gap: 40px;
+      align-items: stretch;
     }
-    .stack-item:nth-child(4n + 1) { --r: .65deg; }
-    .stack-item:nth-child(4n + 2) { --r: -1deg; background: var(--aqua); }
-    .stack-item:nth-child(4n + 3) { --r: .75deg; background: var(--yellow); }
-    .stack-item:nth-child(4n) { --r: -.55deg; background: var(--blue); }
-    .stack-icon { width: 52px; height: 52px; border: 2px solid var(--ink); border-radius: 50%; display: grid; place-items: center; font: 700 14px/1 "DM Mono", monospace; }
-    .stack-item strong { display: block; font-size: 17px; }
-    .stack-item small { display: block; font: 400 12px/1.4 "DM Mono", monospace; margin-top: 3px; }
+    .next-copy h2 { font-size: clamp(38px, 4.6vw, 60px); line-height: .98; letter-spacing: -.045em; margin-bottom: 16px; text-wrap: balance; }
+    .next-copy p { font-size: 19px; max-width: 560px; }
+    .next-copy .rate { font-size: clamp(40px, 4.5vw, 56px); font-weight: 800; letter-spacing: -.055em; line-height: 1; margin: 18px 0 6px; }
+    .next-copy .rate small { font-size: 16px; letter-spacing: 0; font-weight: 700; }
     .guarantee {
       padding: 30px;
       background: var(--aqua);
       border: 2px solid var(--ink);
       box-shadow: 7px 7px 0 var(--ink);
       transform: rotate(.45deg);
-      max-width: 860px;
+      align-self: center;
     }
-    .guarantee-kicker { font: 500 11px/1.3 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
     .guarantee h3 { font-size: clamp(28px, 3vw, 40px); line-height: 1; letter-spacing: -.035em; margin: 10px 0 12px; }
     .guarantee-main { font-size: 19px; font-weight: 800; line-height: 1.35; margin-bottom: 12px; }
-    .guarantee-fair { font: 400 12px/1.5 "DM Mono", monospace; margin: 0; }
-    .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 56px; }
-    .faq-grid h2 { font-size: clamp(42px, 5vw, 70px); letter-spacing: -.045em; line-height: 1; }
-    details { border-top: 1px solid var(--line); padding: 22px 0; }
-    details:last-child { border-bottom: 1px solid var(--line); }
-    summary { cursor: pointer; list-style: none; font-size: 19px; font-weight: 800; padding-right: 34px; position: relative; }
-    summary::-webkit-details-marker { display: none; }
-    summary::after { content: "+"; position: absolute; right: 2px; top: -3px; font: 500 28px/1 "DM Mono", monospace; }
-    details[open] summary::after { content: "–"; }
-    details p { margin: 15px 45px 0 0; max-width: 680px; }
     .cta { background: var(--orange); border-block: 2px solid var(--ink); text-align: center; }
     .cta h2 { font-size: clamp(48px, 7vw, 96px); line-height: .92; letter-spacing: -.055em; text-wrap: balance; margin-bottom: 26px; }
     .cta p { font-size: 20px; font-weight: 700; max-width: 620px; margin: 0 auto 34px; }
@@ -207,29 +106,54 @@
     .booking-card { background: #fff; border: 2px solid var(--ink); max-width: 880px; margin: 0 auto; }
     .email-fallback { max-width: 640px; margin: 36px auto 0; }
     .email-fallback p { font-size: 17px; font-weight: 400; }
-    footer { background: var(--ink); color: white; border-top: 2px solid var(--ink); padding: 42px 0; }
-    .footer-line { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
-    .footer-line strong { font-size: clamp(30px, 4vw, 54px); letter-spacing: -.04em; line-height: 1; max-width: 720px; }
-    .footer-line span { font: 500 11px/1.5 "DM Mono", monospace; text-align: right; }
-    .footer-line a { text-decoration: underline; }
     @media (max-width: 850px) {
       .hero { grid-template-columns: 1fr; padding: 62px 0 76px; }
-      .section-head, .ten-grid, .faq-grid { grid-template-columns: 1fr; }
-      .section-head { gap: 20px; }
-      .flow-row { grid-template-columns: 62px 1fr; }
-      .flow-row p { grid-column: 2; }
-      .nav-links a:not(.button) { display: none; }
+      .ten-grid, .next { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
-      .wrap { width: min(100% - 28px, 1180px); }
       h1 { font-size: clamp(50px, 17vw, 72px); }
-      .hero-actions { align-items: flex-start; flex-direction: column; }
-      .button { width: 100%; }
       .price-card { box-shadow: 6px 6px 0 var(--ink); }
-      .footer-line { align-items: flex-start; flex-direction: column; }
-      .footer-line span { text-align: left; }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": "https://buoydesk.com/audit.html#audit",
+        "name": "The Buoy AI Audit",
+        "serviceType": "Small business AI and operations audit",
+        "url": "https://buoydesk.com/audit.html",
+        "provider": { "@type": "ProfessionalService", "@id": "https://buoydesk.com/#business", "name": "Buoy", "url": "https://buoydesk.com" },
+        "areaServed": [
+          { "@type": "City", "name": "Oceanside", "address": { "@type": "PostalAddress", "addressRegion": "CA", "addressCountry": "US" } },
+          { "@type": "AdministrativeArea", "name": "North County San Diego" }
+        ],
+        "description": "A ten-area diagnostic that finds the missed calls, dead quotes, and busywork costing your shop revenue every week. Includes a written report, missed-revenue estimate, prioritized roadmap, and a 45-minute walkthrough call.",
+        "offers": {
+          "@type": "Offer",
+          "price": "100",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/LimitedAvailability",
+          "description": "Founding rate for the first 10 audits. Fully credited toward month one if you continue with Buoy.",
+          "url": "https://buoydesk.com/audit.html#book"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://buoydesk.com/audit.html#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "How long does the audit take?", "acceptedAnswer": { "@type": "Answer", "text": "About a week from the intro call. Most of the work happens on our side, reviewing how calls, reviews, quotes, and follow-up work in your shop today." } },
+          { "@type": "Question", "name": "What do you need from me?", "acceptedAnswer": { "@type": "Answer", "text": "A 15-minute intro call, then access to look at the things customers touch: your phone system, Google reviews, website, and whatever you use for quotes and scheduling. Read-only wherever possible." } },
+          { "@type": "Question", "name": "What if I don't continue after the audit?", "acceptedAnswer": { "@type": "Answer", "text": "The report is yours to keep, no strings attached. The $100 is only credited if you move forward with Buoy. Either way, you'll know exactly where the money is leaking." } },
+          { "@type": "Question", "name": "Is my business a fit?", "acceptedAnswer": { "@type": "Answer", "text": "The audit was built for local service businesses: auto, home services, dental, and similar shops. We'll tell you on the intro call if you're a fit. If you're not, we'll tell you that too." } },
+          { "@type": "Question", "name": "Will this disrupt my team?", "acceptedAnswer": { "@type": "Answer", "text": "No. The audit is observation only. We don't change a single thing until you've seen the report and approved a plan." } }
+        ]
+      }
+    ]
+  }
+  </script>
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.","-assets.i.")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toArray=u.toArray||function(){return 0},u.toString=u.toString||function(){return"posthog"},u._i.push([i,s,a]),n=["capture","register","register_once","unregister","unregister_once","getFeatureFlag","getFeatureFlagPayload","isFeatureEnabled","reloadFeatureFlags","updateEarlyAccessFeatureEnrollment","getEarlyAccessFeatures","on","onFeatureFlags","onSessionId","getSurveys","getActiveMatchingSurveys","renderSurvey","cancelSurvey","identify","alias","setPersonProperties","group","setPersonPropertiesForFlags","resetPersonPropertiesForFlags","resetGroups","captureException"],o=0;o<n.length;o++)g(u,n[o]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_caPb9oiPzotm63WauXSQ82paS6Mludia7a5UaVqFPk7', {api_host: 'https://us.i.posthog.com', person_profiles: 'identified_only'});
@@ -239,7 +163,7 @@
   <div class="topline">Oceanside first · 10 founding spots</div>
 
   <header class="wrap nav" aria-label="Primary navigation">
-    <div class="nav-note"><a href="index.html" style="text-decoration:none;">← Buoy home</a></div>
+    <div class="nav-note"><a href="index.html">← Buoy home</a></div>
     <nav class="nav-links">
       <a href="#what">What you get</a>
       <a href="#how">How it works</a>
@@ -252,7 +176,7 @@
       <div class="hero-copy">
         <div class="eyebrow">The Buoy AI Audit</div>
         <h1 id="hero-title">Find the money your shop is leaving on the table.</h1>
-        <p>A ten-area diagnostic of your business:the missed calls, dead quotes, and busywork that cost you revenue every week, mapped and ranked so you know exactly what to fix first.</p>
+        <p>A ten-area diagnostic of your business: the missed calls, dead quotes, and busywork that cost you revenue every week, mapped and ranked so you know exactly what to fix first.</p>
         <div class="hero-actions">
           <a class="button dark book-cta" href="#book">Book your $100 audit</a>
           <div class="micro">Built for Oceanside &amp; North County service businesses.</div>
@@ -282,11 +206,11 @@
       <div class="cards">
         <div class="card">
           <h3>Missed revenue</h3>
-          <p>After-hours calls, dead quotes, no-show appointments, and slow follow-up,estimated in dollars, not vibes.</p>
+          <p>After-hours calls, dead quotes, no-show appointments, and slow follow-up, estimated in dollars, not vibes.</p>
         </div>
         <div class="card">
           <h3>Customer picture</h3>
-          <p>How customer info, jobs, messages, and next steps are tracked today,and where things fall through the cracks.</p>
+          <p>How customer info, jobs, messages, and next steps are tracked today, and where things fall through the cracks.</p>
         </div>
         <div class="card">
           <h3>Software spend</h3>
@@ -298,7 +222,7 @@
         </div>
         <div class="card">
           <h3>Team leverage</h3>
-          <p>The repetitive work eating your team's week,and which of it an AI workflow could take over tomorrow.</p>
+          <p>The repetitive work eating your team's week, and which of it an AI workflow could take over tomorrow.</p>
         </div>
         <div class="card">
           <h3>Visibility</h3>
@@ -319,7 +243,7 @@
         </article>
         <article class="flow-row">
           <h3>We audit ten areas</h3>
-          <p>Calls, reviews, quotes, follow-up, software, and visibility,reviewed against the ten jobs Buoy can take on, ranked by value and effort.</p>
+          <p>Calls, reviews, quotes, follow-up, software, and visibility, reviewed against the ten jobs Buoy can take on, ranked by value and effort.</p>
         </article>
         <article class="flow-row">
           <h3>Walkthrough + roadmap</h3>
@@ -336,11 +260,11 @@
           <p>Each area gets a plain-language score and a dollar estimate where one exists. The roadmap starts with the fastest payoff.</p>
         </div>
         <div class="stack" aria-label="The ten audited areas">
-          <div class="stack-item"><div class="stack-icon">01</div><div><strong>After Hours</strong><small>Calls and texts after closing:answered, captured, routed?</small></div></div>
+          <div class="stack-item"><div class="stack-icon">01</div><div><strong>After Hours</strong><small>Calls and texts after closing: answered, captured, routed?</small></div></div>
           <div class="stack-item"><div class="stack-icon">02</div><div><strong>Lean Stack</strong><small>Software spend vs. what it earns its place doing.</small></div></div>
           <div class="stack-item"><div class="stack-icon">03</div><div><strong>Full Picture</strong><small>One useful view of customers, jobs, and next steps.</small></div></div>
           <div class="stack-item"><div class="stack-icon">04</div><div><strong>AI Crew</strong><small>Whether the team has AI help on the work they already do.</small></div></div>
-          <div class="stack-item"><div class="stack-icon">05</div><div><strong>Get Found</strong><small>Website, socials, SEO,and readiness for AI search.</small></div></div>
+          <div class="stack-item"><div class="stack-icon">05</div><div><strong>Get Found</strong><small>Website, socials, SEO, and readiness for AI search.</small></div></div>
           <div class="stack-item"><div class="stack-icon">06</div><div><strong>Regulars</strong><small>Repeat business: follow-up, content, rewards.</small></div></div>
           <div class="stack-item"><div class="stack-icon">07</div><div><strong>Five Stars</strong><small>Review volume, replies, and bad-review response time.</small></div></div>
           <div class="stack-item"><div class="stack-icon">08</div><div><strong>Quote Rescue</strong><small>What happens to estimates that never become jobs.</small></div></div>
@@ -350,12 +274,21 @@
       </div>
     </section>
 
-    <section class="section wrap" aria-labelledby="guarantee-title">
-      <div class="guarantee">
-        <div class="guarantee-kicker">Measurable upside. A clear backstop.</div>
-        <h3 id="guarantee-title">The Buoy Guarantee</h3>
-        <p class="guarantee-main">If we haven't delivered at least 2× your fees in measurable recovered revenue within your first 90 days, month three is free.</p>
-        <p class="guarantee-fair">All we ask: give us the access we need and approve things on time so we can do our best work.</p>
+    <section class="section wrap" id="next" aria-labelledby="next-title">
+      <div class="next">
+        <div class="next-copy">
+          <div class="eyebrow">If you continue</div>
+          <h2 id="next-title">What happens after the audit.</h2>
+          <p>Most shops take the report and keep going. Buoy installs the fastest-payoff fix first, then works through the rest of the roadmap as your AI employee, for one monthly retainer.</p>
+          <div class="rate">$595<small>/month</small></div>
+          <p>Founding client rate, locked for 12 months for the first 10 local businesses. Your $100 audit comes off month one. Three-month pilot, then month-to-month. <a href="index.html#founding">See the full founding offer.</a></p>
+        </div>
+        <div class="guarantee">
+          <div class="guarantee-kicker">Measurable upside. A clear backstop.</div>
+          <h3>The Buoy Guarantee</h3>
+          <p class="guarantee-main">If we haven't delivered at least 2× your fees in measurable recovered revenue within your first 90 days as a client, month three is free.</p>
+          <p class="guarantee-fair">All we ask: give us the access we need and approve things on time so we can do our best work.</p>
+        </div>
       </div>
     </section>
 
@@ -368,7 +301,7 @@
         <div>
           <details>
             <summary>How long does the audit take?</summary>
-            <p>About a week from the intro call. Most of the work happens on our side,reviewing how calls, reviews, quotes, and follow-up work in your shop today.</p>
+            <p>About a week from the intro call. Most of the work happens on our side, reviewing how calls, reviews, quotes, and follow-up work in your shop today.</p>
           </details>
           <details>
             <summary>What do you need from me?</summary>
@@ -376,15 +309,15 @@
           </details>
           <details>
             <summary>What if I don't continue after the audit?</summary>
-            <p>The report is yours to keep, no strings attached. The $100 is only credited if you move forward with Buoy.Either way, you'll know exactly where the money is leaking.</p>
+            <p>The report is yours to keep, no strings attached. The $100 is only credited if you move forward with Buoy. Either way, you'll know exactly where the money is leaking.</p>
           </details>
           <details>
             <summary>Is my business a fit?</summary>
-            <p>The audit was built for local service businesses:auto, home services, dental, and similar shops. We'll tell you on the intro call if you're a fit. If you're not, we'll tell you that too.</p>
+            <p>The audit was built for local service businesses: auto, home services, dental, and similar shops. We'll tell you on the intro call if you're a fit. If you're not, we'll tell you that too.</p>
           </details>
           <details>
             <summary>Will this disrupt my team?</summary>
-            <p>No. The audit is observation only.We don't change a single thing until you've seen the report and approved a plan.</p>
+            <p>No. The audit is observation only. We don't change a single thing until you've seen the report and approved a plan.</p>
           </details>
         </div>
       </div>
@@ -411,7 +344,7 @@
   <footer>
     <div class="wrap footer-line">
       <strong>Don't let good work drift away.</strong>
-      <span><a href="index.html">BUOY HOME</a> · <a href="https://www.linkedin.com/company/buoy-desk" target="_blank" rel="noopener">LINKEDIN ↗</a><br />OCEANSIDE, CALIFORNIA</span>
+      <span>OCEANSIDE, CALIFORNIA<br /><a href="mailto:hello@buoydesk.com">HELLO@BUOYDESK.COM</a> · <a href="https://www.linkedin.com/company/buoy-desk" target="_blank" rel="noopener">LINKEDIN ↗</a><br /><a href="index.html">BUOY HOME</a> · <a href="privacy.html">PRIVACY</a></span>
     </div>
   </footer>
 </body>
