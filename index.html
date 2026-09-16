@@ -8,6 +8,124 @@
   <link rel="icon" href="data:," />
   <title>Buoy — Your local AI operating partner</title>
   <meta name="description" content="Buoy helps Oceanside businesses cut software costs, modernize customer operations, equip their teams with AI, improve their digital presence, and earn more repeat business." />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Buoy",
+    "url": "https://buoydesk.com",
+    "description": "Buoy helps Oceanside businesses cut software costs, modernize customer operations, equip their teams with AI, improve their digital presence, and earn more repeat business.",
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Oceanside",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "CA",
+          "addressCountry": "US"
+        }
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "North County San Diego"
+      }
+    ],
+    "priceRange": "$595/month founding rate",
+    "offers": {
+      "@type": "Offer",
+      "name": "Founding client monthly retainer",
+      "price": "595",
+      "priceCurrency": "USD",
+      "description": "Locked for 12 months for the first 10 local businesses."
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "AI operations services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "After Hours",
+            "description": "Answer calls and texts after closing, capture the need, and book or route the next step."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Lean Stack",
+            "description": "Cut redundant subscriptions and replace software bloat with simpler tools built around your work."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Full Picture",
+            "description": "Bring every customer, job, message, follow-up, and next step into one useful view."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "AI Crew",
+            "description": "Onboard the whole team to AI tools connected to the systems and knowledge they already use."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Get Found",
+            "description": "Modernize your website and socials for SEO, GEO, and the AI agents searching on customers’ behalf."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Regulars",
+            "description": "Bring customers back with useful content, timely follow-up, and automated reward programs."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Five Stars",
+            "description": "Request reviews after every completed job, draft owner-approved replies, and alert the team instantly when a bad review lands."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Quote Rescue",
+            "description": "Run thoughtful follow-up sequences on open estimates that never turned into booked work."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Full Book",
+            "description": "Send smart appointment reminders and automatically offer cancelled slots to the waitlist."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Call Intel",
+            "description": "Transcribe and score every call, flag missed opportunities, and hand the team a clean callback list."
+          }
+        }
+      ]
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -293,9 +411,10 @@
     .guarantee h3 { font-size: clamp(25px, 2.6vw, 34px); line-height: 1; letter-spacing: -.035em; margin: 10px 0 12px; }
     .guarantee-main { font-size: 17px; font-weight: 800; line-height: 1.35; margin-bottom: 12px; }
     .guarantee-fair { font: 400 11px/1.5 "DM Mono", monospace; margin: 0; }
+    .faq-section { padding: clamp(64px, 8vw, 96px) 0; }
     .faq-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: 56px; }
     .faq-grid h2 { font-size: clamp(42px, 5vw, 70px); letter-spacing: -.045em; line-height: 1; }
-    details { border-top: 1px solid var(--line); padding: 22px 0; }
+    details { border-top: 1px solid var(--line); padding: 18px 0; }
     details:last-child { border-bottom: 1px solid var(--line); }
     summary { cursor: pointer; list-style: none; font-size: 19px; font-weight: 800; padding-right: 34px; position: relative; }
     summary::-webkit-details-marker { display: none; }
@@ -545,36 +664,36 @@
       </div>
     </section>
 
-    <section class="section wrap" aria-labelledby="faq-title">
+    <section class="section faq-section wrap" id="faq" aria-labelledby="faq-title">
       <div class="faq-grid">
         <div>
           <div class="eyebrow">Straight answers</div>
-          <h2 id="faq-title">Before you ask.</h2>
+          <h2 id="faq-title">Buoy, briefly.</h2>
         </div>
         <div>
           <details>
-            <summary>What can Buoy actually help with?</summary>
-            <p>Buoy covers ten practical services: After Hours, Lean Stack, Full Picture, AI Crew, Get Found, Regulars, Five Stars, Quote Rescue, Full Book, and Call Intel. We audit the whole operation, then tailor the work to the opportunities that can create the most value for your shop.</p>
+            <summary>What is Buoy?</summary>
+            <p>Buoy is a local AI operating partner. We learn how your business runs, choose the best build-or-buy moves, implement the workflows, train your team, and keep improving them.</p>
           </details>
           <details>
-            <summary>Is this replacing my staff?</summary>
-            <p>No. “AI employee” means Buoy takes on repetitive, trackable work across the operation. Your people keep the judgment, relationships, and customer moments that need a human.</p>
+            <summary>What does Buoy cost?</summary>
+            <p>The Founding 10 rate is $595 per month, locked for 12 months. The first three months are a pilot; after that, service continues month-to-month.</p>
           </details>
           <details>
-            <summary>Does AI talk directly to customers?</summary>
-            <p>Only where you approve it. We start with narrow instructions, clear escalation rules, and human review for anything sensitive or unusual.</p>
+            <summary>What is the 90-day guarantee?</summary>
+            <p>If Buoy hasn’t delivered at least 2× your fees in measurable recovered revenue within your first 90 days, month three is free.</p>
           </details>
           <details>
-            <summary>Do I need to replace my current software?</summary>
-            <p>Maybe less of it. The audit starts with what you already use, then separates what should be kept, connected, rebuilt simply, or removed. A new subscription has to earn its place.</p>
+            <summary>Who is Buoy for?</summary>
+            <p>Buoy works across industries where too many tools, scattered customer knowledge, slow follow-up, and repetitive work get in the way.</p>
           </details>
           <details>
-            <summary>Why only 10 founding businesses?</summary>
-            <p>The first group gets unusually close support while the service is refined around real local operations. Keeping it small protects the quality of the work.</p>
+            <summary>Where does Buoy operate?</summary>
+            <p>Buoy is based in Oceanside and provides onsite training across Oceanside and North County when the work needs it.</p>
           </details>
           <details>
-            <summary>What happens after the three-month pilot?</summary>
-            <p>You can continue month-to-month at the locked founding rate. If it isn’t useful, we stop — no long agency contract.</p>
+            <summary>How does the $250 audit work?</summary>
+            <p>We audit all ten service areas, map the biggest opportunities, and create a build-vs-buy roadmap with the fastest-payoff system first. The $250 fee is fully credited toward month one.</p>
           </details>
         </div>
       </div>
