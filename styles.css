@@ -147,7 +147,8 @@ footer { background: var(--ink); color: white; border-top: 2px solid var(--ink);
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 @media (max-width: 850px) {
   .nav { flex-wrap: wrap; padding: 12px 0; row-gap: 10px; }
-  .nav-links { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: 10px 18px; }
+  .nav-tagline { display: none; }
+  .nav-links { flex: 1 1 auto; justify-content: space-between; flex-wrap: wrap; gap: 10px 18px; }
   .nav-links .button { margin-left: auto; }
   .section-head, .faq-grid { grid-template-columns: 1fr; }
   .section-head { gap: 20px; }
@@ -160,6 +161,7 @@ footer { background: var(--ink); color: white; border-top: 2px solid var(--ink);
   .nav { min-height: 62px; }
   .nav-note { font-size: 13px; }
   .nav-links a { font-size: 13px; }
+  .nav-links .nav-secondary { display: none; }
   .nav .button { min-height: 42px; padding: 0 16px; font-size: 13px; box-shadow: 3px 3px 0 var(--ink); }
   .hero-actions { align-items: flex-start; flex-direction: column; }
   .button { width: 100%; }
