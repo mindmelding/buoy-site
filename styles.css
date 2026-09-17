@@ -20,6 +20,13 @@ body {
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
 }
+/* Decorative shapes bleed past the right edge on purpose. Clip them at the
+   viewport so phones cannot pan sideways. clip (unlike hidden) keeps sticky
+   positioning working; hidden is the fallback for older mobile browsers. */
+main { overflow-x: clip; }
+@supports not (overflow-x: clip) {
+  @media (max-width: 850px) { main { overflow-x: hidden; } }
+}
 button, a { font: inherit; }
 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
