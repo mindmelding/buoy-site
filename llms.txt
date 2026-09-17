@@ -24,7 +24,7 @@ Ten named service areas, audited and installed fastest-payoff first:
 
 - Founding 10: $595/month, locked for 12 months. Three-month commitment, then month-to-month.
 - Future standard price: $1,250/month.
-- Opportunity audit: $250, credited toward month one (presented as a $750 value).
+- The Buoy AI Audit: $100 founding rate for the first 10 audits, fully credited toward month one if the business continues with Buoy. Includes a written ten-area report, missed-revenue estimate, prioritized roadmap, and a 45-minute walkthrough call. The report is the client's to keep either way. Details: https://buoydesk.com/audit.html
 - Guarantee: 2x your fees back in measurable recovered revenue within 90 days, or month three is free.
 - Anchor: a part-time office manager costs $2,500+/month.
 
@@ -34,8 +34,16 @@ Independent auto repair shops, HVAC/plumbing contractors, dental practices,
 and other North County service businesses losing revenue to missed calls,
 dead quotes, no-shows, and thin reviews. Typical finding: ~27% of inbound
 calls go unanswered, at roughly $1,200 in lost revenue per missed call.
+Buoy audited 152 Oceanside shops in 2026; the median digital score was 10 out of 25.
+
+## Pages
+
+- Homepage: https://buoydesk.com/
+- The $100 AI Audit: https://buoydesk.com/audit.html
+- Privacy policy: https://buoydesk.com/privacy.html
 
 ## Contact
 
 - Website: https://buoydesk.com
 - Email: hello@buoydesk.com
+- LinkedIn: https://www.linkedin.com/company/buoy-desk
