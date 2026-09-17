@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light" />
   <meta name="theme-color" content="#ff593d" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -53,6 +54,7 @@
     }
     .price-card ul { list-style: none; margin: 26px 0; padding: 0; display: grid; gap: 10px; font-weight: 700; }
     .price-card ul li::before { content: "→"; color: var(--orange); margin-right: 10px; }
+    .pay-note { margin: 0; font: 400 13px/1.5 "DM Mono", monospace; }
     .credit-note {
       margin-top: 22px;
       padding: 16px 18px;
@@ -146,6 +148,7 @@
         "mainEntity": [
           { "@type": "Question", "name": "How long does the audit take?", "acceptedAnswer": { "@type": "Answer", "text": "About a week from the intro call. Most of the work happens on our side, reviewing how calls, reviews, quotes, and follow-up work in your shop today." } },
           { "@type": "Question", "name": "What do you need from me?", "acceptedAnswer": { "@type": "Answer", "text": "A 15-minute intro call, then access to look at the things customers touch: your phone system, Google reviews, website, and whatever you use for quotes and scheduling. Read-only wherever possible." } },
+          { "@type": "Question", "name": "When do I pay the $100?", "acceptedAnswer": { "@type": "Answer", "text": "Not when you book. The intro call is free. If we agree you're a fit, we send a $100 invoice and the audit starts the same week. If you're not a fit, there's nothing to pay." } },
           { "@type": "Question", "name": "What if I don't continue after the audit?", "acceptedAnswer": { "@type": "Answer", "text": "The report is yours to keep, no strings attached. The $100 is only credited if you move forward with Buoy. Either way, you'll know exactly where the money is leaking." } },
           { "@type": "Question", "name": "Is my business a fit?", "acceptedAnswer": { "@type": "Answer", "text": "The audit was built for local service businesses: auto, home services, dental, and similar shops. We'll tell you on the intro call if you're a fit. If you're not, we'll tell you that too." } },
           { "@type": "Question", "name": "Will this disrupt my team?", "acceptedAnswer": { "@type": "Answer", "text": "No. The audit is observation only. We don't change a single thing until you've seen the report and approved a plan." } }
@@ -179,7 +182,7 @@
         <p>A ten-area diagnostic of your business: the missed calls, dead quotes, and busywork that cost you revenue every week, mapped and ranked so you know exactly what to fix first.</p>
         <div class="hero-actions">
           <a class="button dark book-cta" href="#book">Book your $100 audit</a>
-          <div class="micro">Built for Oceanside &amp; North County service businesses.</div>
+          <div class="micro">Starts with a free 15-minute intro call. Built for Oceanside &amp; North County service businesses.</div>
         </div>
       </div>
       <aside class="price-card" aria-label="Audit pricing">
@@ -193,6 +196,7 @@
             <li>Prioritized fix-it roadmap</li>
             <li>45-minute walkthrough call</li>
           </ul>
+          <p class="pay-note">Nothing to pay up front. Book the free intro call first. If you're a fit, we invoice the $100 and the audit starts that week.</p>
         </div>
         <div class="credit-note">Continue → the $100 comes off month one. Don't → the report is yours to keep.</div>
       </aside>
@@ -308,6 +312,10 @@
             <p>A 15-minute intro call, then access to look at the things customers touch: your phone system, Google reviews, website, and whatever you use for quotes and scheduling. Read-only wherever possible.</p>
           </details>
           <details>
+            <summary>When do I pay the $100?</summary>
+            <p>Not when you book. The intro call is free. If we agree you're a fit, we send a $100 invoice and the audit starts the same week. If you're not a fit, there's nothing to pay.</p>
+          </details>
+          <details>
             <summary>What if I don't continue after the audit?</summary>
             <p>The report is yours to keep, no strings attached. The $100 is only credited if you move forward with Buoy. Either way, you'll know exactly where the money is leaking.</p>
           </details>
@@ -340,6 +348,20 @@
       </div>
     </section>
   </main>
+
+  <script>
+    (function () {
+      function track(name, props) { if (window.posthog && posthog.capture) posthog.capture(name, props || {}); }
+      window.addEventListener('message', function (e) {
+        var d = e.data;
+        if (e.origin === 'https://calendly.com' && d && d.event === 'calendly.event_scheduled') track('intro_call_booked', { source: 'calendly' });
+        if (e.origin === 'https://tally.so' && typeof d === 'string' && d.indexOf('Tally.FormSubmitted') !== -1) track('report_requested', { source: 'tally' });
+      });
+      document.querySelectorAll('a.button').forEach(function (a) {
+        a.addEventListener('click', function () { track('cta_click', { label: a.textContent.trim(), href: a.getAttribute('href'), page: location.pathname }); });
+      });
+    })();
+  </script>
 
   <footer>
     <div class="wrap footer-line">
