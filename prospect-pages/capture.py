@@ -426,13 +426,18 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     failed_assets: list[str] = []
 
     def _asset_failed(request, reason: str) -> None:
+        # Only the site's files. Scripts probe chrome-extension:// urls to spot
+        # installed extensions, and Chromium blocks those by design.
+        if not request.url.startswith(("http://", "https://")):
+            return
         if request.resource_type in ("stylesheet", "script") and len(failed_assets) < 20:
             failed_assets.append(f"{request.resource_type} {reason}: {request.url[:200]}")
 
     def _asset_request_failed(request) -> None:
         reason = request.failure or "failed"
-        # Pages cancel lazy loads all the time. That is not a missing file.
-        if "ERR_ABORTED" not in reason:
+        # Pages cancel lazy loads all the time, and Chromium blocks some
+        # requests on its own. Neither is a missing file.
+        if "ERR_ABORTED" not in reason and "ERR_BLOCKED_BY_CLIENT" not in reason:
             _asset_failed(request, reason)
 
     def _asset_status(resp) -> None:
