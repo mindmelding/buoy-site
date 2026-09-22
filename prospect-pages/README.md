@@ -126,8 +126,10 @@ turned up is built in:
   Those are kept in `other_script_errors` for review.
 - Load time comes from the browser's own timing to the load event, not the
   wall clock around the capture, which included our settle waits.
-- When a script or stylesheet fails to load, the page is loaded once more. If
-  it still fails, the capture is marked `incomplete_render`: the screenshot may
+- When a script or stylesheet fails the way a connection fails (reset, timed
+  out, cut short, a gateway error), the page is loaded once more. Files that
+  fail the same way every time, like a 404 or a file Chromium refuses by
+  design, do not count. If it still fails, the capture is marked `incomplete_render`: the screenshot may
   not be what a customer sees, and the script-error and sideways-scroll
   findings stay quiet, because a missing carousel library produced both on a
   real site on one run and neither on the next. `doctor.py` warns about it.

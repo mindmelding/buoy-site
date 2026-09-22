@@ -31,7 +31,7 @@ OK_PAGE = """<!doctype html><html><head><title>Fine</title>
 <body><h1>Harbor Line Auto Body</h1><p>Call <a href="tel:7605550142">(760) 555-0142</a>.</p>
 </body></html>"""
 
-# A library that never arrives, and the site's own code that needed it.
+# A library whose connection drops, and the site's own code that needed it.
 MISSING_SCRIPT_PAGE = """<!doctype html><html><head><title>Half there</title>
 <meta name="viewport" content="width=device-width"></head>
 <body><h1>Harbor Line Auto Body</h1>
@@ -42,6 +42,16 @@ MISSING_SCRIPT_PAGE = """<!doctype html><html><head><title>Half there</title>
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *args) -> None:
         pass
+
+    def do_GET(self) -> None:
+        # The library drops the connection with no answer, the way a file does
+        # when the network between us and the host gives out mid-load. A 404
+        # would not do: that fails the same way every time and is their bug.
+        if self.path.startswith("/vendor/"):
+            self.close_connection = True
+            self.connection.shutdown(2)
+            return
+        super().do_GET()
 
 
 class LocalCaptureTest(BrowserTestCase):

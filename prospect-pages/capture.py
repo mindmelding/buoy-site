@@ -342,6 +342,15 @@ RETRY_STATUSES = {502, 503, 504}
 # in a Server header. Without one, these say nothing about the prospect.
 PROXY_STATUSES = RETRY_STATUSES | {405, 407}
 DEFAULT_SITE_TIMEOUT_MS = 150000
+# Asset failures a connection can cause, and so ones that can differ from one
+# load to the next. Cancelled lazy loads, extension probes, and files Chromium
+# refuses by design (ORB, CORB, mixed content) fail the same way every time
+# and say nothing about whether we saw the page a customer sees.
+TRANSIENT_FAILURE = re.compile(
+    r"ERR_(CONNECTION|TIMED_OUT|EMPTY_RESPONSE|HTTP2|QUIC|TUNNEL|PROXY|NETWORK|"
+    r"SSL|CERT|NAME_|INTERNET|ADDRESS|SOCKET|INCOMPLETE_CHUNKED|"
+    r"CONTENT_LENGTH_MISMATCH|RESPONSE_HEADERS|INVALID_RESPONSE)",
+)
 # Failures on our end. Nothing about the prospect can be said from them.
 OUR_SIDE_KINDS = {"our_network", "stalled"}
 # https failures where trying plain http can tell us something.
@@ -435,13 +444,11 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
 
     def _asset_request_failed(request) -> None:
         reason = request.failure or "failed"
-        # Pages cancel lazy loads all the time, and Chromium blocks some
-        # requests on its own. Neither is a missing file.
-        if "ERR_ABORTED" not in reason and "ERR_BLOCKED_BY_CLIENT" not in reason:
+        if TRANSIENT_FAILURE.search(reason):
             _asset_failed(request, reason)
 
     def _asset_status(resp) -> None:
-        if resp.status >= 400:
+        if resp.status in RETRY_STATUSES:
             _asset_failed(resp.request, f"HTTP {resp.status}")
 
     page.on("requestfailed", _asset_request_failed)
