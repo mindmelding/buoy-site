@@ -182,7 +182,10 @@ RESOURCE_NOISE = re.compile(
     r"permissions policy|play\(\) failed|no supported sources|"
     r"refused to apply style|suspense rendered fallback|"
     r"request failed with status code 40[13]|third-party cookie|"
-    r"content security policy|mixed content",
+    r"content security policy|mixed content|"
+    # A script or JSON request that got an HTML page back. That is their 404
+    # page or our proxy's error page, and from here the two look the same.
+    r"unexpected token '<'",
     re.IGNORECASE,
 )
 
@@ -566,6 +569,7 @@ def capture_site(
     record["console_errors"] = desktop.get("console_errors", [])
     record["page_errors"] = desktop.get("page_errors", [])
     record["failed_stylesheets"] = desktop.get("failed_stylesheets", [])
+    record["challenge_waited_ms"] = desktop.get("challenge_waited_ms", 0)
     record["desktop"] = f"shots/{DESKTOP_FILE}" if desktop.get("shot") else None
     record["mobile"] = f"shots/{MOBILE_FILE}" if mobile.get("shot") else None
     record["mobile_error"] = mobile.get("error", "")

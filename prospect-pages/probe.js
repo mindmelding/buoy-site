@@ -104,7 +104,10 @@
     latest_year_in_text: years.length ? Math.max.apply(null, years) : null,
 
     hours_listed: (dayWords.test(fullText) && timeWords.test(fullText)) || allDay.test(fullText),
-    mentions_reviews: /\b(reviews?|testimonials?|what our (customers|clients|patients) (say|are saying)|google rating)\b/i.test(text),
+    // Collapsed menus hide the "Reviews" link from innerText on desktop, and a
+    // link to a reviews page is the site pointing at its reviews.
+    mentions_reviews: /\b(reviews?|testimonials?|what our (customers|clients|patients) (say|are saying)|google rating)\b/i.test(fullText) ||
+      hrefs.some((h) => /reviews?|testimonials?/i.test(h)),
     mentions_emergency: /\b(24\/?7|emergency|after hours|24 hour)\b/i.test(text),
 
     // Links a visitor can follow. The raw html mentions facebook.com in every
