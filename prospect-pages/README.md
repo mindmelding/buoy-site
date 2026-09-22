@@ -54,6 +54,66 @@ Useful flags:
 One bad record does not stop the batch. Failures are listed at the end and the
 exit status is non-zero.
 
+## Draft the findings automatically
+
+Writing findings by hand is the slow part. `research.py` visits each prospect's
+site and drafts them from what the page actually shows:
+
+```bash
+python research.py --input prospects.json --in-place --report
+```
+
+It reuses the same browser visit as the screenshots, so it costs almost nothing
+on top of a capture you were running anyway. Then build the pages as usual:
+
+```bash
+python batch.py --input prospects.json --skip-capture
+```
+
+Each draft is routed to the service that fixes it, and the strongest one becomes
+`top_service`. Findings are capped at six per page by default so the page stays
+readable. Raise it with `--max-findings`.
+
+### What it checks
+
+| Signal | Routes to |
+| --- | --- |
+| Site does not load, 4xx, offsite redirect, bad certificate, no https | Get Found |
+| No mobile layout, page overflows at phone width | Get Found |
+| Phone number is text with no `tel:` link, or no number at all | Get Found |
+| No form, no email, no phone, no booking anywhere | After Hours |
+| A form but nothing that books a time | After Hours |
+| No hours, no business markup, thin page, no meta description | Get Found |
+| Footer copyright is two or more years old | Regulars |
+| No reviews on the site | Five Stars |
+| Slow load, scripts throwing on load | Get Found |
+| Photos with no alt text | Get Found |
+| No link to Google, Facebook, Yelp, Instagram, or LinkedIn | Get Found |
+
+### Observed against inferred
+
+Every draft is tagged. `observed` means we measured it: the tag was absent, the
+status was 404, the copyright said 2019. `inferred` means we guessed from a
+pattern, for example that a quote form means nobody chases quiet estimates.
+
+The inferred ones are usually the most valuable and they are the ones that will
+embarrass you if they are wrong. `research.py` counts them at the end and writes
+the evidence for every draft into a `_drafted` block on the record. Read those
+before the page goes out. Use `--observed-only` to drop them.
+
+Nothing here replaces looking at the site. A page that says we looked at your
+business has to be right, so treat the drafts as a first pass that saves you the
+mechanical checks, not as the audit.
+
+### Notes on accuracy
+
+- Failed resource loads are counted separately from scripts that actually threw,
+  so a blocked font on your end never becomes a finding about their site.
+- The sideways-scroll check only fires on sites that claim to be responsive.
+  A site with no mobile layout gets the clearer finding instead.
+- If a rule fires on a site you know is fine, that is a bug worth fixing in
+  `RULES` in [research.py](research.py) rather than editing around.
+
 ## Publish
 
 ```bash
