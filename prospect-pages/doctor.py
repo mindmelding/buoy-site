@@ -156,6 +156,8 @@ def main(argv: list[str] | None = None) -> int:
                 f"desktop {shots.get('desktop.png')} bytes, "
                 f"{len(result['drafted'])} draft finding(s)"
             )
+            if not (result["signals"].get("word_count") or 0):
+                print("  WARNING no visible text on the page, so nothing was drafted from it")
             if result["incomplete_render"]:
                 print("  WARNING scripts or styles did not load, so the screenshot may not "
                       f"be what a customer sees: {result['failed_assets'][0]}")

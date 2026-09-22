@@ -1,6 +1,7 @@
 {
  "label": "dentist-c",
  "capture": {
+  "incomplete_render": true,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,22 +10,22 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 3258,
+  "load_ms": 1020,
   "has_viewport_meta": true,
   "server": "nginx",
-  "challenge_waited_ms": 9000,
+  "challenge_waited_ms": 0,
   "requested_url": "https://site.example/",
   "final_url": "https://site.example/",
   "summary": "",
   "script_errors": [],
   "other_script_errors": [],
   "signals": {
-   "word_count": 464,
+   "word_count": 1313,
    "has_viewport": true,
    "viewport_content": "width=device-width, initial-scale=1.0",
    "title_length": 74,
    "has_meta_description": true,
-   "h1_count": 8,
+   "h1_count": 16,
    "tel_links": 2,
    "mailto_links": 1,
    "phone_in_text": true,
@@ -70,7 +71,7 @@
     "linkedin": false,
     "nextdoor": false
    },
-   "image_count": 6,
+   "image_count": 9,
    "images_without_alt": 0,
    "scroll_width": 1440,
    "inner_width": 1440,
@@ -78,17 +79,20 @@
     "detected": false,
     "hits": [],
     "title": "",
-    "words": 464
+    "words": 1313
    },
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 2438,
-   "console_error_count": 5,
+   "load_ms": 1020,
+   "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390
   }
  },
  "expected_rules": [],
- "verified": {}
+ "verified": {
+  "mobile_overflow": "once fired at 445 to 530px; that came from a carousel whose script was answered with a challenge page. The render is marked incomplete",
+  "console_errors": "once fired on 'owlCarousel is not a function', the same cause"
+ }
 }

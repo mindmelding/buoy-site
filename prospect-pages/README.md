@@ -180,7 +180,9 @@ python -m unittest discover -s tests -t .
   anonymized down to the signals the rules read, and checks the exact set of
   findings each one produces. Every set was checked by hand against the live
   site. If a change moves one, look at that kind of site before updating the
-  fixture.
+  fixture. This directory is served publicly with the rest of the site, so a
+  fixture never carries a business name, url, page title, or error text, and
+  is filed under a label like `plumber-a`.
 - `test_probe.py` runs `probe.js` in Chromium against small pages rebuilt from
   each misfire found on a real site.
 - `test_capture.py` covers the certificate pins and script-error filtering.

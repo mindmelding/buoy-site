@@ -108,8 +108,10 @@ def _reachable(cap: dict) -> bool:
     if cap.get("challenged"):
         return False
     # Capture adds load and mobile keys even when the in-page probe failed, so
-    # check for a key only the probe writes.
-    return bool(cap.get("ok")) and "word_count" in _sig(cap)
+    # check a key only the probe writes.
+    # A page with no visible text is a preloader that never lifted, not a
+    # site anyone could judge, and every text rule would fire on it.
+    return bool(cap.get("ok")) and (_sig(cap).get("word_count") or 0) > 0
 
 
 RULES: list[Rule] = [
@@ -167,8 +169,8 @@ RULES: list[Rule] = [
          lambda cap, s: "no meta viewport tag"),
 
     Rule("mobile_overflow", 78, "Get Found", OBSERVED,
-         lambda cap, s: bool(s.get("mobile_overflows")) and bool(s.get("has_viewport"))
-                        and not cap.get("incomplete_render"),
+         lambda cap, s: _reachable(cap) and bool(s.get("mobile_overflows"))
+                        and bool(s.get("has_viewport")) and not cap.get("incomplete_render"),
          "The page scrolls sideways on a phone",
          "At phone width the layout is wider than the screen, so it slides off to the side "
          "as you scroll. It reads as broken even when everything on the page works.",
@@ -227,7 +229,7 @@ RULES: list[Rule] = [
          lambda cap, s: f"schema types found: {', '.join(s.get('schema_types') or []) or 'none'}"),
 
     Rule("stale_copyright", 60, "Regulars", OBSERVED,
-         lambda cap, s: bool(s.get("copyright_year"))
+         lambda cap, s: _reachable(cap) and bool(s.get("copyright_year"))
                         and s["copyright_year"] < date.today().year - 1,
          "The site has not been touched since {copyright_year}",
          "The footer still reads {copyright_year}. Somebody comparing three shops reads a "
@@ -252,7 +254,7 @@ RULES: list[Rule] = [
          lambda cap, s: "no review text, review widget, or review markup on the page"),
 
     Rule("slow_load", 52, "Get Found", OBSERVED,
-         lambda cap, s: (s.get("load_ms") or 0) > capture_lib.SLOW_LOAD_MS,
+         lambda cap, s: _reachable(cap) and (s.get("load_ms") or 0) > capture_lib.SLOW_LOAD_MS,
          "The page takes {load_seconds} seconds to load",
          "On a phone connection that is long enough that a real share of visitors leave "
          "before they see anything. It counts against you in search rankings too.",
@@ -260,7 +262,7 @@ RULES: list[Rule] = [
                         "and a phone load from our capture machine"),
 
     Rule("console_errors", 50, "Get Found", OBSERVED,
-         lambda cap, s: (s.get("script_error_count") or 0) > 0
+         lambda cap, s: _reachable(cap) and (s.get("script_error_count") or 0) > 0
                         and not cap.get("incomplete_render"),
          "Scripts on your site are failing",
          "{script_error_phrase} when the page loads. Something on the "
@@ -278,7 +280,7 @@ RULES: list[Rule] = [
          lambda cap, s: "no facebook, instagram, yelp, or google business link"),
 
     Rule("images_no_alt", 45, "Get Found", OBSERVED,
-         lambda cap, s: (s.get("image_count") or 0) >= 5
+         lambda cap, s: _reachable(cap) and (s.get("image_count") or 0) >= 5
                         and (s.get("images_without_alt") or 0) / max(1, s.get("image_count") or 1) > 0.5,
          "Your photos cannot be read by anything but a person",
          "{images_without_alt} of {image_count} images have no description attached. For a "

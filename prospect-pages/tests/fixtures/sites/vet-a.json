@@ -1,6 +1,7 @@
 {
  "label": "vet-a",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,10 +10,10 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 1820,
+  "load_ms": 1949,
   "has_viewport_meta": true,
   "server": "Apache",
-  "challenge_waited_ms": 9000,
+  "challenge_waited_ms": 0,
   "requested_url": "https://site.example/",
   "final_url": "https://site.example/",
   "summary": "",
@@ -85,7 +86,7 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 1741,
+   "load_ms": 1694,
    "console_error_count": 2,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -94,5 +95,8 @@
  "expected_rules": [
   "thin_content"
  ],
- "verified": {}
+ "verified": {
+  "thin_content": "192 words of visible text",
+  "images_no_alt": "once fired at 7 of 8; six were lazy-load placeholders with alt=\"\""
+ }
 }

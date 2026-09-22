@@ -1,6 +1,7 @@
 {
  "label": "plumber-a",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 2902,
+  "load_ms": 2724,
   "has_viewport_meta": true,
   "server": "Squarespace",
   "challenge_waited_ms": 0,
@@ -79,7 +80,7 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 2902,
+   "load_ms": 2724,
    "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -88,5 +89,8 @@
  "expected_rules": [
   "stale_copyright"
  ],
- "verified": {}
+ "verified": {
+  "stale_copyright": "the footer copyright reads 2024",
+  "no_reviews": "once fired; the page carries AggregateRating markup"
+ }
 }

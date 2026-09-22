@@ -1,6 +1,7 @@
 {
  "label": "auto-body-b",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 2080,
+  "load_ms": 1954,
   "has_viewport_meta": true,
   "server": "Vercel",
   "challenge_waited_ms": 0,
@@ -19,7 +20,7 @@
   "script_errors": [],
   "other_script_errors": [],
   "signals": {
-   "word_count": 672,
+   "word_count": 720,
    "has_viewport": true,
    "viewport_content": "width=device-width, initial-scale=1",
    "title_length": 57,
@@ -63,21 +64,21 @@
     "linkedin": false,
     "nextdoor": false
    },
-   "image_count": 34,
+   "image_count": 17,
    "images_without_alt": 0,
-   "scroll_width": 1440,
+   "scroll_width": 1489,
    "inner_width": 1440,
    "challenge": {
     "detected": false,
     "hits": [],
     "title": "",
-    "words": 672
+    "words": 720
    },
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 333,
-   "console_error_count": 0,
+   "load_ms": 1757,
+   "console_error_count": 1,
    "script_error_count": 0,
    "mobile_target_width": 390
   }

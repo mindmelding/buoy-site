@@ -450,6 +450,13 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     def _asset_status(resp) -> None:
         if resp.status in RETRY_STATUSES:
             _asset_failed(resp.request, f"HTTP {resp.status}")
+            return
+        # Imunify360 and SiteGround keep challenging a page's files after the
+        # page itself clears, and answer a script request with the challenge
+        # page. jQuery never arrives, and everything built on it throws.
+        content_type = (resp.headers.get("content-type") or "").lower()
+        if resp.ok and "text/html" in content_type:
+            _asset_failed(resp.request, "a web page came back instead of the file")
 
     page.on("requestfailed", _asset_request_failed)
     page.on("response", _asset_status)

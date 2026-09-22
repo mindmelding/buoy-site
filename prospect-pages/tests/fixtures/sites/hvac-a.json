@@ -1,6 +1,7 @@
 {
  "label": "hvac-a",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 3122,
+  "load_ms": 2670,
   "has_viewport_meta": true,
   "server": "Google Frontend",
   "challenge_waited_ms": 0,
@@ -17,11 +18,7 @@
   "final_url": "https://site.example/",
   "summary": "",
   "script_errors": [],
-  "other_script_errors": [
-   "script error 1",
-   "script error 2",
-   "script error 3"
-  ],
+  "other_script_errors": [],
   "signals": {
    "word_count": 1091,
    "has_viewport": true,
@@ -79,12 +76,15 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 2930,
+   "load_ms": 2670,
    "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390
   }
  },
  "expected_rules": [],
- "verified": {}
+ "verified": {
+  "no_local_schema": "once fired; the page declares HVACBusiness",
+  "console_errors": "once fired on video autoplay notices, which are browser chatter"
+ }
 }

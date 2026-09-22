@@ -42,11 +42,11 @@ class ScriptErrorTest(unittest.TestCase):
     def test_only_the_sites_own_scripts_count(self):
         errors = [
             {"message": "widget broke", "origin": "embeddable-app-widgets.s3.us-east-1.amazonaws.com"},
-            {"message": "their page broke", "origin": "escondidosmiles.example"},
-            {"message": "their cdn broke", "origin": "cdn.escondidosmiles.example"},
+            {"message": "their page broke", "origin": "harborline.example"},
+            {"message": "their cdn broke", "origin": "cdn.harborline.example"},
             {"message": "Invalid or unexpected token", "origin": ""},
         ]
-        mine, others = capture.own_errors(errors, "https://www.escondidosmiles.example/")
+        mine, others = capture.own_errors(errors, "https://www.harborline.example/")
         self.assertEqual(mine, ["their page broke", "their cdn broke"])
         self.assertEqual(others, ["widget broke", "Invalid or unexpected token"])
 

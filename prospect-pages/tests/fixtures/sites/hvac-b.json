@@ -1,6 +1,7 @@
 {
  "label": "hvac-b",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 4732,
+  "load_ms": 5353,
   "has_viewport_meta": true,
   "server": "Apache",
   "challenge_waited_ms": 0,
@@ -90,7 +91,7 @@
    "mobile_scroll_width": 405,
    "mobile_inner_width": 405,
    "mobile_overflows": false,
-   "load_ms": 4732,
+   "load_ms": 4809,
    "console_error_count": 1,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -99,5 +100,8 @@
  "expected_rules": [
   "quote_followup"
  ],
- "verified": {}
+ "verified": {
+  "no_hours": "once fired; 'Hours: M-F 8am-5pm' is in the footer",
+  "console_errors": "once fired on a review widget served from someone else's S3 bucket"
+ }
 }

@@ -1,6 +1,7 @@
 {
  "label": "salon-a",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 2273,
+  "load_ms": 2388,
   "has_viewport_meta": true,
   "server": "Squarespace",
   "challenge_waited_ms": 0,
@@ -71,7 +72,7 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 2246,
+   "load_ms": 2340,
    "console_error_count": 2,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -80,5 +81,7 @@
  "expected_rules": [
   "after_hours_gap"
  ],
- "verified": {}
+ "verified": {
+  "no_reviews": "once fired; 'Customer reviews' is in a menu collapsed on desktop"
+ }
 }

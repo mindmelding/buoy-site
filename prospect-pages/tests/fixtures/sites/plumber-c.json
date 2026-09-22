@@ -1,6 +1,7 @@
 {
  "label": "plumber-c",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 2755,
+  "load_ms": 2780,
   "has_viewport_meta": true,
   "server": "Flywheel/5.1.0",
   "challenge_waited_ms": 0,
@@ -82,7 +83,7 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 2406,
+   "load_ms": 2583,
    "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -94,5 +95,9 @@
   "no_local_schema",
   "phone_not_tappable"
  ],
- "verified": {}
+ "verified": {
+  "no_hours": "no hours anywhere in the page text or markup",
+  "no_reviews": "once fired; 'Testimonials' is in the menu",
+  "no_listings_link": "yelp.com appears only inside review markup, not as a link"
+ }
 }

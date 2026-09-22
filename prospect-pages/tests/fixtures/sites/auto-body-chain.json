@@ -1,6 +1,7 @@
 {
  "label": "auto-body-chain",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 4858,
+  "load_ms": 4795,
   "has_viewport_meta": true,
   "server": "Apache/2.4.68 (Ubuntu)",
   "challenge_waited_ms": 0,
@@ -72,12 +73,16 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 4472,
+   "load_ms": 4795,
    "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390
   }
  },
  "expected_rules": [],
- "verified": {}
+ "verified": {
+  "no_hours": "once fired; the page shows 'Tuesday: 8:00 AM to 5:00 PM', which the old day regex could not match",
+  "no_local_schema": "once fired; the page declares AutomotiveBusiness",
+  "slow_load": "once fired at 5 to 7 seconds; the faster of two loads is under 5"
+ }
 }

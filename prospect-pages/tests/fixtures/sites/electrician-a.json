@@ -1,6 +1,7 @@
 {
  "label": "electrician-a",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 3207,
+  "load_ms": 3485,
   "has_viewport_meta": true,
   "server": "Pepyaka",
   "challenge_waited_ms": 0,
@@ -69,7 +70,7 @@
    "mobile_scroll_width": 320,
    "mobile_inner_width": 320,
    "mobile_overflows": false,
-   "load_ms": 2780,
+   "load_ms": 2732,
    "console_error_count": 2,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -82,5 +83,9 @@
   "stale_copyright",
   "thin_content"
  ],
- "verified": {}
+ "verified": {
+  "stale_copyright": "the footer copyright reads 2017",
+  "no_hours": "no hours anywhere in the page text or markup",
+  "thin_content": "163 words of visible text"
+ }
 }

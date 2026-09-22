@@ -1,6 +1,7 @@
 {
  "label": "auto-repair-b",
  "capture": {
+  "incomplete_render": true,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,15 +10,25 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 2476,
+  "load_ms": 2043,
   "has_viewport_meta": true,
   "server": "LiteSpeed",
-  "challenge_waited_ms": 0,
+  "challenge_waited_ms": 9000,
   "requested_url": "https://site.example/",
   "final_url": "https://site.example/",
   "summary": "",
   "script_errors": [
-   "script error 1"
+   "script error 1",
+   "script error 2",
+   "script error 3",
+   "script error 4",
+   "script error 5",
+   "script error 6",
+   "script error 7",
+   "script error 8",
+   "script error 9",
+   "script error 10",
+   "script error 11"
   ],
   "other_script_errors": [],
   "signals": {
@@ -66,22 +77,23 @@
     "title": "",
     "words": 553
    },
-   "mobile_scroll_width": 1500,
-   "mobile_inner_width": 1500,
-   "mobile_overflows": true,
-   "load_ms": 2007,
-   "console_error_count": 8,
-   "script_error_count": 1,
+   "mobile_scroll_width": 390,
+   "mobile_inner_width": 390,
+   "mobile_overflows": false,
+   "load_ms": 154,
+   "console_error_count": 10,
+   "script_error_count": 11,
    "mobile_target_width": 390
   }
  },
  "expected_rules": [
   "after_hours_gap",
-  "console_errors",
-  "mobile_overflow",
   "no_local_schema",
   "no_meta_description",
   "stale_copyright"
  ],
- "verified": {}
+ "verified": {
+  "stale_copyright": "footer reads 2023 on every run that got past the Imunify check",
+  "console_errors": "once fired on 'jQuery is not defined' after Imunify answered jquery.js with a challenge page"
+ }
 }

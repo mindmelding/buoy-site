@@ -1,6 +1,7 @@
 {
  "label": "plumber-b",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 2792,
+  "load_ms": 2317,
   "has_viewport_meta": true,
   "server": "nginx",
   "challenge_waited_ms": 0,
@@ -69,7 +70,7 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 2675,
+   "load_ms": 2317,
    "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390

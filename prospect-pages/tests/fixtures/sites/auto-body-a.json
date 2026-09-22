@@ -1,6 +1,7 @@
 {
  "label": "auto-body-a",
  "capture": {
+  "incomplete_render": false,
   "ok": true,
   "status": 200,
   "status_text": "OK",
@@ -9,7 +10,7 @@
   "tls_error": false,
   "scheme_downgraded": false,
   "redirected_offsite": false,
-  "load_ms": 6648,
+  "load_ms": 6846,
   "has_viewport_meta": true,
   "server": "nginx",
   "challenge_waited_ms": 0,
@@ -82,7 +83,7 @@
    "mobile_scroll_width": 390,
    "mobile_inner_width": 390,
    "mobile_overflows": false,
-   "load_ms": 6097,
+   "load_ms": 6595,
    "console_error_count": 0,
    "script_error_count": 0,
    "mobile_target_width": 390
@@ -95,5 +96,9 @@
   "quote_followup",
   "slow_load"
  ],
- "verified": {}
+ "verified": {
+  "phone_not_tappable": "number printed in the header, no tel: link on desktop or phone",
+  "no_listings_link": "no link to Facebook, Yelp, Google, or Instagram anywhere on the page",
+  "slow_load": "6 to 9 seconds to the load event across five runs, 26 content photos"
+ }
 }
