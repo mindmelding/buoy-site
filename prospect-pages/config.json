@@ -1,0 +1,92 @@
+{
+  "calendly_url": "https://calendly.com/buoydesk/buoy-meeting",
+  "contact_email": "hello@buoydesk.com",
+  "site": {
+    "base_url": "https://buoydesk.com",
+    "audit_path": "/audit",
+    "company": "Buoy",
+    "home_url": "https://buoydesk.com",
+    "audit_info_url": "https://buoydesk.com/audit.html",
+    "privacy_url": "https://buoydesk.com/privacy.html",
+    "location": "Oceanside, California"
+  },
+  "brand": {
+    "ink": "#102f35",
+    "paper": "#fff8ec",
+    "orange": "#ff593d",
+    "yellow": "#ffd448",
+    "aqua": "#a7e6da",
+    "blue": "#b9dff1"
+  },
+  "view_tracking": {
+    "enabled": false,
+    "endpoint": "",
+    "slug_param": "slug",
+    "extra_params": {}
+  },
+  "capture": {
+    "desktop_width": 1440,
+    "desktop_height": 900,
+    "mobile_width": 390,
+    "mobile_height": 844,
+    "timeout_ms": 30000,
+    "settle_ms": 1200,
+    "full_page": false,
+    "max_full_page_height": 4000,
+    "executable_path": "",
+    "proxy": "",
+    "proxy_bypass": ""
+  },
+  "services": {
+    "After Hours": {
+      "kicker": "Stay open",
+      "summary": "Answer calls and texts after closing, capture the need, and book or route the next step.",
+      "payoff": "Every call that rings out after closing is a job someone else books in the morning. We put a Buoy line behind your main number so after-hours calls and texts get answered, the caller states what they need, and the request lands on your schedule with a callback time. You read the night's list with your first coffee instead of guessing who gave up."
+    },
+    "Lean Stack": {
+      "kicker": "Spend less",
+      "summary": "Cut redundant subscriptions and replace software bloat with simpler tools built around your work.",
+      "payoff": "Most shops pay for four tools that each do a fifth of the job. We list what you are paying for, find the overlap, and replace the bloat with a smaller setup built around how you actually work. The monthly bill drops and the team stops copying the same job between three screens."
+    },
+    "Full Picture": {
+      "kicker": "Know more",
+      "summary": "Bring every customer, job, message, follow-up, and next step into one useful view.",
+      "payoff": "Right now the answer to what is happening with a job lives in someone's texts, someone's inbox, and a note on the counter. We pull customers, jobs, messages, and next steps into one view the whole team reads the same way, so nothing waits on the one person who remembers it."
+    },
+    "AI Crew": {
+      "kicker": "Work better",
+      "summary": "Onboard the whole team to AI tools connected to the systems and knowledge they already use.",
+      "payoff": "AI is only useful when it knows your prices, your process, and your customers. We set your team up with tools connected to the systems you already run, then train the people who will use them daily, so quotes, write-ups, and replies stop eating the evening."
+    },
+    "Get Found": {
+      "kicker": "Show up",
+      "summary": "Modernize your website and socials for SEO, GEO, and the AI agents searching on customers' behalf.",
+      "payoff": "Customers now ask an assistant before they ask a neighbor, and the assistant reads your site to decide whether to name you. We rebuild the pages and listings that answer those questions, so the tools doing the searching have something current and specific to work with."
+    },
+    "Regulars": {
+      "kicker": "Earn repeats",
+      "summary": "Bring customers back with useful content, timely follow-up, and automated reward programs.",
+      "payoff": "The cheapest job you will book this year is the second one from a customer you already served. We set up the follow-up that goes out on schedule, the reminders tied to the work you did, and the reasons to come back, so your list keeps earning instead of going cold."
+    },
+    "Five Stars": {
+      "kicker": "Build trust",
+      "summary": "Request reviews after every completed job, draft owner-approved replies, and alert the team instantly when a bad review lands.",
+      "payoff": "Reviews arrive when you ask for them, and almost never when you do not. We send the request after every finished job, draft replies for you to approve, and alert you the moment a bad one lands, so the page a new customer reads keeps getting better without anyone remembering to work on it."
+    },
+    "Quote Rescue": {
+      "kicker": "Recover work",
+      "summary": "Run thoughtful follow-up sequences on open estimates that never turned into booked work.",
+      "payoff": "Open estimates do not decline, they go quiet. We run the follow-up on every quote that never turned into work, spaced so it reads as helpful rather than pushy, and hand you back the ones that come alive. It is the fastest money in the audit because the work is already priced."
+    },
+    "Full Book": {
+      "kicker": "Fill the day",
+      "summary": "Send smart appointment reminders and automatically offer cancelled slots to the waitlist.",
+      "payoff": "A no-show costs the same as an empty slot you never sold. We send reminders on the schedule that actually reduces them, and when a slot opens up we offer it down the waitlist automatically, so the day fills back in before anyone notices the hole."
+    },
+    "Call Intel": {
+      "kicker": "Catch misses",
+      "summary": "Transcribe and score every call, flag missed opportunities, and hand the team a clean callback list.",
+      "payoff": "You cannot fix what happens on the phone if nobody hears it twice. We transcribe and score every call, flag the ones where a booking slipped, and hand you a clean callback list, so the pattern behind the misses becomes something you can coach."
+    }
+  }
+}

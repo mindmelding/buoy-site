@@ -1,0 +1,30 @@
+{
+  "business_name": "Harbor Line Auto Body",
+  "url": "https://example.com",
+  "phone": "(760) 555-0142",
+  "category": "Auto body and collision repair",
+  "city": "Oceanside, CA",
+  "top_service": "Quote Rescue",
+  "findings": [
+    {
+      "title": "Estimates go out and nothing follows them",
+      "detail": "Your site takes estimate requests through a form, and the confirmation is the last thing a customer hears. Shops we look at recover between a fifth and a third of quiet estimates with follow-up alone, and the work is already priced.",
+      "service": "Quote Rescue"
+    },
+    {
+      "title": "The phone number is an image on mobile",
+      "detail": "On a phone the number in your header is part of a graphic, so tapping it does nothing. A customer standing in a parking lot has to read it, switch apps, and type it in.",
+      "service": "Get Found"
+    },
+    {
+      "title": "Nobody answers after 5pm, and the page says you close at 5",
+      "detail": "Collision calls come in right after the accident, which is mostly evenings and weekends. There is no way to leave a request that reaches you before the next morning.",
+      "service": "After Hours"
+    },
+    {
+      "title": "Twenty-two reviews, none from this year",
+      "detail": "Your rating is good and the page is stale, which reads worse than a lower rating kept current. There is no step in your process that asks a finished customer for one.",
+      "service": "Five Stars"
+    }
+  ]
+}

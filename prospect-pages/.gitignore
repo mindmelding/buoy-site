@@ -1,0 +1,7 @@
+dist/
+__pycache__/
+*.pyc
+
+# Real prospect lists stay out of the repo. Anchored so the examples still ship.
+/prospects.json
+/prospects.*.json

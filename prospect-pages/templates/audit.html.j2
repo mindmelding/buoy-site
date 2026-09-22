@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="{{ brand.orange }}" />
+  <meta name="robots" content="noindex, nofollow, noarchive, noimageindex, nosnippet" />
+  <meta name="referrer" content="no-referrer" />
+  <title>AI audit preview for {{ p.business_name }} | {{ cfg.site.company }}</title>
+  <meta name="description" content="A private audit preview prepared for {{ p.business_name }}. Not listed publicly." />
+  <link rel="icon" href="{{ cfg.site.base_url }}/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ cfg.site.base_url }}/favicon-32x32.png" />
+  <link rel="apple-touch-icon" href="{{ cfg.site.base_url }}/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: {{ brand.ink }};
+      --paper: {{ brand.paper }};
+      --orange: {{ brand.orange }};
+      --yellow: {{ brand.yellow }};
+      --aqua: {{ brand.aqua }};
+      --blue: {{ brand.blue }};
+      --line: rgba(16, 47, 53, .23);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Bricolage Grotesque", system-ui, sans-serif;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+    h1, h2, h3, p { margin-top: 0; }
+    .wrap { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
+    .mono { font-family: "DM Mono", ui-monospace, monospace; }
+
+    .topline {
+      background: var(--ink);
+      color: #fff;
+      font: 500 12px/1.4 "DM Mono", ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 16px;
+    }
+    .site-head {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { font-weight: 800; font-size: 20px; text-decoration: none; letter-spacing: -.02em; }
+    .brand-note { font: 500 12px/1.3 "DM Mono", ui-monospace, monospace; text-transform: uppercase; letter-spacing: .07em; }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 9px;
+      align-items: center;
+      font: 500 12px/1.3 "DM Mono", ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 18px;
+    }
+    .eyebrow::before { content: ""; width: 36px; height: 3px; background: var(--orange); }
+
+    .hero { padding: clamp(44px, 7vw, 76px) 0 clamp(30px, 4vw, 44px); }
+    h1 {
+      font-size: clamp(36px, 5.6vw, 66px);
+      line-height: .98;
+      letter-spacing: -.045em;
+      margin-bottom: 20px;
+      text-wrap: balance;
+    }
+    .lede { font-size: clamp(17px, 2vw, 21px); max-width: 640px; margin-bottom: 26px; }
+
+    .facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .facts li {
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      padding: 8px 15px;
+      font: 500 12px/1.3 "DM Mono", ui-monospace, monospace;
+      background: #fff;
+    }
+    .facts li a { text-decoration: underline; }
+
+    .section { padding: clamp(40px, 6vw, 68px) 0; border-top: 2px solid var(--ink); }
+    .section > .wrap > h2 {
+      font-size: clamp(28px, 3.6vw, 44px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      margin-bottom: 14px;
+      text-wrap: balance;
+    }
+    .section-note { max-width: 620px; font-size: 17px; margin-bottom: 34px; }
+
+    .screens { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, .45fr); gap: 26px; align-items: start; }
+    figure { margin: 0; }
+    figcaption {
+      font: 500 11px/1.4 "DM Mono", ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-top: 10px;
+    }
+    .frame { border: 2px solid var(--ink); background: #fff; box-shadow: 7px 7px 0 var(--ink); overflow: hidden; }
+    .frame-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 12px;
+      border-bottom: 2px solid var(--ink);
+      background: var(--aqua);
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ink); background: var(--paper); }
+    .frame-url {
+      margin-left: 8px;
+      font: 400 11px/1.3 "DM Mono", ui-monospace, monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .frame img { display: block; width: 100%; height: auto; }
+    .frame.phone { border-radius: 22px; box-shadow: 6px 6px 0 var(--ink); }
+    .frame.phone .frame-bar { background: var(--blue); justify-content: center; border-bottom: 2px solid var(--ink); }
+    .frame.phone .frame-notch { width: 54px; height: 6px; border-radius: 999px; background: var(--ink); }
+
+    .dead {
+      border: 2px dashed var(--ink);
+      background: var(--yellow);
+      padding: clamp(24px, 4vw, 40px);
+      box-shadow: 7px 7px 0 var(--ink);
+    }
+    .dead h3 { font-size: clamp(20px, 2.6vw, 28px); letter-spacing: -.02em; margin-bottom: 10px; }
+    .dead p { margin: 0 0 12px; font-size: 16px; max-width: 560px; }
+    .dead .mono { font-size: 12px; word-break: break-word; }
+
+    .flags { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+    .flags li {
+      background: #fff;
+      border: 1px solid var(--ink);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font: 500 12px/1.45 "DM Mono", ui-monospace, monospace;
+    }
+    .flags li b { font-weight: 700; }
+
+    .findings { counter-reset: finding; margin-top: clamp(34px, 5vw, 54px); border-top: 2px solid var(--ink); }
+    .finding {
+      counter-increment: finding;
+      display: grid;
+      grid-template-columns: 74px minmax(0, 1fr) 190px;
+      gap: 24px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+      scroll-margin-top: 20px;
+    }
+    .finding-num { font: 500 15px/1.4 "DM Mono", ui-monospace, monospace; color: var(--orange); }
+    .finding h3 { font-size: clamp(20px, 2.4vw, 27px); line-height: 1.08; letter-spacing: -.025em; margin: 0 0 8px; }
+    .finding p { margin: 0; font-size: 16px; max-width: 560px; }
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      padding: 7px 13px;
+      background: var(--aqua);
+      font: 500 11px/1.3 "DM Mono", ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .tag small { display: block; text-transform: none; letter-spacing: 0; opacity: .75; margin-top: 2px; }
+
+    .install { background: var(--aqua); }
+    .install-card {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      box-shadow: 9px 9px 0 var(--ink);
+      padding: clamp(26px, 4vw, 44px);
+      max-width: 760px;
+    }
+    .install-card .kicker {
+      font: 500 12px/1.3 "DM Mono", ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 10px;
+    }
+    .install-card h3 { font-size: clamp(30px, 4.4vw, 52px); letter-spacing: -.045em; line-height: 1; margin: 0 0 16px; }
+    .install-card p { font-size: 17px; max-width: 620px; }
+    .install-card p:last-child { margin-bottom: 0; }
+
+    .cta { background: var(--ink); color: #fff; }
+    .cta h2 { color: #fff; }
+    .cta .section-note { color: #fff; opacity: .88; }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 0 26px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--orange);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 4px 4px 0 var(--paper);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--paper); }
+    .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
+    .cta-alt { font: 500 12px/1.6 "DM Mono", ui-monospace, monospace; }
+    .cta-alt a { text-decoration: underline; }
+
+    .private {
+      background: var(--paper);
+      border-top: 2px solid var(--ink);
+      padding: 34px 0 44px;
+    }
+    .private p {
+      font: 400 12px/1.7 "DM Mono", ui-monospace, monospace;
+      max-width: 680px;
+      margin: 0 0 10px;
+    }
+    .private p:last-child { margin-bottom: 0; }
+    .private a { text-decoration: underline; }
+    .pixel { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    @media (prefers-reduced-motion: reduce) { .button { transition: none; } }
+    @media (max-width: 900px) {
+      .screens { grid-template-columns: 1fr; }
+      .frame.phone { max-width: 320px; }
+      .finding { grid-template-columns: 54px minmax(0, 1fr); gap: 8px 16px; }
+      .finding-body { grid-column: 2; }
+      .finding-tag { grid-column: 2; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 28px, 1080px); }
+      .topline { font-size: 10px; letter-spacing: .06em; }
+      .site-head { min-height: 62px; }
+      .finding { grid-template-columns: 40px minmax(0, 1fr); padding: 22px 0; }
+      .finding p { font-size: 15px; }
+      .button { width: 100%; }
+      .frame { box-shadow: 5px 5px 0 var(--ink); }
+      .install-card { box-shadow: 6px 6px 0 var(--ink); }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">Private preview prepared for {{ p.business_name }}</div>
+
+  <header class="wrap site-head">
+    <a class="brand" href="{{ cfg.site.home_url }}">{{ cfg.site.company }}</a>
+    <span class="brand-note">AI audit preview</span>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <p class="eyebrow">Sample of the $100 audit</p>
+      <h1>AI audit preview for {{ p.business_name }}</h1>
+      {% if p.intro %}
+      <p class="lede">{{ p.intro }}</p>
+      {% else %}
+      <p class="lede">We looked at what a customer finds when they try to reach {{ p.business_name }}{% if p.city %} in {{ p.city }}{% endif %}, and wrote down what we would fix first. This is a sample of the full {{ cfg.site.company }} audit, run on your business rather than a made-up one.</p>
+      {% endif %}
+      <ul class="facts">
+        {% if p.category %}<li>{{ p.category }}</li>{% endif %}
+        {% if p.city %}<li>{{ p.city }}</li>{% endif %}
+        {% if p.url %}<li><a href="{{ p.url }}" target="_blank" rel="noopener nofollow">{{ p.display_url }}</a></li>{% endif %}
+        {% if p.phone %}<li>{% if p.tel_href %}<a href="{{ p.tel_href }}">{{ p.phone }}</a>{% else %}{{ p.phone }}{% endif %}</li>{% endif %}
+        <li>Reviewed {{ reviewed_on }}</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>What we saw</h2>
+        {% if cap and cap.ok %}
+        <p class="section-note">These are screenshots of your own site, taken at a desktop width of {{ cfg.capture.desktop_width }} pixels and a phone width of {{ cfg.capture.mobile_width }} pixels. The findings under them come from what is on these screens.</p>
+        {% else %}
+        <p class="section-note">We tried to open your site the way a customer would, at a desktop width of {{ cfg.capture.desktop_width }} pixels and a phone width of {{ cfg.capture.mobile_width }} pixels. Here is what came back.</p>
+        {% endif %}
+
+        {% if cap and cap.ok %}
+        <div class="screens">
+          {% if cap.desktop %}
+          <figure>
+            <div class="frame">
+              <div class="frame-bar">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="frame-url">{{ cap.final_url or p.url }}</span>
+              </div>
+              <img src="{{ cap.desktop }}" alt="The {{ p.business_name }} website on a desktop screen." />
+            </div>
+            <figcaption>Desktop, {{ cfg.capture.desktop_width }}px wide</figcaption>
+          </figure>
+          {% endif %}
+          {% if cap.mobile %}
+          <figure>
+            <div class="frame phone">
+              <div class="frame-bar"><span class="frame-notch"></span></div>
+              <img src="{{ cap.mobile }}" alt="The {{ p.business_name }} website on a phone screen." />
+            </div>
+            <figcaption>Phone, {{ cfg.capture.mobile_width }}px wide</figcaption>
+          </figure>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="dead">
+          {% if cap and cap.error_kind == "no_url" %}
+          <h3>We could not find a website for you</h3>
+          <p>We have no website on file for {{ p.business_name }}, and we could not find one. That is the finding: someone who looks you up gets a listing and nowhere to go next.</p>
+          {% else %}
+          <h3>Your site did not load for us</h3>
+          <p>{{ cap.summary if cap and cap.summary else "We could not load the site, so there is no screenshot to show." }}</p>
+          <p>A customer who taps your listing sees this same thing. That is the first item on the list below.</p>
+          {% endif %}
+          {% if p.url %}
+          <p class="mono">Tried <a href="{{ p.url }}" target="_blank" rel="noopener nofollow">{{ p.display_url }}</a>{% if cap and cap.error %} and got: {{ cap.error }}{% endif %}</p>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {% if flags %}
+        <ul class="flags">
+          {% for flag in flags %}<li><b>{{ flag.label }}</b>: {{ flag.detail }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if p.findings %}
+        <div class="findings">
+          {% for finding in p.findings %}
+          <article class="finding" id="{{ finding.anchor }}">
+            <p class="finding-num">{{ finding.number }}</p>
+            <div class="finding-body">
+              <h3>{{ finding.title }}</h3>
+              {% if finding.detail %}<p>{{ finding.detail }}</p>{% endif %}
+            </div>
+            <div class="finding-tag">
+              {% if finding.service %}
+              <span class="tag">{{ finding.service }}{% if finding.kicker %}<small>{{ finding.kicker }}</small>{% endif %}</span>
+              {% endif %}
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    {% if p.top_service %}
+    <section class="section install">
+      <div class="wrap">
+        <h2>What we would install first</h2>
+        <p class="section-note">One thing, running and handed over, before we touch anything else.</p>
+        <div class="install-card">
+          {% if p.top_service_kicker %}<p class="kicker">{{ p.top_service_kicker }}</p>{% endif %}
+          <h3>{{ p.top_service }}</h3>
+          {% if p.top_service_payoff %}<p>{{ p.top_service_payoff }}</p>{% endif %}
+          {% if p.top_service_summary and not p.top_service_payoff %}<p>{{ p.top_service_summary }}</p>{% endif %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="section cta" id="book">
+      <div class="wrap">
+        <h2>Book your $100 audit call</h2>
+        <p class="section-note">Thirty minutes on a call, then the full audit across all ten areas, written up for {{ p.business_name }}. The $100 is credited to month one if you go ahead, and refunded if the audit turns up nothing worth doing.</p>
+        <div class="cta-row">
+          <a class="button" href="{{ cfg.calendly_url }}" target="_blank" rel="noopener">Book your $100 audit call</a>
+          <p class="cta-alt">
+            Or reply to the email this came from.<br />
+            {% if cfg.contact_email %}<a href="mailto:{{ cfg.contact_email }}?subject={{ mail_subject }}">{{ cfg.contact_email }}</a>{% endif %}
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="private">
+    <div class="wrap">
+      <p>This is a private preview page. It was prepared for {{ p.business_name }}, it is not linked from anywhere on our site, and it is not indexed by search engines. The address is yours to share or to ignore.</p>
+      <p>Screenshots were taken from the public website on {{ reviewed_on }}. Nothing here came from a system we do not have access to.</p>
+      <p>{{ cfg.site.company }}{% if cfg.site.location %}, {{ cfg.site.location }}{% endif %}. <a href="{{ cfg.site.home_url }}">Our site</a>{% if cfg.site.audit_info_url %} · <a href="{{ cfg.site.audit_info_url }}">About the $100 audit</a>{% endif %}{% if cfg.site.privacy_url %} · <a href="{{ cfg.site.privacy_url }}">Privacy</a>{% endif %}{% if cfg.contact_email %} · <a href="mailto:{{ cfg.contact_email }}">{{ cfg.contact_email }}</a>{% endif %}</p>
+      <p>To have this page taken down, reply to the email it came from or write to {% if cfg.contact_email %}<a href="mailto:{{ cfg.contact_email }}?subject=Take%20down%20audit%20preview">{{ cfg.contact_email }}</a>{% else %}us{% endif %} and it comes down the same day.</p>
+    </div>
+  </footer>
+  {% if tracking_src %}
+  <img class="pixel" src="{{ tracking_src }}" alt="" width="1" height="1" aria-hidden="true" referrerpolicy="no-referrer" decoding="async" />
+  {% endif %}
+</body>
+</html>
