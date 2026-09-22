@@ -63,20 +63,6 @@
       font-weight: 800;
       transform: rotate(-.5deg);
     }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
-    .card {
-      background: white;
-      border: 2px solid var(--ink);
-      border-radius: 14px;
-      padding: 26px 24px;
-      box-shadow: 5px 5px 0 var(--ink);
-    }
-    .card:nth-child(4n + 1) { transform: rotate(.5deg); }
-    .card:nth-child(4n + 2) { transform: rotate(-.7deg); background: var(--aqua); }
-    .card:nth-child(4n + 3) { transform: rotate(.6deg); background: var(--yellow); }
-    .card:nth-child(4n) { transform: rotate(-.5deg); background: var(--blue); }
-    .card h3 { font-size: 21px; letter-spacing: -.02em; margin-bottom: 10px; }
-    .card p { margin: 0; font-size: 16px; }
     .ten { background: var(--ink); color: white; }
     .ten-grid { display: grid; grid-template-columns: .72fr 1.28fr; gap: clamp(38px, 8vw, 100px); align-items: start; }
     .ten-grid h2 { font-size: clamp(46px, 6vw, 82px); line-height: .95; letter-spacing: -.05em; margin: 0 0 20px; }
@@ -104,11 +90,15 @@
     .cta { background: var(--orange); border-block: 2px solid var(--ink); text-align: center; }
     .cta h2 { font-size: clamp(48px, 7vw, 96px); line-height: .92; letter-spacing: -.055em; text-wrap: balance; margin-bottom: 26px; }
     .cta p { font-size: 20px; font-weight: 700; max-width: 620px; margin: 0 auto 34px; }
+    .cta .lede { margin-bottom: 12px; }
     .cta .micro { max-width: none; margin: 22px auto 0; }
     .booking-card { background: #fff; border: 2px solid var(--ink); max-width: 880px; margin: 0 auto; }
     .email-fallback { max-width: 640px; margin: 36px auto 0; }
     .email-fallback p { font-size: 17px; font-weight: 400; }
     @media (max-width: 850px) {
+      /* Keep the header on one row: the nav button drops to "Book a call". */
+      .nav .button { white-space: nowrap; }
+      .nav .long-label { display: none; }
       .hero { grid-template-columns: 1fr; padding: 62px 0 76px; }
       .ten-grid, .next { grid-template-columns: 1fr; }
     }
@@ -168,9 +158,9 @@
   <header class="wrap nav" aria-label="Primary navigation">
     <div class="nav-note"><a href="index.html">← Buoy home</a></div>
     <nav class="nav-links">
-      <a class="nav-secondary" href="#what">What you get</a>
+      <a class="nav-secondary" href="#grades">What you get</a>
       <a href="#how">How it works</a>
-      <a class="button book-cta" href="#book">Book your audit</a>
+      <a class="button book-cta" href="#book"><span>Book a <span class="long-label">free intro </span>call</span></a>
     </nav>
   </header>
 
@@ -181,15 +171,15 @@
         <h1 id="hero-title">Find the money your shop is leaving on the table.</h1>
         <p>A ten-area diagnostic of your business: the missed calls, dead quotes, and busywork that cost you revenue every week, mapped and ranked so you know exactly what to fix first.</p>
         <div class="hero-actions">
-          <a class="button dark book-cta" href="#book">Book your $100 audit</a>
-          <div class="micro">Starts with a free 15-minute intro call. Built for Oceanside &amp; North County service businesses.</div>
+          <a class="button dark book-cta" href="#book">Book a free intro call</a>
+          <div class="micro">15 minutes, no charge. Built for Oceanside &amp; North County service businesses.</div>
         </div>
       </div>
       <aside class="price-card" aria-label="Audit pricing">
         <div>
           <div class="price-kicker">Founding rate · first 10 audits</div>
           <div class="price">$100</div>
-          <p style="font-weight:700;">Fully credited toward your first month if you continue with Buoy.</p>
+          <p style="font-weight:700;">A ten-area diagnostic, done in a week, with a written report.</p>
           <ul>
             <li>Written ten-area report</li>
             <li>Missed-revenue estimate</li>
@@ -202,40 +192,7 @@
       </aside>
     </section>
 
-    <section class="section wrap" id="what" aria-labelledby="what-title">
-      <div class="section-head">
-        <h2 id="what-title">What the audit actually looks at.</h2>
-        <p>Most shops we look at are missing the same handful of things: unanswered after-hours calls, quotes that never get followed up, reviews nobody asks for, software nobody uses. We check all of it and show you the math.</p>
-      </div>
-      <div class="cards">
-        <div class="card">
-          <h3>Missed revenue</h3>
-          <p>After-hours calls, dead quotes, no-show appointments, and slow follow-up, estimated in dollars, not vibes.</p>
-        </div>
-        <div class="card">
-          <h3>Customer picture</h3>
-          <p>How customer info, jobs, messages, and next steps are tracked today, and where things fall through the cracks.</p>
-        </div>
-        <div class="card">
-          <h3>Software spend</h3>
-          <p>Every subscription you're paying for, what it actually does for you, and what can be cut or simplified.</p>
-        </div>
-        <div class="card">
-          <h3>Reputation engine</h3>
-          <p>Review volume, response habits, and the review gaps your competitors are quietly winning.</p>
-        </div>
-        <div class="card">
-          <h3>Team leverage</h3>
-          <p>The repetitive work eating your team's week, and which of it an AI workflow could take over tomorrow.</p>
-        </div>
-        <div class="card">
-          <h3>Visibility</h3>
-          <p>How you show up on Google, on socials, and to the AI agents starting to recommend businesses on customers' behalf.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section wrap" id="how" aria-labelledby="how-title" style="padding-top:0;">
+    <section class="section wrap" id="how" aria-labelledby="how-title">
       <div class="section-head">
         <h2 id="how-title">A week, mostly on our side.</h2>
         <p>You give us a short intro call and read-only access to the things customers touch. We do the digging and bring you the findings.</p>
@@ -256,12 +213,12 @@
       </div>
     </section>
 
-    <section class="section ten" aria-labelledby="ten-title">
+    <section class="section ten" id="grades" aria-labelledby="ten-title">
       <div class="wrap ten-grid">
         <div>
           <div class="eyebrow">The ten areas</div>
           <h2 id="ten-title">Everything the audit grades.</h2>
-          <p>Each area gets a plain-language score and a dollar estimate where one exists. The roadmap starts with the fastest payoff.</p>
+          <p>Each area gets a plain-language score and a missed-revenue estimate in dollars, not vibes. The roadmap starts with the fastest payoff.</p>
         </div>
         <div class="stack" aria-label="The ten audited areas">
           <div class="stack-item"><div class="stack-icon">01</div><div><strong>After Hours</strong><small>Calls and texts after closing: answered, captured, routed?</small></div></div>
@@ -334,7 +291,8 @@
     <section class="section cta" id="book" aria-labelledby="cta-title">
       <div class="wrap">
         <h2 id="cta-title">Stop guessing where the money goes.</h2>
-        <p>Book a 15-minute intro call. If you're a fit, the audit starts the same week.</p>
+        <p class="lede">Book a 15-minute intro call. If you're a fit, the audit starts the same week.</p>
+        <p class="proof">We've already scored 152 Oceanside shops. Ask for yours on the call.</p>
         <div class="booking-card">
           <div class="calendly-inline-widget" data-url="https://calendly.com/buoydesk/buoy-meeting" style="min-width:320px;height:700px;"></div>
           <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
@@ -344,7 +302,7 @@
           <iframe data-tally-src="https://tally.so/embed/gDB2zM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&source=audit" loading="lazy" width="100%" height="498" frameborder="0" marginheight="0" marginwidth="0" title="Buoy - Free report request"></iframe>
           <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
         </div>
-        <div class="micro">$100 credited to month one if you continue · No long contract · Report is yours either way</div>
+        <div class="micro">Free 15-minute call · No long contract · Report is yours either way</div>
       </div>
     </section>
   </main>
