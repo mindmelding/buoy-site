@@ -35,6 +35,7 @@ KNOWN_FIELDS = (
     "slug",
     "intro",
     "notes",
+    "_drafted",
 )
 
 

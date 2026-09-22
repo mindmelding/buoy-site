@@ -51,7 +51,7 @@ def tracking_src(config: dict[str, Any], slug: str) -> str:
 
 def build_flags(cap: dict[str, Any] | None) -> list[dict[str, str]]:
     """Turn the capture diagnosis into short technical notes for the page."""
-    if not cap or not cap.get("ok"):
+    if not cap or not cap.get("ok") or cap.get("challenged"):
         return []
 
     flags: list[dict[str, str]] = []
@@ -87,12 +87,18 @@ def build_flags(cap: dict[str, Any] | None) -> list[dict[str, str]]:
             "label": "Slow load",
             "detail": f"the page took {load_ms / 1000:.1f} seconds to become usable",
         })
-    errors = cap.get("console_errors") or []
+    # Count only scripts that actually threw. A resource that failed to load is
+    # often our own connection, and we do not put our network on their page.
+    errors = cap.get("script_errors")
+    if errors is None:
+        errors = capture_lib.script_errors(cap.get("console_errors") or [])
     if errors:
         count = len(errors)
+        noun = "script error" if count == 1 else "script errors"
+        verb = "fires" if count == 1 else "fire"
         flags.append({
             "label": "Broken scripts",
-            "detail": f"{count} script error{'s' if count != 1 else ''} fire on load",
+            "detail": f"{count} {noun} {verb} on load",
         })
     if not cap.get("mobile"):
         flags.append({

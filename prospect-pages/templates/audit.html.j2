@@ -289,31 +289,31 @@
     <section class="section">
       <div class="wrap">
         <h2>What we saw</h2>
-        {% if cap and cap.ok %}
+        {% if cap and cap.get('ok') and not cap.get('challenged') %}
         <p class="section-note">These are screenshots of your own site, taken at a desktop width of {{ cfg.capture.desktop_width }} pixels and a phone width of {{ cfg.capture.mobile_width }} pixels. The findings under them come from what is on these screens.</p>
         {% else %}
         <p class="section-note">We tried to open your site the way a customer would, at a desktop width of {{ cfg.capture.desktop_width }} pixels and a phone width of {{ cfg.capture.mobile_width }} pixels. Here is what came back.</p>
         {% endif %}
 
-        {% if cap and cap.ok %}
+        {% if cap and cap.get('ok') and not cap.get('challenged') %}
         <div class="screens">
-          {% if cap.desktop %}
+          {% if cap.get('desktop') %}
           <figure>
             <div class="frame">
               <div class="frame-bar">
                 <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                <span class="frame-url">{{ cap.final_url or p.url }}</span>
+                <span class="frame-url">{{ cap.get('final_url') or p.url }}</span>
               </div>
-              <img src="{{ cap.desktop }}" alt="The {{ p.business_name }} website on a desktop screen." />
+              <img src="{{ cap.get('desktop') }}" alt="The {{ p.business_name }} website on a desktop screen." />
             </div>
             <figcaption>Desktop, {{ cfg.capture.desktop_width }}px wide</figcaption>
           </figure>
           {% endif %}
-          {% if cap.mobile %}
+          {% if cap.get('mobile') %}
           <figure>
             <div class="frame phone">
               <div class="frame-bar"><span class="frame-notch"></span></div>
-              <img src="{{ cap.mobile }}" alt="The {{ p.business_name }} website on a phone screen." />
+              <img src="{{ cap.get('mobile') }}" alt="The {{ p.business_name }} website on a phone screen." />
             </div>
             <figcaption>Phone, {{ cfg.capture.mobile_width }}px wide</figcaption>
           </figure>
@@ -321,16 +321,20 @@
         </div>
         {% else %}
         <div class="dead">
-          {% if cap and cap.error_kind == "no_url" %}
+          {% if cap and cap.get('challenged') %}
+          <h3>We could not reach your site from our end</h3>
+          <p>A bot-protection screen answered instead of your website, so we have not shown a screenshot here rather than show you something that is not yours. That screen is doing its job and it is not a fault on your site.</p>
+          <p>The findings below come from what we could check another way.</p>
+          {% elif cap and cap.get('error_kind') == "no_url" %}
           <h3>We could not find a website for you</h3>
           <p>We have no website on file for {{ p.business_name }}, and we could not find one. That is the finding: someone who looks you up gets a listing and nowhere to go next.</p>
           {% else %}
           <h3>Your site did not load for us</h3>
-          <p>{{ cap.summary if cap and cap.summary else "We could not load the site, so there is no screenshot to show." }}</p>
+          <p>{{ cap.get('summary') if cap and cap.get('summary') else "We could not load the site, so there is no screenshot to show." }}</p>
           <p>A customer who taps your listing sees this same thing. That is the first item on the list below.</p>
           {% endif %}
           {% if p.url %}
-          <p class="mono">Tried <a href="{{ p.url }}" target="_blank" rel="noopener nofollow">{{ p.display_url }}</a>{% if cap and cap.error %} and got: {{ cap.error }}{% endif %}</p>
+          <p class="mono">Tried <a href="{{ p.url }}" target="_blank" rel="noopener nofollow">{{ p.display_url }}</a>{% if cap and cap.get('error') %} and got: {{ cap.get('error') }}{% endif %}</p>
           {% endif %}
         </div>
         {% endif %}

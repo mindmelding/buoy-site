@@ -25,9 +25,12 @@ from urllib.parse import urlsplit
 
 import prospect as prospect_lib
 
+PACKAGE_DIR = prospect_lib.PACKAGE_DIR
+
 DESKTOP_FILE = "desktop.png"
 MOBILE_FILE = "mobile.png"
 CAPTURE_FILE = "capture.json"
+PROBE_FILE = PACKAGE_DIR / "probe.js"
 
 USER_AGENT_DESKTOP = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -60,6 +63,10 @@ KIND_SUMMARY = {
     "empty": "The server answered with nothing at all.",
     "blocked": "The request was blocked before the page could load.",
     "unknown": "The page did not load.",
+    "challenged": (
+        "A bot-protection screen answered instead of the site, so we could not see "
+        "what a customer sees from here."
+    ),
 }
 
 
@@ -111,6 +118,20 @@ def classify_error(message: str) -> str:
     return "unknown"
 
 
+# A failed resource load is often our own network rather than their site, so it
+# is counted separately from a script that actually threw.
+RESOURCE_NOISE = re.compile(
+    r"failed to load resource|net::ERR_|ERR_BLOCKED|net::ERR_CERT|"
+    r"loading (chunk|css chunk)|preload|favicon|ERR_CONNECTION",
+    re.IGNORECASE,
+)
+
+
+def script_errors(messages: list[str]) -> list[str]:
+    """Console errors that came from code running, not from a fetch failing."""
+    return [m for m in messages if not RESOURCE_NOISE.search(m)]
+
+
 def clean_error(message: str) -> str:
     """Strip the tooling prefix and trailing url so the page can quote it."""
     message = re.sub(r"^[A-Za-z]+\.[A-Za-z_]+:\s*", "", message.strip())
@@ -128,6 +149,25 @@ def _blank(record: dict[str, Any], kind: str, message: str) -> dict[str, Any]:
     record["error"] = clean_error(message)
     record["summary"] = KIND_SUMMARY.get(kind, KIND_SUMMARY["unknown"])
     return record
+
+
+def probe_page(page) -> dict[str, Any]:
+    """Read the signals a findings pass needs, from the page already on screen.
+
+    Returns an empty dict rather than raising. A site that breaks the probe is
+    still a site we want the screenshot of.
+    """
+    try:
+        script = PROBE_FILE.read_text(encoding="utf-8")
+    except OSError as exc:
+        print(f"  probe script unavailable: {exc}", file=sys.stderr)
+        return {}
+    try:
+        signals = page.evaluate(script)
+    except Exception as exc:  # noqa: BLE001 - a hostile page must not stop capture
+        print(f"  probe failed: {str(exc).splitlines()[0]}", file=sys.stderr)
+        return {}
+    return signals if isinstance(signals, dict) else {}
 
 
 def _shoot(page, path: Path, settings: dict[str, Any]) -> bool:
@@ -185,6 +225,8 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         if msg.type == "error" and len(console_errors) < 20
         else None,
     )
+    page.on("pageerror", lambda exc: console_errors.append(str(exc)[:300])
+            if len(console_errors) < 20 else None)
 
     started = time.monotonic()
     try:
@@ -221,6 +263,7 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     except Exception:  # noqa: BLE001
         result["has_viewport_meta"] = None
     result["console_errors"] = console_errors
+    result["signals"] = probe_page(page)
 
     shot_path.parent.mkdir(parents=True, exist_ok=True)
     result["shot"] = _shoot(page, shot_path, settings)
@@ -332,9 +375,43 @@ def capture_site(
     record["mobile"] = f"shots/{MOBILE_FILE}" if mobile.get("shot") else None
     record["mobile_error"] = mobile.get("error", "")
 
+    signals = dict(desktop.get("signals") or {})
+    mobile_signals = mobile.get("signals") or {}
+    scroll = mobile_signals.get("scroll_width") or 0
+    inner = mobile_signals.get("inner_width") or 0
+    # A page wider than the phone viewport is the sideways-scroll complaint.
+    signals["mobile_scroll_width"] = scroll
+    signals["mobile_inner_width"] = inner
+    signals["mobile_overflows"] = bool(scroll and inner and scroll > inner + 4)
+    signals["load_ms"] = record.get("load_ms")
+    all_errors = record.get("console_errors") or []
+    real_errors = script_errors(all_errors)
+    record["script_errors"] = real_errors
+    signals["console_error_count"] = len(all_errors)
+    signals["script_error_count"] = len(real_errors)
+    # The width we asked for, so a finding can quote a real phone width rather
+    # than the layout viewport a browser invents for a non-responsive page.
+    signals["mobile_target_width"] = mobile_view["width"]
+    record["signals"] = signals
+
     record["redirected_offsite"] = bool(
         _host(record["final_url"]) and _host(record["final_url"]) != _host(url)
     )
+
+    # A challenge screen renders fine and says nothing about the prospect. Flag
+    # it so no rule downstream writes a finding about someone else's interstitial.
+    challenge = (signals.get("challenge") or {}) if isinstance(signals, dict) else {}
+    record["challenged"] = bool(challenge.get("detected"))
+    if record["challenged"]:
+        record["challenge_hits"] = challenge.get("hits") or []
+        record["error_kind"] = "challenged"
+        record["summary"] = KIND_SUMMARY["challenged"]
+        record["error"] = (
+            "bot protection detected by: " + ", ".join(record["challenge_hits"])
+        )
+        _write(out_dir, record)
+        return record
+
     status = record["status"] or 0
     if status >= 400:
         record["error_kind"] = "http_error"
