@@ -85,10 +85,13 @@ def inspect(url: str, name: str, config: dict, base: str | Path | None) -> dict[
         "scheme_downgraded": cap.get("scheme_downgraded"),
         "redirected_offsite": cap.get("redirected_offsite"),
         "load_ms": cap.get("load_ms"),
+        "server": cap.get("server", ""),
+        "challenge_waited_ms": cap.get("challenge_waited_ms"),
         "page_title": cap.get("title", ""),
         "screenshot_bytes": _shot_facts(slug, base),
         "signals": {k: v for k, v in signals.items() if k != "challenge"},
         "script_errors": (cap.get("script_errors") or [])[:5],
+        "console_errors": (cap.get("console_errors") or [])[:5],
         "drafted": [
             {"rule": d["rule"], "confidence": d["confidence"],
              "title": d["title"], "evidence": d["evidence"]}
@@ -139,6 +142,8 @@ def main(argv: list[str] | None = None) -> int:
 
         if result["challenged"]:
             print(f"  bot protection: {', '.join(result['challenge_hits'])}")
+        elif result["error_kind"] == "our_network":
+            print(f"  our side failed, not the site: {result['error']}")
         elif not result["ok"]:
             print(f"  did not load: {result['error_kind']} {result['error']}")
         else:
@@ -158,7 +163,16 @@ def main(argv: list[str] | None = None) -> int:
 
     loaded = sum(1 for r in results if r.get("ok") and not r.get("challenged"))
     blocked = sum(1 for r in results if r.get("challenged"))
-    print(f"\n{loaded} loaded, {blocked} bot-blocked, {len(results) - loaded - blocked} failed")
+    ours = sum(1 for r in results if r.get("error_kind") == "our_network")
+    failed = len(results) - loaded - blocked - ours
+    print(f"\n{loaded} loaded, {blocked} bot-blocked, {ours} failed on our side, {failed} failed")
+    tls = sum(1 for r in results if r.get("tls_error") or r.get("error_kind") == "tls")
+    if len(results) >= 3 and tls == len(results):
+        print(
+            "Every site came back with a certificate error. That is almost always a "
+            "proxy re-signing TLS on this machine, not the sites. Point BUOY_TRUST_CA "
+            "at the proxy's CA bundle and run again."
+        )
     print(f"report written to {path}")
     print("Send that file back. Check the screenshots yourself before trusting any of it.")
     return 0

@@ -35,7 +35,9 @@
     "max_full_page_height": 4000,
     "executable_path": "",
     "proxy": "",
-    "proxy_bypass": ""
+    "proxy_bypass": "",
+    "challenge_wait_ms": 15000,
+    "trust_ca": ""
   },
   "services": {
     "After Hours": {

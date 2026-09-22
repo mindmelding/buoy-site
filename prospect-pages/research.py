@@ -28,12 +28,29 @@ OBSERVED = "observed"
 INFERRED = "inferred"
 
 DEAD_KINDS = {"dns", "refused", "unreachable", "timeout", "empty", "blocked", "unknown"}
+# LocalBusiness and the schema.org subtypes a North County shop actually uses.
+# Real sites declare HVACBusiness, AutomotiveBusiness, and PlumbingContractor
+# rather than the parent type, and every one of them is business markup.
 LOCAL_SCHEMA = {
-    "localbusiness", "autorepair", "autobodyshop", "dentist", "medicalbusiness",
-    "homeandconstructionbusiness", "professionalservice", "store", "restaurant",
-    "hairsalon", "healthandbeautybusiness", "plumber", "electrician", "roofingcontractor",
-    "generalcontractor", "veterinarycare", "legalservice", "accountingservice",
+    "localbusiness", "professionalservice", "homeandconstructionbusiness",
+    "automotivebusiness", "autorepair", "autobodyshop", "autodealer", "autopartsstore",
+    "autorental", "autowash", "gasstation", "motorcycledealer", "motorcyclerepair",
+    "hvacbusiness", "plumber", "plumbingcontractor", "electrician", "roofingcontractor",
+    "generalcontractor", "housepainter", "locksmith", "movingcompany",
+    "healthandbeautybusiness", "hairsalon", "beautysalon", "dayspa", "nailsalon",
+    "tattooparlor", "healthclub", "medicalbusiness", "medicalclinic", "dentist",
+    "physician", "optician", "pharmacy", "physicaltherapy", "veterinarycare",
+    "animalshelter", "petstore", "childcare", "drycleaningorlaundry",
+    "emergencyservice", "employmentagency", "entertainmentbusiness",
+    "financialservice", "accountingservice", "insuranceagency", "legalservice",
+    "attorney", "notary", "realestateagent", "foodestablishment", "restaurant",
+    "bakery", "barorpub", "cafeorcoffeeshop", "fastfoodrestaurant", "winery",
+    "brewery", "lodgingbusiness", "hotel", "store", "homegoodsstore",
+    "hardwarestore", "florist", "furniturestore", "gardenstore", "jewelrystore",
+    "sportinggoodsstore", "selfstorage", "sportsactivitylocation", "travelagency",
+    "recyclingcenter", "radiostation", "tourisminformationcenter",
 }
+REVIEW_SCHEMA = {"review", "aggregaterating"}
 
 
 class Rule:
@@ -65,6 +82,23 @@ def _has_local_schema(sig: dict) -> bool:
     return any(str(t).lower() in LOCAL_SCHEMA for t in sig.get("schema_types") or [])
 
 
+def _shows_reviews(sig: dict) -> bool:
+    return bool(
+        sig.get("mentions_reviews") or sig.get("review_embed")
+        or any(str(t).lower() in REVIEW_SCHEMA for t in sig.get("schema_types") or [])
+    )
+
+
+def _contact_forms(sig: dict) -> int:
+    """Forms a customer would use to reach the shop, not search or newsletter boxes.
+
+    Captures from before contact_form_count existed fall back to every form.
+    """
+    if "contact_form_count" in sig:
+        return sig.get("contact_form_count") or 0
+    return sig.get("form_count") or 0
+
+
 def _reachable(cap: dict) -> bool:
     """True when we actually rendered the site, so DOM rules can be trusted.
 
@@ -73,7 +107,9 @@ def _reachable(cap: dict) -> bool:
     """
     if cap.get("challenged"):
         return False
-    return bool(cap.get("ok")) and bool(_sig(cap))
+    # Capture adds load and mobile keys even when the in-page probe failed, so
+    # check for a key only the probe writes.
+    return bool(cap.get("ok")) and "word_count" in _sig(cap)
 
 
 RULES: list[Rule] = [
@@ -154,30 +190,32 @@ RULES: list[Rule] = [
          lambda cap, s: "no phone number found in text or links"),
 
     Rule("no_contact_route", 72, "After Hours", OBSERVED,
-         lambda cap, s: _reachable(cap) and not s.get("form_count")
+         lambda cap, s: _reachable(cap) and not _contact_forms(s)
                         and not s.get("tel_links") and not s.get("mailto_links")
-                        and not s.get("booking_embed"),
+                        and not s.get("booking_embed") and not s.get("phone_in_text")
+                        and not s.get("contact_link"),
          "There is no way to contact you from the site",
-         "No form, no email link, no phone link, no booking. A visitor who wants to reach "
-         "you has to go back to a search result and start over.",
-         lambda cap, s: "no form, mailto, tel link, or booking embed"),
+         "No form, no email link, no phone number, no booking, and no contact page. A "
+         "visitor who wants to reach you has to go back to a search result and start over.",
+         lambda cap, s: "no form, mailto, tel link, phone number, booking embed, or contact link"),
 
     Rule("form_only", 68, "After Hours", OBSERVED,
-         lambda cap, s: _reachable(cap) and s.get("form_count")
+         lambda cap, s: _reachable(cap) and _contact_forms(s)
                         and not s.get("booking_links") and not s.get("booking_embed"),
          "Every request waits for someone to get back to it",
          "Your site takes messages through a form, and after that the customer waits. "
          "Nothing confirms a time and nothing gets booked. A request that comes in Friday "
          "night sits until Monday, and the people in a hurry call the next shop on the list.",
-         lambda cap, s: f"{s.get('form_count')} form(s), no booking link or scheduler embed"),
+         lambda cap, s: f"{_contact_forms(s)} contact form(s), no booking link or scheduler embed"),
 
     Rule("no_hours", 65, "Get Found", OBSERVED,
-         lambda cap, s: _reachable(cap) and s.get("hours_listed") is False,
+         lambda cap, s: _reachable(cap) and s.get("hours_listed") is False
+                        and not s.get("schema_hours"),
          "Your hours are not on the site",
          "We could not find opening hours anywhere. That is one of the first things somebody "
          "checks before driving over, and the first thing an assistant looks for when "
          "somebody asks whether you are open right now.",
-         lambda cap, s: "no day and time pattern found in page text"),
+         lambda cap, s: "no day and time pattern in page text, no openingHours markup"),
 
     Rule("no_local_schema", 62, "Get Found", OBSERVED,
          lambda cap, s: _reachable(cap) and not _has_local_schema(s),
@@ -205,20 +243,20 @@ RULES: list[Rule] = [
          lambda cap, s: f"{s.get('word_count')} words of visible text"),
 
     Rule("no_reviews", 55, "Five Stars", OBSERVED,
-         lambda cap, s: _reachable(cap) and not s.get("mentions_reviews")
-                        and not s.get("review_embed"),
+         lambda cap, s: _reachable(cap) and not _shows_reviews(s),
          "Your reviews are not on your own site",
          "Nothing on the page points to your reviews. The best evidence you have that you do "
          "good work is sitting on someone else's website, where a visitor has to go looking "
          "for it.",
-         lambda cap, s: "no review text or review widget on the page"),
+         lambda cap, s: "no review text, review widget, or review markup on the page"),
 
     Rule("slow_load", 52, "Get Found", OBSERVED,
-         lambda cap, s: (s.get("load_ms") or 0) > 4000,
+         lambda cap, s: (s.get("load_ms") or 0) > capture_lib.SLOW_LOAD_MS,
          "The page takes {load_seconds} seconds to load",
          "On a phone connection that is long enough that a real share of visitors leave "
          "before they see anything. It counts against you in search rankings too.",
-         lambda cap, s: f"{s.get('load_ms')}ms to interactive"),
+         lambda cap, s: f"{s.get('load_ms')}ms to the load event, measured from our capture "
+                        "machine on a fast connection"),
 
     Rule("console_errors", 50, "Get Found", OBSERVED,
          lambda cap, s: (s.get("script_error_count") or 0) > 0,
@@ -226,7 +264,8 @@ RULES: list[Rule] = [
          "{script_error_phrase} when the page loads. Something on the "
          "page is not doing what it was built to do, and when that something is a contact "
          "form the messages go nowhere without anyone noticing.",
-         lambda cap, s: f"{s.get('script_error_count')} script errors thrown on load"),
+         lambda cap, s: f"{s.get('script_error_count')} uncaught script error(s) on load, first: "
+                        + ((cap.get("script_errors") or [""])[0])[:160]),
 
     Rule("no_listings_link", 48, "Get Found", OBSERVED,
          lambda cap, s: _reachable(cap) and not any((s.get("social") or {}).values()),
@@ -255,21 +294,25 @@ RULES: list[Rule] = [
 
     # Inferred. High value, and the ones you have to check before sending.
     Rule("quote_followup", 69, "Quote Rescue", INFERRED,
-         lambda cap, s: _reachable(cap) and (s.get("form_count") or 0) > 0,
+         lambda cap, s: _reachable(cap) and _contact_forms(s) > 0
+                        and s.get("quote_language", True),
          "Estimates go out and nothing follows them",
          "Your site takes requests through a form. In most shops that means the quote goes "
          "out and whether anyone chases it depends on somebody remembering. The ones that "
          "go quiet are the cheapest work available to you, because the job is already priced.",
-         lambda cap, s: "INFERRED from the presence of a request form, not observed"),
+         lambda cap, s: "INFERRED from a request form on a site that talks about estimates "
+                        "or quotes, not observed"),
 
     Rule("after_hours_gap", 64, "After Hours", INFERRED,
          lambda cap, s: _reachable(cap) and s.get("hours_listed")
-                        and not s.get("mentions_emergency") and not s.get("chat_widget"),
+                        and not s.get("mentions_emergency") and not s.get("chat_widget")
+                        and not s.get("booking_embed"),
          "Nothing catches the calls that come in after you close",
          "Your hours are posted and there is no after hours path next to them. Calls that "
          "land in the evening reach a voicemail at best, and the customer is usually calling "
          "three places in the same ten minutes.",
-         lambda cap, s: "INFERRED from posted hours with no emergency or chat option"),
+         lambda cap, s: "INFERRED from posted hours with no emergency, chat, or online "
+                        "booking option"),
 ]
 
 
@@ -277,7 +320,7 @@ def draft_findings(cap: dict, record: dict, *, max_findings: int = 6,
                    observed_only: bool = False) -> list[dict[str, Any]]:
     """Run every rule against one capture and return the findings that fired."""
     cap = cap or {}
-    if cap.get("challenged"):
+    if cap.get("challenged") or cap.get("error_kind") == "our_network":
         # Nothing here is about the prospect. Say so rather than guess.
         return []
     signals = _sig(cap)
@@ -383,6 +426,13 @@ def main(argv: list[str] | None = None) -> int:
             max_findings=args.max_findings,
             observed_only=args.observed_only,
         )
+        if cap.get("error_kind") == "our_network":
+            print(
+                "  our connection failed before reaching the site "
+                f"({cap.get('error', '')}). Nothing drafted. Retry later or check it "
+                "in your own browser."
+            )
+            continue
         if cap.get("challenged"):
             print(
                 "  bot protection answered instead of the site "

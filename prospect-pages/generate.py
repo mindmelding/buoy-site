@@ -22,7 +22,6 @@ import prospect as prospect_lib
 
 TEMPLATE_DIR = prospect_lib.PACKAGE_DIR / "templates"
 TEMPLATE_NAME = "audit.html.j2"
-SLOW_LOAD_MS = 4000
 
 
 def _environment() -> Environment:
@@ -82,10 +81,10 @@ def build_flags(cap: dict[str, Any] | None) -> list[dict[str, str]]:
             "detail": "the page has no mobile layout, so phone visitors get the desktop version shrunk down",
         })
     load_ms = cap.get("load_ms") or 0
-    if load_ms > SLOW_LOAD_MS:
+    if load_ms > capture_lib.SLOW_LOAD_MS:
         flags.append({
             "label": "Slow load",
-            "detail": f"the page took {load_ms / 1000:.1f} seconds to become usable",
+            "detail": f"the page took {load_ms / 1000:.1f} seconds to finish loading",
         })
     # Count only scripts that actually threw. A resource that failed to load is
     # often our own connection, and we do not put our network on their page.

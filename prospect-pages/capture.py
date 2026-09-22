@@ -13,9 +13,12 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import base64
+import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -63,11 +66,51 @@ KIND_SUMMARY = {
     "empty": "The server answered with nothing at all.",
     "blocked": "The request was blocked before the page could load.",
     "unknown": "The page did not load.",
+    "our_network": (
+        "Our connection to the site failed on our side, so we could not check "
+        "what a customer sees."
+    ),
     "challenged": (
         "A bot-protection screen answered instead of the site, so we could not see "
         "what a customer sees from here."
     ),
 }
+
+
+def spki_pins(pem_path: str) -> list[str]:
+    """Base64 SHA-256 of each certificate's public key in a PEM file.
+
+    Chromium does not read the system trust store on every machine, so behind a
+    proxy that re-signs TLS every site would fail as a bad certificate and get a
+    finding it did not earn. Pinning the proxy's CA fixes that without turning
+    off certificate checks for the sites themselves.
+    """
+    try:
+        text = Path(pem_path).read_text(encoding="utf-8")
+    except OSError as exc:
+        print(f"  trust_ca unreadable, ignoring it: {exc}", file=sys.stderr)
+        return []
+    blocks = re.findall(
+        r"-----BEGIN CERTIFICATE-----.+?-----END CERTIFICATE-----", text, re.DOTALL
+    )
+    pins = []
+    for block in blocks:
+        try:
+            pem_key = subprocess.run(
+                ["openssl", "x509", "-pubkey", "-noout"], input=block.encode(),
+                capture_output=True, check=True,
+            ).stdout
+            der = subprocess.run(
+                ["openssl", "pkey", "-pubin", "-outform", "der"], input=pem_key,
+                capture_output=True, check=True,
+            ).stdout
+        except OSError as exc:
+            print(f"  trust_ca needs the openssl command: {exc}", file=sys.stderr)
+            return []
+        except subprocess.CalledProcessError:
+            continue
+        pins.append(base64.b64encode(hashlib.sha256(der).digest()).decode())
+    return pins
 
 
 def _launch_options(settings: dict[str, Any]) -> dict[str, Any]:
@@ -76,7 +119,8 @@ def _launch_options(settings: dict[str, Any]) -> dict[str, Any]:
     Set capture.executable_path in config.json, or BUOY_CHROMIUM_PATH in the
     environment, to use a Chromium that is already on the machine instead of
     the one the playwright package downloads. Proxies come from config or from
-    the usual HTTPS_PROXY and HTTP_PROXY variables.
+    the usual HTTPS_PROXY and HTTP_PROXY variables. Behind a proxy that
+    re-signs TLS, point capture.trust_ca or BUOY_TRUST_CA at its CA file.
     """
     options: dict[str, Any] = {
         "headless": True,
@@ -96,6 +140,13 @@ def _launch_options(settings: dict[str, Any]) -> dict[str, Any]:
         or os.environ.get("http_proxy")
         or ""
     )
+    trust_ca = (
+        os.environ.get("BUOY_TRUST_CA") or str(settings.get("trust_ca", "")).strip()
+    )
+    if trust_ca:
+        pins = spki_pins(trust_ca)
+        if pins:
+            options["args"].append("--ignore-certificate-errors-spki-list=" + ",".join(pins))
     if proxy:
         bypass = (
             str(settings.get("proxy_bypass", "")).strip()
@@ -119,16 +170,27 @@ def classify_error(message: str) -> str:
 
 
 # A failed resource load is often our own network rather than their site, so it
-# is counted separately from a script that actually threw.
+# is counted separately from a script that actually threw. The rest is browser
+# chatter seen on real sites that breaks nothing a visitor would notice:
+# autoplay refusals, permissions-policy notices on embeds, stylesheet MIME
+# warnings, and frameworks logging their own internals through console.error.
 RESOURCE_NOISE = re.compile(
     r"failed to load resource|net::ERR_|ERR_BLOCKED|net::ERR_CERT|"
-    r"loading (chunk|css chunk)|preload|favicon|ERR_CONNECTION",
+    r"loading (chunk|css chunk)|preload|favicon|ERR_CONNECTION|"
+    r"permissions policy|play\(\) failed|no supported sources|"
+    r"refused to apply style|suspense rendered fallback|"
+    r"request failed with status code 40[13]|third-party cookie|"
+    r"content security policy|mixed content",
     re.IGNORECASE,
 )
 
 
 def script_errors(messages: list[str]) -> list[str]:
-    """Console errors that came from code running, not from a fetch failing."""
+    """Uncaught exceptions that came from code running, not from a fetch failing.
+
+    Only exceptions that escaped to the page count. console.error is a logging
+    call and vendor widgets use it for routine chatter.
+    """
     return [m for m in messages if not RESOURCE_NOISE.search(m)]
 
 
@@ -162,11 +224,23 @@ def probe_page(page) -> dict[str, Any]:
     except OSError as exc:
         print(f"  probe script unavailable: {exc}", file=sys.stderr)
         return {}
-    try:
-        signals = page.evaluate(script)
-    except Exception as exc:  # noqa: BLE001 - a hostile page must not stop capture
-        print(f"  probe failed: {str(exc).splitlines()[0]}", file=sys.stderr)
-        return {}
+    # A challenge page that clears itself navigates while we read it. Wait for
+    # the new document and read that instead of returning nothing.
+    for attempt in range(3):
+        try:
+            signals = page.evaluate(script)
+            break
+        except Exception as exc:  # noqa: BLE001 - a hostile page must not stop capture
+            message = str(exc).splitlines()[0]
+            if "context was destroyed" in message and attempt < 2:
+                try:
+                    page.wait_for_load_state("domcontentloaded", timeout=10000)
+                    page.wait_for_timeout(1000)
+                except Exception:  # noqa: BLE001
+                    pass
+                continue
+            print(f"  probe failed: {message}", file=sys.stderr)
+            return {}
     return signals if isinstance(signals, dict) else {}
 
 
@@ -193,6 +267,42 @@ def _shoot(page, path: Path, settings: dict[str, Any]) -> bool:
     except Exception as exc:  # noqa: BLE001 - any render failure is still a result
         print(f"  screenshot failed for {path.name}: {exc}", file=sys.stderr)
         return False
+
+
+# Measured to the load event from the capture machine. Real small-business
+# homepages came in between 0.5 and 6.5 seconds on a fast line, so 5 seconds
+# flags the heavy ones without flagging a normal page on a slow proxy.
+SLOW_LOAD_MS = 5000
+
+RETRY_STATUSES = {502, 503, 504}
+# https failures where trying plain http can tell us something.
+HTTP_FALLBACK_KINDS = {"tls", "refused", "unreachable", "empty"}
+
+NAV_LOAD_JS = """() => {
+  const nav = performance.getEntriesByType("navigation")[0];
+  if (!nav) return 0;
+  return Math.round(nav.loadEventEnd || nav.domContentLoadedEventEnd || 0);
+}"""
+
+
+def _settle(page, settings: dict[str, Any], timeout: int) -> None:
+    try:
+        page.wait_for_load_state("networkidle", timeout=min(6000, timeout))
+    except Exception:  # noqa: BLE001 - settling is best effort
+        pass
+    page.wait_for_timeout(int(settings.get("settle_ms", 1200)))
+
+
+def _nav_load_ms(page) -> int:
+    """Time to the load event as the browser measured it.
+
+    Wall time around the visit includes our own settle and network-idle waits,
+    which would put every site over the slow threshold.
+    """
+    try:
+        return int(page.evaluate(NAV_LOAD_JS) or 0)
+    except Exception:  # noqa: BLE001
+        return 0
 
 
 def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
@@ -225,8 +335,19 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         if msg.type == "error" and len(console_errors) < 20
         else None,
     )
-    page.on("pageerror", lambda exc: console_errors.append(str(exc)[:300])
-            if len(console_errors) < 20 else None)
+    page_errors: list[str] = []
+    page.on("pageerror", lambda exc: page_errors.append(str(exc)[:300])
+            if len(page_errors) < 20 else None)
+
+    # The last document the main frame loaded, so a page that reloads itself
+    # past an interstitial reports the real page's status, not the wall's.
+    documents: list[Any] = []
+    page.on(
+        "response",
+        lambda resp: documents.append(resp)
+        if resp.request.resource_type == "document" and resp.frame == page.main_frame
+        else None,
+    )
 
     started = time.monotonic()
     try:
@@ -242,15 +363,41 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         return result
 
     # Give scripts and fonts a moment, but never let a chatty page hold the run.
-    try:
-        page.wait_for_load_state("networkidle", timeout=min(6000, timeout))
-    except Exception:  # noqa: BLE001 - settling is best effort
-        pass
-    page.wait_for_timeout(int(settings.get("settle_ms", 1200)))
+    _settle(page, settings, timeout)
 
-    result["load_ms"] = int((time.monotonic() - started) * 1000)
+    # A gateway error is as often a hiccup between us and the host as it is the
+    # site, and a finding that says the site is down had better be true twice.
+    if response and response.status in RETRY_STATUSES:
+        page.wait_for_timeout(3000)
+        try:
+            response = page.reload(wait_until="domcontentloaded", timeout=timeout) or response
+            _settle(page, settings, timeout)
+        except Exception:  # noqa: BLE001 - keep the first answer
+            pass
+
+    # Imunify360, SiteGround, and Cloudflare screens often clear themselves
+    # with a reload a few seconds in. Wait that out before calling it a wall.
+    signals = probe_page(page)
+    waited = 0
+    challenge_wait = int(settings.get("challenge_wait_ms", 15000))
+    while (signals.get("challenge") or {}).get("detected") and waited < challenge_wait:
+        page.wait_for_timeout(1500)
+        waited += 1500
+        signals = probe_page(page)
+    if waited and not (signals.get("challenge") or {}).get("detected"):
+        _settle(page, settings, timeout)
+        signals = probe_page(page)
+    result["challenge_waited_ms"] = waited
+    if documents:
+        response = documents[-1]
+
+    result["load_ms"] = _nav_load_ms(page) or int((time.monotonic() - started) * 1000)
     result["status"] = response.status if response else None
     result["status_text"] = response.status_text if response else ""
+    try:
+        result["server"] = (response.headers.get("server") or "") if response else ""
+    except Exception:  # noqa: BLE001
+        result["server"] = ""
     result["final_url"] = page.url
     try:
         result["title"] = (page.title() or "").strip()[:200]
@@ -263,7 +410,8 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     except Exception:  # noqa: BLE001
         result["has_viewport_meta"] = None
     result["console_errors"] = console_errors
-    result["signals"] = probe_page(page)
+    result["page_errors"] = page_errors
+    result["signals"] = signals
 
     shot_path.parent.mkdir(parents=True, exist_ok=True)
     result["shot"] = _shoot(page, shot_path, settings)
@@ -331,23 +479,36 @@ def capture_site(
             return record
         try:
             # Attempt order: as given, then trusting a bad certificate, then plain
-            # http. Each fallback that works is itself a finding about the site.
-            attempts = [(url, False), (url, True)]
-            if url.startswith("https://"):
-                attempts.append(("http://" + url[len("https://"):], True))
-
-            desktop: dict[str, Any] = {}
-            used_url = url
-            for attempt_url, ignore_https in attempts:
-                desktop = _visit(
+            # http. Each fallback that works is itself a finding about the site,
+            # so each one only runs after the failure it answers. A timeout that
+            # happens to succeed on a second try is not a certificate problem.
+            def visit(attempt_url: str, ignore_https: bool) -> dict[str, Any]:
+                return _visit(
                     browser, attempt_url, desktop_view, USER_AGENT_DESKTOP,
                     False, settings, ignore_https, shots_dir / DESKTOP_FILE,
                 )
+
+            used_url = url
+            desktop = visit(url, False)
+            first_error = desktop
+            if not desktop.get("shot") and desktop.get("error_kind") == "tls":
+                desktop = visit(url, True)
                 if desktop.get("shot"):
-                    used_url = attempt_url
-                    record["tls_error"] = ignore_https and attempt_url == url
-                    record["scheme_downgraded"] = attempt_url != url
-                    break
+                    record["tls_error"] = True
+            if (
+                not desktop.get("shot")
+                and url.startswith("https://")
+                and first_error.get("error_kind") in HTTP_FALLBACK_KINDS
+            ):
+                plain = "http://" + url[len("https://"):]
+                attempt = visit(plain, True)
+                if attempt.get("shot"):
+                    desktop = attempt
+                    used_url = plain
+                    record["scheme_downgraded"] = True
+            if not desktop.get("shot"):
+                # Report why https failed. The http retry's error says less.
+                desktop = first_error
 
             if not desktop.get("shot"):
                 message = desktop.get("error", "the page did not load")
@@ -371,6 +532,7 @@ def capture_site(
     record["load_ms"] = desktop.get("load_ms")
     record["has_viewport_meta"] = desktop.get("has_viewport_meta")
     record["console_errors"] = desktop.get("console_errors", [])
+    record["page_errors"] = desktop.get("page_errors", [])
     record["desktop"] = f"shots/{DESKTOP_FILE}" if desktop.get("shot") else None
     record["mobile"] = f"shots/{MOBILE_FILE}" if mobile.get("shot") else None
     record["mobile_error"] = mobile.get("error", "")
@@ -379,13 +541,21 @@ def capture_site(
     mobile_signals = mobile.get("signals") or {}
     scroll = mobile_signals.get("scroll_width") or 0
     inner = mobile_signals.get("inner_width") or 0
-    # A page wider than the phone viewport is the sideways-scroll complaint.
+    # A page wider than the phone is the sideways-scroll complaint. Mobile
+    # Chrome widens innerWidth to fit overflowing content, so compare against
+    # the width we asked for, with room for a few stray pixels nobody sees.
+    target = mobile_view["width"]
     signals["mobile_scroll_width"] = scroll
     signals["mobile_inner_width"] = inner
-    signals["mobile_overflows"] = bool(scroll and inner and scroll > inner + 4)
+    signals["mobile_overflows"] = bool(scroll and scroll > target * 1.08)
+    # Some sites only render a tap-to-call or booking button on phones, and
+    # those are the findings about phones.
+    for key in ("tel_links", "booking_links"):
+        if (mobile_signals.get(key) or 0) > (signals.get(key) or 0):
+            signals[key] = mobile_signals[key]
     signals["load_ms"] = record.get("load_ms")
     all_errors = record.get("console_errors") or []
-    real_errors = script_errors(all_errors)
+    real_errors = script_errors(record.get("page_errors") or [])
     record["script_errors"] = real_errors
     signals["console_error_count"] = len(all_errors)
     signals["script_error_count"] = len(real_errors)
@@ -413,6 +583,17 @@ def capture_site(
         return record
 
     status = record["status"] or 0
+    record["server"] = desktop.get("server", "")
+    if status in RETRY_STATUSES and not record["server"]:
+        # A real origin or CDN names itself. A bare gateway error with no
+        # server header came from a proxy between us and the site, and saying
+        # the prospect's site is down on that evidence would be a lie.
+        record["ok"] = False
+        record["error_kind"] = "our_network"
+        record["summary"] = KIND_SUMMARY["our_network"]
+        record["error"] = f"HTTP {status} with no server header, likely our own proxy"
+        _write(out_dir, record)
+        return record
     if status >= 400:
         record["error_kind"] = "http_error"
         record["summary"] = (

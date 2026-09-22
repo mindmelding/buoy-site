@@ -325,6 +325,10 @@
           <h3>We could not reach your site from our end</h3>
           <p>A bot-protection screen answered instead of your website, so we have not shown a screenshot here rather than show you something that is not yours. That screen is doing its job and it is not a fault on your site.</p>
           <p>The findings below come from what we could check another way.</p>
+          {% elif cap and cap.get('error_kind') == "our_network" %}
+          <h3>We could not reach your site from our end</h3>
+          <p>Our connection failed before it got to your website, so we have not shown a screenshot here. That is a problem on our side, not a fault on your site.</p>
+          <p>The findings below come from what we could check another way.</p>
           {% elif cap and cap.get('error_kind') == "no_url" %}
           <h3>We could not find a website for you</h3>
           <p>We have no website on file for {{ p.business_name }}, and we could not find one. That is the finding: someone who looks you up gets a listing and nowhere to go next.</p>

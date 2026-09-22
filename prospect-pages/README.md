@@ -25,6 +25,13 @@ export BUOY_CHROMIUM_PATH=/path/to/chromium
 You can also set `capture.executable_path` in `config.json`. Behind a proxy,
 set `capture.proxy` or the usual `HTTPS_PROXY` variable.
 
+If the proxy re-signs TLS (corporate networks, cloud sandboxes), Chromium will
+reject every certificate and each prospect gets a false certificate finding.
+Point `capture.trust_ca` or `BUOY_TRUST_CA` at the proxy's CA bundle. That
+trusts those keys without turning certificate checks off, so a site with a
+really broken certificate still gets flagged. It needs the `openssl` command.
+`doctor.py` warns when every site comes back with a certificate error.
+
 ## Build one page
 
 ```bash
@@ -83,11 +90,11 @@ readable. Raise it with `--max-findings`.
 | Phone number is text with no `tel:` link, or no number at all | Get Found |
 | No form, no email, no phone, no booking anywhere | After Hours |
 | A form but nothing that books a time | After Hours |
-| No hours, no business markup, thin page, no meta description | Get Found |
+| No hours in text or markup, no business markup, thin page, no meta description | Get Found |
 | Footer copyright is two or more years old | Regulars |
-| No reviews on the site | Five Stars |
-| Slow load, scripts throwing on load | Get Found |
-| Photos with no alt text | Get Found |
+| No review text, widget, or review markup on the site | Five Stars |
+| Slow load (over 5 seconds to the load event), uncaught script errors | Get Found |
+| Content photos with no alt attribute | Get Found |
 | No link to Google, Facebook, Yelp, Instagram, or LinkedIn | Get Found |
 
 ### Observed against inferred
@@ -107,10 +114,42 @@ mechanical checks, not as the audit.
 
 ### Notes on accuracy
 
-- Failed resource loads are counted separately from scripts that actually threw,
-  so a blocked font on your end never becomes a finding about their site.
-- The sideways-scroll check only fires on sites that claim to be responsive.
-  A site with no mobile layout gets the clearer finding instead.
+These were checked against 23 real North County business sites. What that
+turned up is built in:
+
+- Only uncaught exceptions count as script errors. Failed resource loads,
+  autoplay refusals, permissions-policy notices, and vendor widgets logging
+  through `console.error` do not, so a blocked font on your end never becomes a
+  finding about their site.
+- Load time comes from the browser's own timing to the load event, not the
+  wall clock around the capture, which included our settle waits.
+- A reCAPTCHA or Turnstile on a contact form is not a bot wall. Challenge
+  detection needs a challenge title, a challenge URL, challenge-page markup,
+  or a near-empty page with captcha wording. Screens that clear themselves,
+  like Imunify360's "One moment, please...", get up to
+  `capture.challenge_wait_ms` to do it before the page is called challenged.
+- A 502, 503, or 504 is retried once. If it comes back with no `Server` header,
+  it came from a proxy between us and the site, and the capture is marked
+  `our_network` with no findings, instead of telling the owner their site is down.
+- A certificate finding only follows a certificate error. A timeout that works
+  on the second try is not one.
+- The sideways-scroll check compares the phone layout against the 390px width
+  we asked for, because mobile Chrome widens its own viewport to fit an
+  overflowing page. It only fires on sites that claim to be responsive. A site
+  with no mobile layout gets the clearer finding instead.
+- `alt=""` is correct markup for a decorative image, so only content-sized
+  images with no alt attribute at all count as missing one.
+- Tap-to-call and booking buttons that only render on phones are counted.
+- Business markup means any schema.org LocalBusiness subtype, including
+  `HVACBusiness`, `AutomotiveBusiness`, and `PlumbingContractor`. Hours
+  declared in `openingHours` markup count as posted hours.
+- Social and listing links are read from the links on the page, not the raw
+  HTML, which mentions facebook.com in every tracking pixel.
+- The quote follow-up draft needs a real contact form, not a search box or a
+  newsletter signup, on a site that talks about estimates or quotes. The
+  after-hours draft stays quiet on sites with online booking.
+- Run `doctor.py` on a handful of real sites after any change to `probe.js` or
+  `RULES`. Every bug above passed the synthetic tests.
 - If a rule fires on a site you know is fine, that is a bug worth fixing in
   `RULES` in [research.py](research.py) rather than editing around.
 
