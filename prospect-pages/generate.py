@@ -80,7 +80,7 @@ def build_flags(cap: dict[str, Any] | None) -> list[dict[str, str]]:
             "label": "Not built for phones",
             "detail": "the page has no mobile layout, so phone visitors get the desktop version shrunk down",
         })
-    load_ms = cap.get("load_ms") or 0
+    load_ms = (cap.get("signals") or {}).get("load_ms") or cap.get("load_ms") or 0
     if load_ms > capture_lib.SLOW_LOAD_MS:
         flags.append({
             "label": "Slow load",

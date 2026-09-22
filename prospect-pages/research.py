@@ -255,8 +255,8 @@ RULES: list[Rule] = [
          "The page takes {load_seconds} seconds to load",
          "On a phone connection that is long enough that a real share of visitors leave "
          "before they see anything. It counts against you in search rankings too.",
-         lambda cap, s: f"{s.get('load_ms')}ms to the load event, measured from our capture "
-                        "machine on a fast connection"),
+         lambda cap, s: f"{s.get('load_ms')}ms to the load event, the faster of a desktop "
+                        "and a phone load from our capture machine"),
 
     Rule("console_errors", 50, "Get Found", OBSERVED,
          lambda cap, s: (s.get("script_error_count") or 0) > 0,

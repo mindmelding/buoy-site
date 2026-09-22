@@ -351,6 +351,21 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         else None,
     )
 
+    # Stylesheets that never arrived. A page without its CSS looks broken in a
+    # screenshot, and when it happens here it is usually our connection.
+    failed_styles: list[str] = []
+
+    def _style_failed(request) -> None:
+        if request.resource_type == "stylesheet" and len(failed_styles) < 20:
+            failed_styles.append(request.url[:200])
+
+    def _style_status(resp) -> None:
+        if resp.request.resource_type == "stylesheet" and resp.status >= 400:
+            _style_failed(resp.request)
+
+    page.on("requestfailed", _style_failed)
+    page.on("response", _style_status)
+
     started = time.monotonic()
     try:
         response = page.goto(url, wait_until="domcontentloaded", timeout=timeout)
@@ -364,8 +379,22 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         result.update(error=message, error_kind=classify_error(message))
         return result
 
+    # The fallback when the browser keeps no timing for the page. Taken before
+    # any of our own waiting, which is not the site's load time.
+    goto_ms = int((time.monotonic() - started) * 1000)
+
     # Give scripts and fonts a moment, but never let a chatty page hold the run.
     _settle(page, settings, timeout)
+
+    if failed_styles:
+        # One retry. If the styles still do not load, the capture says so and
+        # the screenshot should be checked before anyone sees it.
+        failed_styles.clear()
+        try:
+            response = page.reload(wait_until="domcontentloaded", timeout=timeout) or response
+            _settle(page, settings, timeout)
+        except Exception:  # noqa: BLE001 - keep the first render
+            pass
 
     # A gateway error is as often a hiccup between us and the host as it is the
     # site, and a finding that says the site is down had better be true twice.
@@ -390,10 +419,11 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         _settle(page, settings, timeout)
         signals = probe_page(page)
     result["challenge_waited_ms"] = waited
+    result["failed_stylesheets"] = list(failed_styles)
     if documents:
         response = documents[-1]
 
-    result["load_ms"] = _nav_load_ms(page) or int((time.monotonic() - started) * 1000)
+    result["load_ms"] = _nav_load_ms(page) or goto_ms
     result["status"] = response.status if response else None
     result["status_text"] = response.status_text if response else ""
     try:
@@ -535,6 +565,7 @@ def capture_site(
     record["has_viewport_meta"] = desktop.get("has_viewport_meta")
     record["console_errors"] = desktop.get("console_errors", [])
     record["page_errors"] = desktop.get("page_errors", [])
+    record["failed_stylesheets"] = desktop.get("failed_stylesheets", [])
     record["desktop"] = f"shots/{DESKTOP_FILE}" if desktop.get("shot") else None
     record["mobile"] = f"shots/{MOBILE_FILE}" if mobile.get("shot") else None
     record["mobile_error"] = mobile.get("error", "")
@@ -555,7 +586,10 @@ def capture_site(
     for key in ("tel_links", "booking_links"):
         if (mobile_signals.get(key) or 0) > (signals.get(key) or 0):
             signals[key] = mobile_signals[key]
-    signals["load_ms"] = record.get("load_ms")
+    # One slow fetch through our own connection is not a slow site. The finding
+    # quotes the faster of the two loads we made.
+    loads = [ms for ms in (record.get("load_ms"), mobile.get("load_ms")) if ms]
+    signals["load_ms"] = min(loads) if loads else None
     all_errors = record.get("console_errors") or []
     real_errors = script_errors(record.get("page_errors") or [])
     record["script_errors"] = real_errors
