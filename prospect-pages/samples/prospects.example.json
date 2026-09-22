@@ -1,0 +1,54 @@
+[
+  {
+    "business_name": "Seabreeze Dental Care",
+    "url": "https://pypi.org/",
+    "phone": "(760) 555 0148",
+    "category": "Dental practice",
+    "city": "Oceanside",
+    "top_service": "Missed-call text-back for the front desk",
+    "payoff": "When the front desk is with a patient, calls go to voicemail and most callers do not leave one. A text-back reply catches those callers within seconds and books them, so fewer new patients slip away while the team is busy.",
+    "findings": [
+      {
+        "title": "New patients have to call during office hours to book",
+        "detail": "There is no way to request an appointment from the site after hours. People deciding on a dentist at night have nothing to act on, so they keep looking.",
+        "service": "Online booking"
+      },
+      {
+        "title": "The same patient questions get answered by phone all day",
+        "detail": "Insurance, first-visit steps, and hours come up on every call. A short assistant on the site can answer these in plain language and hand off the rest to staff.",
+        "service": "Site assistant"
+      },
+      {
+        "title": "Reviews are strong but hard to find on the page",
+        "detail": "The practice has a good reputation that the site does not show. Pulling a few recent reviews onto the homepage helps first-time visitors trust the practice sooner.",
+        "service": "Reputation"
+      }
+    ]
+  },
+  {
+    "business_name": "Harbor Auto Repair",
+    "url": "https://broken.buoy-nonexistent-9f8a2b41.test",
+    "phone": "(760) 555 0192",
+    "category": "Auto repair shop",
+    "city": "Oceanside",
+    "top_service": "A working one-page site with click-to-call and hours",
+    "payoff": "Right now a customer who searches for the shop lands on a page that does not load. The fix is a simple, fast page that shows hours, address, and a click-to-call button, so the phone rings instead of a competitor's.",
+    "findings": [
+      {
+        "title": "The website does not load for customers",
+        "detail": "When we tried to open the site it did not respond. Anyone searching for the shop sees the same dead page, and most of them move on to the next result.",
+        "service": "Site rebuild"
+      },
+      {
+        "title": "There is no click-to-call on a phone",
+        "detail": "Most people look up a repair shop on a phone. Without a tap-to-call button the shop loses calls it never hears about.",
+        "service": "Click-to-call"
+      },
+      {
+        "title": "Hours and location are not findable",
+        "detail": "A customer cannot quickly confirm the shop is open or where to drop off a car. Clear hours and a map cut down on missed visits.",
+        "service": "Local listing"
+      }
+    ]
+  }
+]

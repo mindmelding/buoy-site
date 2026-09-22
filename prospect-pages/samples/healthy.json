@@ -1,0 +1,27 @@
+{
+  "business_name": "Seabreeze Dental Care",
+  "url": "https://pypi.org/",
+  "phone": "(760) 555 0148",
+  "category": "Dental practice",
+  "city": "Oceanside",
+  "top_service": "Missed-call text-back for the front desk",
+  "payoff": "When the front desk is with a patient, calls go to voicemail and most callers do not leave one. A text-back reply catches those callers within seconds and books them, so fewer new patients slip away while the team is busy.",
+  "findings": [
+    {
+      "title": "New patients have to call during office hours to book",
+      "detail": "There is no way to request an appointment from the site after hours. People deciding on a dentist at night have nothing to act on, so they keep looking.",
+      "service": "Online booking"
+    },
+    {
+      "title": "The same patient questions get answered by phone all day",
+      "detail": "Insurance, first-visit steps, and hours come up on every call. A short assistant on the site can answer these in plain language and hand off the rest to staff.",
+      "service": "Site assistant"
+    },
+    {
+      "title": "Reviews are strong but hard to find on the page",
+      "detail": "The practice has a good reputation that the site does not show. Pulling a few recent reviews onto the homepage helps first-time visitors trust the practice sooner.",
+      "service": "Reputation"
+    }
+  ],
+  "slug": "seabreeze-dental-care-39e721e6"
+}

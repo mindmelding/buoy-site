@@ -1,0 +1,9 @@
+{
+  "calendly_url": "https://calendly.com/buoydesk/buoy-meeting",
+  "site_base_url": "https://buoydesk.com",
+  "contact_email": "hello@buoydesk.com",
+  "location": "Oceanside, California",
+  "brand": {"ink":"#102f35","paper":"#fff8ec","orange":"#ff593d","yellow":"#ffd448","aqua":"#a7e6da","blue":"#b9dff1"},
+  "capture": {"desktop_width":1440,"desktop_height":900,"mobile_width":390,"mobile_height":844,"full_page":false,"timeout_ms":30000,"chromium_executable":"/opt/pw-browsers/chromium","ignore_https_errors":true},
+  "pageview_ping": {"enabled": false, "endpoint": ""}
+}

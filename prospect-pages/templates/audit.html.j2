@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#ff593d">
+  <title>AI audit preview for {{ business_name }} | Buoy</title>
+
+  <meta property="og:title" content="AI audit preview for {{ business_name }} | Buoy">
+  <meta property="og:description" content="A private sample of the $100 founding audit, prepared for {{ business_name }}.">
+  <meta property="og:image" content="https://buoydesk.com/og-image.png">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="https://buoydesk.com/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://buoydesk.com/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="https://buoydesk.com/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#102f35;
+      --paper:#fff8ec;
+      --orange:#ff593d;
+      --yellow:#ffd448;
+      --aqua:#a7e6da;
+      --blue:#b9dff1;
+      --hairline:rgba(16,47,53,.23);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      background:var(--paper);
+      color:var(--ink);
+      font-family:"Bricolage Grotesque", system-ui, sans-serif;
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--ink)}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+    .eyebrow{
+      font-family:"DM Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin:0 0 14px;
+    }
+    .eyebrow::before{
+      content:"";
+      width:36px;
+      height:3px;
+      background:var(--orange);
+      display:inline-block;
+    }
+    .mono{
+      font-family:"DM Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:12px;
+    }
+    .button{display:inline-flex;justify-content:center;align-items:center;gap:10px;min-height:52px;padding:0 22px;border:2px solid var(--ink);border-radius:999px;background:var(--orange);color:var(--ink);text-decoration:none;font-weight:800;box-shadow:4px 4px 0 var(--ink);transition:transform .16s ease, box-shadow .16s ease}
+    .button:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+    .button.dark{background:var(--ink);color:#fff;box-shadow:4px 4px 0 var(--orange)}
+
+    .topline{
+      background:var(--ink);
+      color:#fff;
+      text-align:center;
+      font-family:"DM Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:12px;
+      padding:9px 16px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:22px 0;
+      flex-wrap:wrap;
+    }
+    .nav .home{
+      font-family:"DM Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:13px;
+      text-decoration:none;
+      font-weight:500;
+    }
+
+    .hero{padding:26px 0 10px}
+    .hero h1{
+      font-weight:800;
+      font-size:clamp(30px, 6vw, 56px);
+      line-height:1.05;
+      margin:0 0 16px;
+      letter-spacing:-0.01em;
+    }
+    .hero .sub{font-size:clamp(16px,2.4vw,20px);max-width:60ch;margin:0 0 18px}
+    .facts{display:flex;flex-wrap:wrap;gap:10px 26px;margin:10px 0 6px}
+    .fact{font-size:14px}
+    .fact .k{font-family:"DM Mono", monospace;text-transform:uppercase;letter-spacing:.07em;font-size:11px;display:block;opacity:.75}
+    .fact a{color:var(--ink)}
+
+    section{padding:30px 0}
+    .card{
+      border:2px solid var(--ink);
+      background:#fff;
+      box-shadow:4px 4px 0 var(--ink);
+    }
+
+    .panel{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:26px;
+      align-items:start;
+    }
+    .shots{display:flex;flex-direction:column;gap:18px}
+    .browser{border:2px solid var(--ink);background:#fff;box-shadow:4px 4px 0 var(--ink);overflow:hidden}
+    .browser .barrow{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:2px solid var(--ink);background:var(--aqua)}
+    .browser .dot{width:11px;height:11px;border-radius:999px;border:1.5px solid var(--ink);display:inline-block}
+    .browser .dot.r{background:var(--orange)}
+    .browser .dot.y{background:var(--yellow)}
+    .browser .dot.g{background:var(--blue)}
+    .browser img{display:block;width:100%;height:auto}
+    .phone-wrap{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}
+    .phone{
+      width:190px;
+      border:2px solid var(--ink);
+      border-radius:22px;
+      background:#fff;
+      box-shadow:4px 4px 0 var(--ink);
+      overflow:hidden;
+    }
+    .phone .notch{height:16px;background:var(--ink);border-top-left-radius:18px;border-top-right-radius:18px}
+    .phone img{display:block;width:100%;height:auto}
+    .phone-note{max-width:26ch;font-size:14px}
+    .looked{font-size:15px;margin:14px 0 0}
+    .capnote{
+      margin:12px 0 0;
+      padding:12px 14px;
+      border:2px solid var(--ink);
+      background:var(--yellow);
+      font-size:14px;
+    }
+
+    .findings{display:flex;flex-direction:column;gap:16px}
+    .finding{border:2px solid var(--ink);background:#fff;box-shadow:4px 4px 0 var(--ink);padding:18px}
+    .finding h3{margin:0 0 8px;font-size:19px;font-weight:800}
+    .finding p{margin:0 0 12px;font-size:15px}
+    .tag{
+      display:inline-block;
+      font-family:"DM Mono", monospace;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-size:11px;
+      border:1.5px solid var(--ink);
+      border-radius:999px;
+      padding:3px 10px;
+      background:var(--aqua);
+    }
+
+    .install h2{font-weight:800;font-size:clamp(24px,4vw,38px);line-height:1.1;margin:0 0 14px}
+    .install p{font-size:clamp(16px,2.2vw,19px);max-width:62ch;margin:0}
+
+    .cta{
+      text-align:center;
+      background:var(--blue);
+      border:2px solid var(--ink);
+      box-shadow:4px 4px 0 var(--ink);
+      padding:40px 22px;
+    }
+    .cta h2{font-weight:800;font-size:clamp(24px,4vw,36px);margin:0 0 18px;line-height:1.1}
+    .cta .micro{margin:16px 0 0;font-size:14px}
+
+    footer.preview{border-top:2px solid var(--ink);margin-top:30px;padding:28px 0 46px}
+    footer.preview p{margin:0 0 10px;font-size:14px}
+    footer.preview .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:14px;font-family:"DM Mono", monospace;text-transform:uppercase;letter-spacing:.07em;font-size:12px}
+    footer.preview a{color:var(--ink)}
+
+    @media (max-width:850px){
+      .panel{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .nav{gap:12px}
+      .cta{padding:30px 16px}
+      .phone{width:150px}
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">PRIVATE PREVIEW &middot; PREPARED FOR {{ business_name|upper }}</div>
+
+  <div class="wrap">
+    <div class="nav">
+      <a class="home" href="https://buoydesk.com/">&larr; Buoy home</a>
+      <a class="button" href="{{ calendly_url }}">Book your $100 audit call</a>
+    </div>
+
+    <div class="hero">
+      <p class="eyebrow">AI audit preview</p>
+      <h1>AI audit preview for {{ business_name }}</h1>
+      <p class="sub">A sample of the $100 founding audit, prepared for {{ business_name }}{% if city %} in {{ city }}{% endif %}.</p>
+      {% if category or phone %}
+      <div class="facts">
+        {% if category %}
+        <div class="fact"><span class="k">Category</span>{{ category }}</div>
+        {% endif %}
+        {% if phone %}
+        <div class="fact"><span class="k">Phone</span><a href="tel:{{ phone|replace(' ', '') }}">{{ phone }}</a></div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section>
+      <div class="panel">
+        <div class="shots">
+          <div class="browser">
+            <div class="barrow">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            </div>
+            <img src="shots/desktop.png" alt="Desktop view of the website for {{ business_name }} as captured for this audit." loading="lazy">
+          </div>
+          <div class="phone-wrap">
+            <div class="phone">
+              <div class="notch"></div>
+              <img src="shots/mobile.png" alt="Mobile view of the website for {{ business_name }} as captured for this audit." loading="lazy">
+            </div>
+            <p class="phone-note mono">Same site, on a phone. This is how most customers arrive.</p>
+          </div>
+          <p class="looked">We looked at <a href="{{ url }}">{{ url }}</a>.</p>
+          {% if capture_status and capture_status != "ok" %}
+          <p class="capnote">We could not fully load <a href="{{ url }}">{{ url }}</a> when we captured this. For a customer trying to reach you, that is the finding.</p>
+          {% endif %}
+        </div>
+
+        <div class="findings">
+          {% for item in findings %}
+          <div class="finding">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.detail }}</p>
+            {% if item.service %}<span class="tag">{{ item.service }}</span>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    {% if top_service %}
+    <section class="install">
+      <p class="eyebrow">What we would install first</p>
+      <h2>{{ top_service }}</h2>
+      <p>{% if payoff %}{{ payoff }}{% else %}We would set up {{ top_service }} for {{ business_name }} first, because it is the change that starts paying back the soonest and needs the least from your team to keep running.{% endif %}</p>
+    </section>
+    {% endif %}
+
+    <section>
+      <div class="cta">
+        <h2>See the full audit for {{ business_name }}.</h2>
+        <a class="button dark" href="{{ calendly_url }}">Book your $100 audit call</a>
+        <p class="micro">Free 15-minute call. No long contract. The written report is yours either way.</p>
+      </div>
+    </section>
+
+    <footer class="preview">
+      <p>This page was prepared privately for {{ business_name }}. It is not linked from our site and it is not indexed.</p>
+      <p>Questions? Email <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.</p>
+      <div class="row">
+        <span>{{ location }}</span>
+        <span><a href="https://buoydesk.com/">buoydesk.com</a></span>
+      </div>
+    </footer>
+  </div>
+
+  {% if pageview_ping.enabled and pageview_ping.endpoint %}
+  <script>
+    (function(){
+      var base = "{{ pageview_ping.endpoint }}";
+      new Image().src = base + (base.includes('?') ? '&' : '?') + "slug={{ slug }}&t=" + Date.now();
+    })();
+  </script>
+  {% endif %}
+</body>
+</html>
