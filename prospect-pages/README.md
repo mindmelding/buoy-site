@@ -29,7 +29,7 @@ If the proxy re-signs TLS (corporate networks, cloud sandboxes), Chromium will
 reject every certificate and each prospect gets a false certificate finding.
 Point `capture.trust_ca` or `BUOY_TRUST_CA` at the proxy's CA bundle. That
 trusts those keys without turning certificate checks off, so a site with a
-really broken certificate still gets flagged. It needs the `openssl` command.
+really broken certificate still gets flagged.
 `doctor.py` warns when every site comes back with a certificate error.
 
 ## Build one page
@@ -117,10 +117,13 @@ mechanical checks, not as the audit.
 These were checked against 23 real North County business sites. What that
 turned up is built in:
 
-- Only uncaught exceptions count as script errors. Failed resource loads,
-  autoplay refusals, permissions-policy notices, and vendor widgets logging
-  through `console.error` do not, so a blocked font on your end never becomes a
-  finding about their site.
+- A script error is an uncaught exception thrown by the site's own scripts.
+  Failed resource loads, autoplay refusals, permissions-policy notices, and
+  vendor widgets logging through `console.error` do not count, so a blocked
+  font on your end never becomes a finding about their site. Neither does an
+  exception from a widget served off someone else's domain, or one with no
+  script url in its stack, which could be our connection cutting a file short.
+  Those are kept in `other_script_errors` for review.
 - Load time comes from the browser's own timing to the load event, not the
   wall clock around the capture, which included our settle waits.
 - A reCAPTCHA or Turnstile on a contact form is not a bot wall. Challenge
@@ -131,6 +134,11 @@ turned up is built in:
 - A 502, 503, or 504 is retried once. If it comes back with no `Server` header,
   it came from a proxy between us and the site, and the capture is marked
   `our_network` with no findings, instead of telling the owner their site is down.
+- Every capture runs in a child process with a hard limit,
+  `capture.site_timeout_ms` (150 seconds by default). A page that locks up its
+  own tab can hang some browser calls forever, and one once stalled a whole
+  batch. Past the limit the capture is killed, Chromium with it, and the site
+  is recorded as `stalled`, with no findings.
 - A certificate finding only follows a certificate error. A timeout that works
   on the second try is not one.
 - The sideways-scroll check compares the phone layout against the 390px width
@@ -152,6 +160,26 @@ turned up is built in:
   `RULES`. Every bug above passed the synthetic tests.
 - If a rule fires on a site you know is fine, that is a bug worth fixing in
   `RULES` in [research.py](research.py) rather than editing around.
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -t .
+```
+
+- `test_rules.py` runs every rule against captures of real North County sites,
+  anonymized down to the signals the rules read, and checks the exact set of
+  findings each one produces. Every set was checked by hand against the live
+  site. If a change moves one, look at that kind of site before updating the
+  fixture.
+- `test_probe.py` runs `probe.js` in Chromium against small pages rebuilt from
+  each misfire found on a real site.
+- `test_capture.py` covers the certificate pins and script-error filtering.
+- `test_watchdog.py` serves a page that locks up its own tab and checks the
+  capture is stopped and marked stalled.
+
+The browser tests skip themselves when Chromium cannot start. They need no
+network access.
 
 ## Publish
 

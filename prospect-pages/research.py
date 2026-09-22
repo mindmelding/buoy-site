@@ -320,7 +320,7 @@ def draft_findings(cap: dict, record: dict, *, max_findings: int = 6,
                    observed_only: bool = False) -> list[dict[str, Any]]:
     """Run every rule against one capture and return the findings that fired."""
     cap = cap or {}
-    if cap.get("challenged") or cap.get("error_kind") == "our_network":
+    if cap.get("challenged") or cap.get("error_kind") in capture_lib.OUR_SIDE_KINDS:
         # Nothing here is about the prospect. Say so rather than guess.
         return []
     signals = _sig(cap)
@@ -426,9 +426,9 @@ def main(argv: list[str] | None = None) -> int:
             max_findings=args.max_findings,
             observed_only=args.observed_only,
         )
-        if cap.get("error_kind") == "our_network":
+        if cap.get("error_kind") in capture_lib.OUR_SIDE_KINDS:
             print(
-                "  our connection failed before reaching the site "
+                "  the capture failed on our side "
                 f"({cap.get('error', '')}). Nothing drafted. Retry later or check it "
                 "in your own browser."
             )

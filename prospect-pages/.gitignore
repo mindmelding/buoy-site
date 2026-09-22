@@ -5,3 +5,8 @@ __pycache__/
 # Real prospect lists stay out of the repo. Anchored so the examples still ship.
 /prospects.json
 /prospects.*.json
+
+# doctor.py reports name real businesses and what is wrong with their sites.
+# This directory is served publicly by GitHub Pages, so they never get committed.
+doctor-report.json
+*.doctor.json

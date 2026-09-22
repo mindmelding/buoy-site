@@ -92,6 +92,7 @@ def inspect(url: str, name: str, config: dict, base: str | Path | None) -> dict[
         "screenshot_bytes": _shot_facts(slug, base),
         "signals": {k: v for k, v in signals.items() if k != "challenge"},
         "script_errors": (cap.get("script_errors") or [])[:5],
+        "other_script_errors": (cap.get("other_script_errors") or [])[:5],
         "console_errors": (cap.get("console_errors") or [])[:5],
         "drafted": [
             {"rule": d["rule"], "confidence": d["confidence"],
@@ -143,8 +144,8 @@ def main(argv: list[str] | None = None) -> int:
 
         if result["challenged"]:
             print(f"  bot protection: {', '.join(result['challenge_hits'])}")
-        elif result["error_kind"] == "our_network":
-            print(f"  our side failed, not the site: {result['error']}")
+        elif result["error_kind"] in capture_lib.OUR_SIDE_KINDS:
+            print(f"  failed on our side, not the site's fault: {result['error']}")
         elif not result["ok"]:
             print(f"  did not load: {result['error_kind']} {result['error']}")
         else:
@@ -167,7 +168,7 @@ def main(argv: list[str] | None = None) -> int:
 
     loaded = sum(1 for r in results if r.get("ok") and not r.get("challenged"))
     blocked = sum(1 for r in results if r.get("challenged"))
-    ours = sum(1 for r in results if r.get("error_kind") == "our_network")
+    ours = sum(1 for r in results if r.get("error_kind") in capture_lib.OUR_SIDE_KINDS)
     failed = len(results) - loaded - blocked - ours
     print(f"\n{loaded} loaded, {blocked} bot-blocked, {ours} failed on our side, {failed} failed")
     tls = sum(1 for r in results if r.get("tls_error") or r.get("error_kind") == "tls")

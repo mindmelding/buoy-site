@@ -37,7 +37,8 @@
     "proxy": "",
     "proxy_bypass": "",
     "challenge_wait_ms": 15000,
-    "trust_ca": ""
+    "trust_ca": "",
+    "site_timeout_ms": 150000
   },
   "services": {
     "After Hours": {

@@ -19,7 +19,7 @@ import hashlib
 import json
 import os
 import re
-import subprocess
+import signal
 import sys
 import time
 from datetime import datetime, timezone
@@ -67,6 +67,10 @@ KIND_SUMMARY = {
     "empty": "The server answered with nothing at all.",
     "blocked": "The request was blocked before the page could load.",
     "unknown": "The page did not load.",
+    "stalled": (
+        "The page stopped responding while we were reading it, so we could not "
+        "finish checking what a customer sees."
+    ),
     "our_network": (
         "Our connection to the site failed on our side, so we could not check "
         "what a customer sees."
@@ -76,6 +80,38 @@ KIND_SUMMARY = {
         "what a customer sees from here."
     ),
 }
+
+
+def _der_element(data: bytes, pos: int) -> tuple[int, int, int]:
+    """Tag, start of content, and end of one DER element at pos."""
+    tag = data[pos]
+    length = data[pos + 1]
+    pos += 2
+    if length & 0x80:
+        count = length & 0x7F
+        length = int.from_bytes(data[pos:pos + count], "big")
+        pos += count
+    return tag, pos, pos + length
+
+
+def _spki_from_der(cert: bytes) -> bytes:
+    """The raw SubjectPublicKeyInfo of a DER certificate.
+
+    Certificate is a SEQUENCE whose first element, tbsCertificate, holds an
+    optional [0] version, then serial, signature, issuer, validity, subject,
+    and subjectPublicKeyInfo, in that order.
+    """
+    _, body, _ = _der_element(cert, 0)
+    _, pos, _ = _der_element(cert, body)
+    tag, _, end = _der_element(cert, pos)
+    if tag == 0xA0:
+        pos = end
+    for _ in range(5):
+        pos = _der_element(cert, pos)[2]
+    tag, _, end = _der_element(cert, pos)
+    if tag != 0x30:
+        raise ValueError("no SubjectPublicKeyInfo where one belongs")
+    return cert[pos:end]
 
 
 @functools.lru_cache(maxsize=8)
@@ -92,26 +128,15 @@ def spki_pins(pem_path: str) -> tuple[str, ...]:
     except OSError as exc:
         print(f"  trust_ca unreadable, ignoring it: {exc}", file=sys.stderr)
         return ()
-    blocks = re.findall(
-        r"-----BEGIN CERTIFICATE-----.+?-----END CERTIFICATE-----", text, re.DOTALL
-    )
     pins = []
-    for block in blocks:
+    for block in re.findall(
+        r"-----BEGIN CERTIFICATE-----(.+?)-----END CERTIFICATE-----", text, re.DOTALL
+    ):
         try:
-            pem_key = subprocess.run(
-                ["openssl", "x509", "-pubkey", "-noout"], input=block.encode(),
-                capture_output=True, check=True,
-            ).stdout
-            der = subprocess.run(
-                ["openssl", "pkey", "-pubin", "-outform", "der"], input=pem_key,
-                capture_output=True, check=True,
-            ).stdout
-        except OSError as exc:
-            print(f"  trust_ca needs the openssl command: {exc}", file=sys.stderr)
-            return ()
-        except subprocess.CalledProcessError:
+            spki = _spki_from_der(base64.b64decode("".join(block.split())))
+        except (ValueError, IndexError):
             continue
-        pins.append(base64.b64encode(hashlib.sha256(der).digest()).decode())
+        pins.append(base64.b64encode(hashlib.sha256(spki).digest()).decode())
     return tuple(pins)
 
 
@@ -188,6 +213,37 @@ RESOURCE_NOISE = re.compile(
     r"unexpected token '<'",
     re.IGNORECASE,
 )
+
+
+STACK_URL = re.compile(r"https?://[^\s)/:]+")
+
+
+def _page_error(exc) -> dict[str, str]:
+    """An uncaught exception and the host of the script that threw it."""
+    message = (getattr(exc, "message", "") or str(exc))[:300]
+    match = STACK_URL.search(getattr(exc, "stack", "") or "")
+    return {"message": message, "origin": _host(match.group(0)) if match else ""}
+
+
+def own_errors(errors: list[dict[str, str]], site_url: str) -> tuple[list[str], list[str]]:
+    """Split uncaught exceptions into the site's own and everything else.
+
+    The finding says scripts on the prospect's site are failing, so it only
+    counts errors thrown by a script served from their own domain or its
+    subdomains. A review widget from someone else's server is not their bug,
+    and an error with no script URL in its stack, a bare syntax error for
+    one, looks the same from here whether their file is broken or our
+    connection cut it short.
+    """
+    site = _host(site_url)
+    mine, others = [], []
+    for error in errors:
+        origin = error.get("origin", "")
+        own = bool(site and origin) and (
+            origin == site or origin.endswith("." + site) or site.endswith("." + origin)
+        )
+        (mine if own else others).append(error.get("message", ""))
+    return script_errors(mine), script_errors(others)
 
 
 def script_errors(messages: list[str]) -> list[str]:
@@ -280,6 +336,14 @@ def _shoot(page, path: Path, settings: dict[str, Any]) -> bool:
 SLOW_LOAD_MS = 5000
 
 RETRY_STATUSES = {502, 503, 504}
+# Statuses a proxy between us and the site answers with on its own behalf:
+# gateway errors, 407 for its own auth, and 405 from relays that only tunnel
+# https and refuse the plain-http fallback. A real origin or CDN names itself
+# in a Server header. Without one, these say nothing about the prospect.
+PROXY_STATUSES = RETRY_STATUSES | {405, 407}
+DEFAULT_SITE_TIMEOUT_MS = 150000
+# Failures on our end. Nothing about the prospect can be said from them.
+OUR_SIDE_KINDS = {"our_network", "stalled"}
 # https failures where trying plain http can tell us something.
 HTTP_FALLBACK_KINDS = {"tls", "refused", "unreachable", "empty"}
 
@@ -340,8 +404,8 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         if msg.type == "error" and len(console_errors) < 20
         else None,
     )
-    page_errors: list[str] = []
-    page.on("pageerror", lambda exc: page_errors.append(str(exc)[:300])
+    page_errors: list[dict[str, str]] = []
+    page.on("pageerror", lambda exc: page_errors.append(_page_error(exc))
             if len(page_errors) < 20 else None)
 
     # The last document the main frame loaded, so a page that reloads itself
@@ -454,22 +518,8 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     return result
 
 
-def capture_site(
-    url: str,
-    slug: str,
-    *,
-    config: dict[str, Any] | None = None,
-    output_base: str | Path | None = None,
-) -> dict[str, Any]:
-    """Capture one site and return the diagnosis, writing shots and capture.json."""
-    config = config or prospect_lib.load_config()
-    settings = config.get("capture", {})
-    out_dir = prospect_lib.output_dir_for(slug, output_base)
-    shots_dir = out_dir / "shots"
-    shots_dir.mkdir(parents=True, exist_ok=True)
-
-    url = prospect_lib.normalize_url(url)
-    record: dict[str, Any] = {
+def _new_record(slug: str, url: str) -> dict[str, Any]:
+    return {
         "slug": slug,
         "requested_url": url,
         "captured_at": _now_iso(),
@@ -483,6 +533,95 @@ def capture_site(
         "error": "",
         "summary": "",
     }
+
+
+def _capture_child(url: str, slug: str, config: dict[str, Any],
+                   output_base: str | Path | None) -> None:
+    """Child process entry. Its own process group, so one kill takes Chromium too."""
+    if hasattr(os, "setsid"):
+        os.setsid()
+    _capture_inline(url, slug, config, output_base)
+
+
+def _kill_child(process) -> None:
+    if hasattr(os, "killpg"):
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except (ProcessLookupError, PermissionError):
+            pass
+    process.kill()
+    process.join(5)
+
+
+def capture_site(
+    url: str,
+    slug: str,
+    *,
+    config: dict[str, Any] | None = None,
+    output_base: str | Path | None = None,
+) -> dict[str, Any]:
+    """Capture one site and return the diagnosis, writing shots and capture.json.
+
+    The browser work runs in a child process with a hard time limit. Some
+    Playwright calls, reading the page among them, take no timeout, and a page
+    that locks up its tab can hold them forever. One such site once stalled a
+    whole batch for ten minutes. Past capture.site_timeout_ms the child and
+    its Chromium are killed and the site is recorded as stalled. Set it to 0 to
+    capture in this process with no limit.
+    """
+    config = config or prospect_lib.load_config()
+    settings = config.get("capture", {})
+    limit_ms = int(settings.get("site_timeout_ms", DEFAULT_SITE_TIMEOUT_MS))
+    if limit_ms <= 0 or not prospect_lib.normalize_url(url):
+        return _capture_inline(url, slug, config, output_base)
+
+    import multiprocessing  # noqa: PLC0415
+
+    out_dir = prospect_lib.output_dir_for(slug, output_base)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    # A capture.json left from an earlier run must not pass for this one.
+    (out_dir / CAPTURE_FILE).unlink(missing_ok=True)
+
+    process = multiprocessing.get_context("spawn").Process(
+        target=_capture_child, args=(url, slug, config, output_base), daemon=True
+    )
+    process.start()
+    process.join(limit_ms / 1000)
+    if process.is_alive():
+        _kill_child(process)
+        record = _new_record(slug, prospect_lib.normalize_url(url))
+        record["error_kind"] = "stalled"
+        record["summary"] = KIND_SUMMARY["stalled"]
+        record["error"] = f"capture did not finish within {limit_ms // 1000}s and was stopped"
+        _write(out_dir, record)
+        print(f"  {record['error']}", file=sys.stderr)
+        return record
+
+    record = load_capture(slug, output_base)
+    if record is None:
+        record = _blank(
+            _new_record(slug, prospect_lib.normalize_url(url)), "unknown",
+            f"capture process exited with code {process.exitcode} and wrote nothing",
+        )
+        _write(out_dir, record)
+    return record
+
+
+def _capture_inline(
+    url: str,
+    slug: str,
+    config: dict[str, Any] | None = None,
+    output_base: str | Path | None = None,
+) -> dict[str, Any]:
+    """Capture in this process. capture_site wraps this in a time limit."""
+    config = config or prospect_lib.load_config()
+    settings = config.get("capture", {})
+    out_dir = prospect_lib.output_dir_for(slug, output_base)
+    shots_dir = out_dir / "shots"
+    shots_dir.mkdir(parents=True, exist_ok=True)
+
+    url = prospect_lib.normalize_url(url)
+    record = _new_record(slug, url)
 
     if not url:
         _write(out_dir, _blank(record, "no_url", "no website on file"))
@@ -595,8 +734,11 @@ def capture_site(
     loads = [ms for ms in (record.get("load_ms"), mobile.get("load_ms")) if ms]
     signals["load_ms"] = min(loads) if loads else None
     all_errors = record.get("console_errors") or []
-    real_errors = script_errors(record.get("page_errors") or [])
+    real_errors, other_errors = own_errors(
+        record.get("page_errors") or [], record["final_url"]
+    )
     record["script_errors"] = real_errors
+    record["other_script_errors"] = other_errors
     signals["console_error_count"] = len(all_errors)
     signals["script_error_count"] = len(real_errors)
     # The width we asked for, so a finding can quote a real phone width rather
@@ -624,10 +766,9 @@ def capture_site(
 
     status = record["status"] or 0
     record["server"] = desktop.get("server", "")
-    if status in RETRY_STATUSES and not record["server"]:
-        # A real origin or CDN names itself. A bare gateway error with no
-        # server header came from a proxy between us and the site, and saying
-        # the prospect's site is down on that evidence would be a lie.
+    if status in PROXY_STATUSES and not record["server"]:
+        # A bare error with no server header came from a proxy between us and
+        # the site, and saying the prospect's site is down on it would be a lie.
         record["ok"] = False
         record["error_kind"] = "our_network"
         record["summary"] = KIND_SUMMARY["our_network"]
