@@ -126,6 +126,11 @@ turned up is built in:
   Those are kept in `other_script_errors` for review.
 - Load time comes from the browser's own timing to the load event, not the
   wall clock around the capture, which included our settle waits.
+- When a script or stylesheet fails to load, the page is loaded once more. If
+  it still fails, the capture is marked `incomplete_render`: the screenshot may
+  not be what a customer sees, and the script-error and sideways-scroll
+  findings stay quiet, because a missing carousel library produced both on a
+  real site on one run and neither on the next. `doctor.py` warns about it.
 - A reCAPTCHA or Turnstile on a contact form is not a bot wall. Challenge
   detection needs a challenge title, a challenge URL, challenge-page markup,
   or a near-empty page with captcha wording. Screens that clear themselves,
@@ -143,8 +148,10 @@ turned up is built in:
   on the second try is not one.
 - The sideways-scroll check compares the phone layout against the 390px width
   we asked for, because mobile Chrome widens its own viewport to fit an
-  overflowing page. It only fires on sites that claim to be responsive. A site
-  with no mobile layout gets the clearer finding instead.
+  overflowing page. It reads the width twice, two seconds apart, since
+  carousels are wide for a moment while they load. It only fires on sites
+  that claim to be responsive. A site with no mobile layout gets the clearer
+  finding instead.
 - `alt=""` is correct markup for a decorative image, so only content-sized
   images with no alt attribute at all count as missing one.
 - Tap-to-call and booking buttons that only render on phones are counted.
@@ -175,8 +182,10 @@ python -m unittest discover -s tests -t .
 - `test_probe.py` runs `probe.js` in Chromium against small pages rebuilt from
   each misfire found on a real site.
 - `test_capture.py` covers the certificate pins and script-error filtering.
-- `test_watchdog.py` serves a page that locks up its own tab and checks the
-  capture is stopped and marked stalled.
+- `test_local_capture.py` serves pages from this machine and runs whole
+  captures: one that locks up its own tab has to be stopped and marked
+  stalled, and one whose library never arrives has to be marked
+  `incomplete_render` with no script-error finding.
 
 The browser tests skip themselves when Chromium cannot start. They need no
 network access.

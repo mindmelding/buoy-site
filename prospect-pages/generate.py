@@ -91,7 +91,9 @@ def build_flags(cap: dict[str, Any] | None) -> list[dict[str, str]]:
     errors = cap.get("script_errors")
     if errors is None:
         errors = capture_lib.script_errors(cap.get("console_errors") or [])
-    if errors:
+    # Some of their files never reached us, so errors from code that needed
+    # those files say nothing about the site.
+    if errors and not cap.get("incomplete_render"):
         count = len(errors)
         noun = "script error" if count == 1 else "script errors"
         verb = "fires" if count == 1 else "fire"

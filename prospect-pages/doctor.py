@@ -87,7 +87,8 @@ def inspect(url: str, name: str, config: dict, base: str | Path | None) -> dict[
         "load_ms": cap.get("load_ms"),
         "server": cap.get("server", ""),
         "challenge_waited_ms": cap.get("challenge_waited_ms"),
-        "failed_stylesheets": cap.get("failed_stylesheets", []),
+        "incomplete_render": cap.get("incomplete_render", False),
+        "failed_assets": (cap.get("failed_assets") or []) + (cap.get("mobile_failed_assets") or []),
         "page_title": cap.get("title", ""),
         "screenshot_bytes": _shot_facts(slug, base),
         "signals": {k: v for k, v in signals.items() if k != "challenge"},
@@ -155,9 +156,9 @@ def main(argv: list[str] | None = None) -> int:
                 f"desktop {shots.get('desktop.png')} bytes, "
                 f"{len(result['drafted'])} draft finding(s)"
             )
-            if result["failed_stylesheets"]:
-                print("  WARNING stylesheets did not load, so the screenshot is unstyled: "
-                      f"{result['failed_stylesheets'][0]}")
+            if result["incomplete_render"]:
+                print("  WARNING scripts or styles did not load, so the screenshot may not "
+                      f"be what a customer sees: {result['failed_assets'][0]}")
         results.append(result)
 
     report = {"environment": _versions(), "results": results}

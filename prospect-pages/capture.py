@@ -418,20 +418,37 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         else None,
     )
 
-    # Stylesheets that never arrived. A page without its CSS looks broken in a
-    # screenshot, and when it happens here it is usually our connection.
-    failed_styles: list[str] = []
+    # Scripts and stylesheets that never arrived. Without its CSS a page looks
+    # broken in a screenshot. Without a library, the site's own code throws
+    # "owlCarousel is not a function" and an unstarted carousel sprawls past
+    # the phone width. Real sites did both on one run and neither on the next,
+    # so when it happens here it is usually our connection.
+    failed_assets: list[str] = []
 
-    def _style_failed(request) -> None:
-        if request.resource_type == "stylesheet" and len(failed_styles) < 20:
-            failed_styles.append(request.url[:200])
+    def _asset_failed(request, reason: str) -> None:
+        if request.resource_type in ("stylesheet", "script") and len(failed_assets) < 20:
+            failed_assets.append(f"{request.resource_type} {reason}: {request.url[:200]}")
 
-    def _style_status(resp) -> None:
-        if resp.request.resource_type == "stylesheet" and resp.status >= 400:
-            _style_failed(resp.request)
+    def _asset_request_failed(request) -> None:
+        reason = request.failure or "failed"
+        # Pages cancel lazy loads all the time. That is not a missing file.
+        if "ERR_ABORTED" not in reason:
+            _asset_failed(request, reason)
 
-    page.on("requestfailed", _style_failed)
-    page.on("response", _style_status)
+    def _asset_status(resp) -> None:
+        if resp.status >= 400:
+            _asset_failed(resp.request, f"HTTP {resp.status}")
+
+    page.on("requestfailed", _asset_request_failed)
+    page.on("response", _asset_status)
+
+    def reload() -> Any:
+        """Load the page again, forgetting what the discarded load reported."""
+        failed_assets.clear()
+        console_errors.clear()
+        page_errors.clear()
+        documents.clear()
+        return page.reload(wait_until="domcontentloaded", timeout=timeout)
 
     started = time.monotonic()
     try:
@@ -453,12 +470,12 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     # Give scripts and fonts a moment, but never let a chatty page hold the run.
     _settle(page, settings, timeout)
 
-    if failed_styles:
-        # One retry. If the styles still do not load, the capture says so and
-        # the screenshot should be checked before anyone sees it.
-        failed_styles.clear()
+    if failed_assets:
+        # One retry. If the files still do not load, the capture says so, the
+        # rules that need a whole page stay quiet, and the screenshot should
+        # be checked before anyone sees it.
         try:
-            response = page.reload(wait_until="domcontentloaded", timeout=timeout) or response
+            response = reload() or response
             _settle(page, settings, timeout)
         except Exception:  # noqa: BLE001 - keep the first render
             pass
@@ -468,7 +485,7 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
     if response and response.status in RETRY_STATUSES:
         page.wait_for_timeout(3000)
         try:
-            response = page.reload(wait_until="domcontentloaded", timeout=timeout) or response
+            response = reload() or response
             _settle(page, settings, timeout)
         except Exception:  # noqa: BLE001 - keep the first answer
             pass
@@ -486,7 +503,7 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         _settle(page, settings, timeout)
         signals = probe_page(page)
     result["challenge_waited_ms"] = waited
-    result["failed_stylesheets"] = list(failed_styles)
+    result["failed_assets"] = list(failed_assets)
     if documents:
         response = documents[-1]
 
@@ -510,6 +527,17 @@ def _visit(browser, url: str, viewport: dict[str, int], user_agent: str,
         result["has_viewport_meta"] = None
     result["console_errors"] = console_errors
     result["page_errors"] = page_errors
+    if is_mobile and signals.get("scroll_width"):
+        # Carousels and lazy sections are wide for a moment while they load, so
+        # one reading of the page width can catch a layout nobody ever sees.
+        # The page has to still be too wide two seconds later.
+        page.wait_for_timeout(2000)
+        try:
+            again = int(page.evaluate("() => document.documentElement.scrollWidth") or 0)
+        except Exception:  # noqa: BLE001
+            again = 0
+        if again:
+            signals["scroll_width"] = min(signals["scroll_width"], again)
     result["signals"] = signals
 
     shot_path.parent.mkdir(parents=True, exist_ok=True)
@@ -707,7 +735,12 @@ def _capture_inline(
     record["has_viewport_meta"] = desktop.get("has_viewport_meta")
     record["console_errors"] = desktop.get("console_errors", [])
     record["page_errors"] = desktop.get("page_errors", [])
-    record["failed_stylesheets"] = desktop.get("failed_stylesheets", [])
+    record["failed_assets"] = desktop.get("failed_assets", [])
+    record["mobile_failed_assets"] = mobile.get("failed_assets", [])
+    # Scripts or styles that never arrived, on either visit. The render is not
+    # the site as a customer sees it, so findings that read the render stay
+    # quiet on it.
+    record["incomplete_render"] = bool(record["failed_assets"] or record["mobile_failed_assets"])
     record["challenge_waited_ms"] = desktop.get("challenge_waited_ms", 0)
     record["desktop"] = f"shots/{DESKTOP_FILE}" if desktop.get("shot") else None
     record["mobile"] = f"shots/{MOBILE_FILE}" if mobile.get("shot") else None

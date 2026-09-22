@@ -167,7 +167,8 @@ RULES: list[Rule] = [
          lambda cap, s: "no meta viewport tag"),
 
     Rule("mobile_overflow", 78, "Get Found", OBSERVED,
-         lambda cap, s: bool(s.get("mobile_overflows")) and bool(s.get("has_viewport")),
+         lambda cap, s: bool(s.get("mobile_overflows")) and bool(s.get("has_viewport"))
+                        and not cap.get("incomplete_render"),
          "The page scrolls sideways on a phone",
          "At phone width the layout is wider than the screen, so it slides off to the side "
          "as you scroll. It reads as broken even when everything on the page works.",
@@ -259,7 +260,8 @@ RULES: list[Rule] = [
                         "and a phone load from our capture machine"),
 
     Rule("console_errors", 50, "Get Found", OBSERVED,
-         lambda cap, s: (s.get("script_error_count") or 0) > 0,
+         lambda cap, s: (s.get("script_error_count") or 0) > 0
+                        and not cap.get("incomplete_render"),
          "Scripts on your site are failing",
          "{script_error_phrase} when the page loads. Something on the "
          "page is not doing what it was built to do, and when that something is a contact "

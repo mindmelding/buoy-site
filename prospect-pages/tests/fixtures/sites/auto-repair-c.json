@@ -1,0 +1,93 @@
+{
+ "label": "auto-repair-c",
+ "capture": {
+  "ok": true,
+  "status": 200,
+  "status_text": "OK",
+  "error_kind": "",
+  "challenged": false,
+  "tls_error": false,
+  "scheme_downgraded": false,
+  "redirected_offsite": false,
+  "load_ms": 6486,
+  "has_viewport_meta": true,
+  "server": "Apache",
+  "challenge_waited_ms": 0,
+  "requested_url": "https://site.example/",
+  "final_url": "https://site.example/",
+  "summary": "",
+  "script_errors": [],
+  "other_script_errors": [
+   "script error 1"
+  ],
+  "signals": {
+   "word_count": 20061,
+   "has_viewport": true,
+   "viewport_content": "width=device-width,initial-scale=1,user-scalable=no",
+   "title_length": 47,
+   "has_meta_description": true,
+   "h1_count": 0,
+   "tel_links": 7,
+   "mailto_links": 1,
+   "phone_in_text": true,
+   "form_count": 0,
+   "contact_form_count": 0,
+   "contact_link": true,
+   "quote_language": true,
+   "input_count": 1,
+   "booking_links": 0,
+   "booking_embed": false,
+   "chat_widget": false,
+   "review_embed": true,
+   "maps_embed": false,
+   "schema_types": [
+    "WebPage",
+    "ReadAction",
+    "BreadcrumbList",
+    "ListItem",
+    "WebSite",
+    "SearchAction",
+    "EntryPoint",
+    "PropertyValueSpecification"
+   ],
+   "schema_hours": false,
+   "jsonld_blocks": 1,
+   "copyright_year": null,
+   "latest_year_in_text": 2026,
+   "hours_listed": true,
+   "mentions_reviews": true,
+   "mentions_emergency": false,
+   "social": {
+    "facebook": true,
+    "instagram": false,
+    "yelp": true,
+    "google_business": true,
+    "linkedin": false,
+    "nextdoor": false
+   },
+   "image_count": 1020,
+   "images_without_alt": 0,
+   "scroll_width": 1440,
+   "inner_width": 1440,
+   "challenge": {
+    "detected": false,
+    "hits": [],
+    "title": "",
+    "words": 20061
+   },
+   "mobile_scroll_width": 390,
+   "mobile_inner_width": 390,
+   "mobile_overflows": false,
+   "load_ms": 6486,
+   "console_error_count": 2,
+   "script_error_count": 0,
+   "mobile_target_width": 390
+  }
+ },
+ "expected_rules": [
+  "after_hours_gap",
+  "no_local_schema",
+  "slow_load"
+ ],
+ "verified": {}
+}

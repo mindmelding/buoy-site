@@ -1,7 +1,7 @@
-"""The per-site time limit, against a page that locks up its own tab.
+"""Whole captures against pages served from this machine.
 
-A capture of this page hangs forever without the limit: the page loads, then
-an infinite loop takes the main thread, and reading the page never returns.
+The hang page is the reason capture runs under a time limit: it loads, then an
+infinite loop takes the main thread, and reading the page never returns.
 """
 
 from __future__ import annotations
@@ -19,6 +19,7 @@ from unittest import mock
 from tests.support import PROXY_VARS, BrowserTestCase, capture
 
 import prospect as prospect_lib
+import research
 
 HANG_PAGE = """<!doctype html><html><head><title>Hang</title>
 <meta name="viewport" content="width=device-width"></head>
@@ -30,19 +31,27 @@ OK_PAGE = """<!doctype html><html><head><title>Fine</title>
 <body><h1>Harbor Line Auto Body</h1><p>Call <a href="tel:7605550142">(760) 555-0142</a>.</p>
 </body></html>"""
 
+# A library that never arrives, and the site's own code that needed it.
+MISSING_SCRIPT_PAGE = """<!doctype html><html><head><title>Half there</title>
+<meta name="viewport" content="width=device-width"></head>
+<body><h1>Harbor Line Auto Body</h1>
+<script src="/vendor/carousel.js"></script>
+<script>jQuery(".slides").owlCarousel();</script></body></html>"""
+
 
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *args) -> None:
         pass
 
 
-class WatchdogTest(BrowserTestCase):
+class LocalCaptureTest(BrowserTestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()  # skips the class when there is no browser
         cls.root = tempfile.TemporaryDirectory()
         Path(cls.root.name, "hang.html").write_text(HANG_PAGE, encoding="utf-8")
         Path(cls.root.name, "ok.html").write_text(OK_PAGE, encoding="utf-8")
+        Path(cls.root.name, "half.html").write_text(MISSING_SCRIPT_PAGE, encoding="utf-8")
         handler = functools.partial(QuietHandler, directory=cls.root.name)
         cls.server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
         threading.Thread(target=cls.server.serve_forever, daemon=True).start()
@@ -80,6 +89,18 @@ class WatchdogTest(BrowserTestCase):
         self.assertTrue(record["ok"], record.get("error"))
         self.assertEqual(record["signals"]["tel_links"], 1)
         self.assertEqual(record["desktop"], "shots/desktop.png")
+        self.assertFalse(record["incomplete_render"])
+
+    def test_missing_library_marks_the_render_incomplete(self):
+        record, _ = self.capture("half.html", 60000)
+        self.assertTrue(record["ok"], record.get("error"))
+        self.assertTrue(record["incomplete_render"])
+        self.assertTrue(any("carousel.js" in a for a in record["failed_assets"]))
+        # The error is real and on their domain, but it follows from a file
+        # that never arrived, so no finding is drafted from it.
+        self.assertEqual(record["signals"]["script_error_count"], 1)
+        drafts = research.draft_findings(record, {"business_name": "Test"}, max_findings=100)
+        self.assertNotIn("console_errors", {d["rule"] for d in drafts})
 
 
 if __name__ == "__main__":
