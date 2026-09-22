@@ -51,7 +51,7 @@ def tracking_src(config: dict[str, Any], slug: str) -> str:
 
 def build_flags(cap: dict[str, Any] | None) -> list[dict[str, str]]:
     """Turn the capture diagnosis into short technical notes for the page."""
-    if not cap or not cap.get("ok"):
+    if not cap or not cap.get("ok") or cap.get("challenged"):
         return []
 
     flags: list[dict[str, str]] = []

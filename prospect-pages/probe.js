@@ -82,6 +82,23 @@
     images_without_alt: images.filter((img) => !(img.getAttribute("alt") || "").trim()).length,
 
     scroll_width: document.documentElement ? document.documentElement.scrollWidth : 0,
-    inner_width: window.innerWidth
+    inner_width: window.innerWidth,
+
+    // Bot-protection interstitials look like a loaded page but are not the
+    // prospect's site. Auditing one would produce findings about Cloudflare.
+    challenge: (() => {
+      const title = (document.title || "").toLowerCase();
+      const titleHit = /just a moment|attention required|access denied|checking your browser|security check|verifying you are human|are you human|ddos protection|please wait|human verification/.test(title);
+      const vendorHit = /challenges\.cloudflare\.com|hcaptcha\.com|recaptcha|turnstile|perimeterx|datadome|incapsula|imperva|akamai bot/i.test(html);
+      const markupHit = !!document.querySelector("#cf-wrapper, .cf-error-details, #challenge-form, #challenge-running, .g-recaptcha, .h-captcha, [data-sitekey]");
+      const shortAndSuspicious = text.trim().split(/\s+/).filter(Boolean).length < 120 &&
+        /cloudflare|captcha|ray id|enable javascript and cookies|verify you are a human|bot detection/i.test(text);
+      const hits = [];
+      if (titleHit) hits.push("title");
+      if (vendorHit) hits.push("vendor script");
+      if (markupHit) hits.push("challenge markup");
+      if (shortAndSuspicious) hits.push("short page with bot-check wording");
+      return { detected: hits.length > 0, hits: hits, title: document.title || "" };
+    })()
   };
 }

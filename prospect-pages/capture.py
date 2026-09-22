@@ -63,6 +63,10 @@ KIND_SUMMARY = {
     "empty": "The server answered with nothing at all.",
     "blocked": "The request was blocked before the page could load.",
     "unknown": "The page did not load.",
+    "challenged": (
+        "A bot-protection screen answered instead of the site, so we could not see "
+        "what a customer sees from here."
+    ),
 }
 
 
@@ -393,6 +397,21 @@ def capture_site(
     record["redirected_offsite"] = bool(
         _host(record["final_url"]) and _host(record["final_url"]) != _host(url)
     )
+
+    # A challenge screen renders fine and says nothing about the prospect. Flag
+    # it so no rule downstream writes a finding about someone else's interstitial.
+    challenge = (signals.get("challenge") or {}) if isinstance(signals, dict) else {}
+    record["challenged"] = bool(challenge.get("detected"))
+    if record["challenged"]:
+        record["challenge_hits"] = challenge.get("hits") or []
+        record["error_kind"] = "challenged"
+        record["summary"] = KIND_SUMMARY["challenged"]
+        record["error"] = (
+            "bot protection detected by: " + ", ".join(record["challenge_hits"])
+        )
+        _write(out_dir, record)
+        return record
+
     status = record["status"] or 0
     if status >= 400:
         record["error_kind"] = "http_error"

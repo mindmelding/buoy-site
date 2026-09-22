@@ -66,7 +66,13 @@ def _has_local_schema(sig: dict) -> bool:
 
 
 def _reachable(cap: dict) -> bool:
-    """True when we actually rendered the site, so DOM rules can be trusted."""
+    """True when we actually rendered the site, so DOM rules can be trusted.
+
+    A bot-protection screen renders perfectly and belongs to Cloudflare, not to
+    the prospect, so every DOM rule has to stay silent on one.
+    """
+    if cap.get("challenged"):
+        return False
     return bool(cap.get("ok")) and bool(_sig(cap))
 
 
@@ -271,6 +277,9 @@ def draft_findings(cap: dict, record: dict, *, max_findings: int = 6,
                    observed_only: bool = False) -> list[dict[str, Any]]:
     """Run every rule against one capture and return the findings that fired."""
     cap = cap or {}
+    if cap.get("challenged"):
+        # Nothing here is about the prospect. Say so rather than guess.
+        return []
     signals = _sig(cap)
     load_ms = signals.get("load_ms") or cap.get("load_ms") or 0
     fields = {
@@ -374,6 +383,13 @@ def main(argv: list[str] | None = None) -> int:
             max_findings=args.max_findings,
             observed_only=args.observed_only,
         )
+        if cap.get("challenged"):
+            print(
+                "  bot protection answered instead of the site "
+                f"({', '.join(cap.get('challenge_hits') or [])}). "
+                "Nothing drafted. Open this one in your own browser and write it by hand."
+            )
+            continue
         if not drafts:
             print("  nothing fired. This site is in decent shape, so write findings by hand.")
             continue
