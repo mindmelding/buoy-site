@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import functools
 import hashlib
 import json
 import os
@@ -77,7 +78,8 @@ KIND_SUMMARY = {
 }
 
 
-def spki_pins(pem_path: str) -> list[str]:
+@functools.lru_cache(maxsize=8)
+def spki_pins(pem_path: str) -> tuple[str, ...]:
     """Base64 SHA-256 of each certificate's public key in a PEM file.
 
     Chromium does not read the system trust store on every machine, so behind a
@@ -89,7 +91,7 @@ def spki_pins(pem_path: str) -> list[str]:
         text = Path(pem_path).read_text(encoding="utf-8")
     except OSError as exc:
         print(f"  trust_ca unreadable, ignoring it: {exc}", file=sys.stderr)
-        return []
+        return ()
     blocks = re.findall(
         r"-----BEGIN CERTIFICATE-----.+?-----END CERTIFICATE-----", text, re.DOTALL
     )
@@ -106,11 +108,11 @@ def spki_pins(pem_path: str) -> list[str]:
             ).stdout
         except OSError as exc:
             print(f"  trust_ca needs the openssl command: {exc}", file=sys.stderr)
-            return []
+            return ()
         except subprocess.CalledProcessError:
             continue
         pins.append(base64.b64encode(hashlib.sha256(der).digest()).decode())
-    return pins
+    return tuple(pins)
 
 
 def _launch_options(settings: dict[str, Any]) -> dict[str, Any]:
