@@ -270,7 +270,7 @@
 
   <main>
     <section class="hero wrap">
-      <p class="eyebrow">Sample of the $100 audit</p>
+      <p class="eyebrow">Sample of the free audit</p>
       <h1>AI audit preview for {{ p.business_name }}</h1>
       {% if p.intro %}
       <p class="lede">{{ p.intro }}</p>
@@ -383,10 +383,10 @@
 
     <section class="section cta" id="book">
       <div class="wrap">
-        <h2>Book your $100 audit call</h2>
-        <p class="section-note">Thirty minutes on a call, then the full audit across all ten areas, written up for {{ p.business_name }}. The $100 is credited to month one if you go ahead, and refunded if the audit turns up nothing worth doing.</p>
+        <h2>Book your free audit call</h2>
+        <p class="section-note">Twenty minutes on a call, then the full audit across all ten areas, written up for {{ p.business_name }}. It's free, and the report is yours to keep whether or not we work together.</p>
         <div class="cta-row">
-          <a class="button" href="{{ cfg.calendly_url }}" target="_blank" rel="noopener">Book your $100 audit call</a>
+          <a class="button" href="{{ cfg.calendly_url }}" target="_blank" rel="noopener">Book your free audit call</a>
           <p class="cta-alt">
             Or reply to the email this came from.<br />
             {% if cfg.contact_email %}<a href="mailto:{{ cfg.contact_email }}?subject={{ mail_subject }}">{{ cfg.contact_email }}</a>{% endif %}
@@ -400,7 +400,7 @@
     <div class="wrap">
       <p>This is a private preview page. It was prepared for {{ p.business_name }}, it is not linked from anywhere on our site, and it is not indexed by search engines. The address is yours to share or to ignore.</p>
       <p>Screenshots were taken from the public website on {{ reviewed_on }}. Nothing here came from a system we do not have access to.</p>
-      <p>{{ cfg.site.company }}{% if cfg.site.location %}, {{ cfg.site.location }}{% endif %}. <a href="{{ cfg.site.home_url }}">Our site</a>{% if cfg.site.audit_info_url %} · <a href="{{ cfg.site.audit_info_url }}">About the $100 audit</a>{% endif %}{% if cfg.site.privacy_url %} · <a href="{{ cfg.site.privacy_url }}">Privacy</a>{% endif %}{% if cfg.contact_email %} · <a href="mailto:{{ cfg.contact_email }}">{{ cfg.contact_email }}</a>{% endif %}</p>
+      <p>{{ cfg.site.company }}{% if cfg.site.location %}, {{ cfg.site.location }}{% endif %}. <a href="{{ cfg.site.home_url }}">Our site</a>{% if cfg.site.audit_info_url %} · <a href="{{ cfg.site.audit_info_url }}">About the free audit</a>{% endif %}{% if cfg.site.privacy_url %} · <a href="{{ cfg.site.privacy_url }}">Privacy</a>{% endif %}{% if cfg.contact_email %} · <a href="mailto:{{ cfg.contact_email }}">{{ cfg.contact_email }}</a>{% endif %}</p>
       <p>To have this page taken down, reply to the email it came from or write to {% if cfg.contact_email %}<a href="mailto:{{ cfg.contact_email }}?subject=Take%20down%20audit%20preview">{{ cfg.contact_email }}</a>{% else %}us{% endif %} and it comes down the same day.</p>
     </div>
   </footer>

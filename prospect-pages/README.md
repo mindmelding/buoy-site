@@ -1,7 +1,7 @@
 # Prospect audit pages
 
 Builds one unlisted page per prospect that shows the specific work we would do
-for that business. It is a sample of the $100 founding audit with their name on
+for that business. It is a sample of the free founding audit with their name on
 it, sent 1:1 in cold outreach and never linked publicly.
 
 Each page ships with the GitHub Pages site and serves at

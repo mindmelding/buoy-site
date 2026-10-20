@@ -22,24 +22,24 @@ Ten named service areas, audited and installed fastest-payoff first:
 
 ## Pricing
 
-- Founding 10: $595/month, locked for 12 months. Three-month commitment, then month-to-month.
+- Founding 10: $595/month, locked for 12 months, for shops that start by November 30, 2026. Software and usage costs included. Three-month commitment, then month-to-month.
 - Future standard price: $1,250/month.
-- The Buoy AI Audit: $100 founding rate for the first 10 audits, fully credited toward month one if the business continues with Buoy. Includes a written ten-area report, missed-revenue estimate, prioritized roadmap, and a 45-minute walkthrough call. Nothing is paid at booking: the 15-minute intro call is free, and the $100 is invoiced only if the business is a fit. The report is the client's to keep either way. Details: https://buoydesk.com/audit.html
-- Guarantee: 2x your fees back in measurable recovered revenue within 90 days, or month three is free.
+- The Buoy AI Audit: free for the founding 10. Includes a written ten-area report, missed-revenue estimate, prioritized roadmap, and a 45-minute walkthrough call. The 20-minute intro call is free too. The report is the client's to keep either way. Details: https://buoydesk.com/audit.html
+- Guarantee: at least 2x one month's fee ($1,190) in booked jobs traced to Buoy within 90 days, or month three is free. Counted as after-hours calls booked, quotes revived, and cancelled slots refilled, at the shop's own average ticket.
 - Anchor: a part-time office manager costs $2,500+/month.
 
 ## Who it's for
 
 Independent auto repair shops, HVAC/plumbing contractors, dental practices,
 and other North County service businesses losing revenue to missed calls,
-dead quotes, no-shows, and thin reviews. Typical finding: ~27% of inbound
-calls go unanswered, at roughly $1,200 in lost revenue per missed call.
+dead quotes, no-shows, and thin reviews. For many of these shops, one missed
+call is one lost job.
 Buoy audited 152 Oceanside shops in 2026; the median digital score was 10 out of 25.
 
 ## Pages
 
 - Homepage: https://buoydesk.com/
-- The $100 AI Audit: https://buoydesk.com/audit.html
+- The free AI Audit: https://buoydesk.com/audit.html
 - Privacy policy: https://buoydesk.com/privacy.html
 
 ## Contact
