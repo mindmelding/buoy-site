@@ -223,3 +223,16 @@ the URL the way you would treat a password and send it to one recipient.
 
 Every page carries a line telling the recipient they can have it taken down the
 same day. Honor that with `publish.py --prune`.
+
+## Customer-facing shop rebuilds
+
+Separate from the audit pages above. The three HVAC/plumbing rebuilds live at
+`https://buoydesk.com/p/<shop>/` (seaside, prestigious, airtime). They are
+unlisted: `noindex`, `robots.txt` disallows `/p/`, and nothing on the public
+site links to them. They are meant as 1:1 outreach previews of a rebuilt
+customer site, not as Buoy audit pages.
+
+Source for this round is outside this toolkit (`shop_rebuilds` from the
+prospecting chat). Next batch should still run `research.py` + `generate.py`
+for audit pages at `/audit/<slug>/`, and keep shop rebuilds under `/p/` only
+when a shop is in the top set.

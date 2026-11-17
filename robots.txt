@@ -3,5 +3,6 @@ Allow: /
 
 # Private, unlisted prospect audit previews. Sent 1:1, never linked publicly.
 Disallow: /audit/
+Disallow: /p/
 
 Sitemap: https://buoydesk.com/sitemap.xml

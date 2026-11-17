@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="googlebot" content="noindex, nofollow, noarchive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airtime Plumbing, Heating &amp; Air · Oceanside HVAC &amp; Plumbing</title>
+  <meta name="description" content="Family-owned plumbing, heating, and air conditioning in Oceanside and Murrieta. Free virtual inspection, flat-rate upfront pricing, 24/7 emergency service. (760) 908-5076.">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.0/dist/index.global.js" integrity="sha384-nWTzRTCY/9V4Bo352ehygr1c4cnst4XN6lMR3fipakEQrhVpc0hEM5Dii3Amz0sT" crossorigin="anonymous"></script>
+  <style type="text/tailwindcss">
+    @custom-variant dark (&:where(.dark, .dark *));
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="/theme.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="emergency">
+    <div class="wrap emergency-row">
+      <span><b>Got an emergency?</b> We're available 24/7.</span>
+      <a href="tel:+17609085076">(760) 908-5076</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a href="/" class="brand"><img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/11/Airtime-Logo_Updated.svg" alt="Airtime Plumbing, Heating &amp; Air" width="180" height="75"></a>
+      <nav class="nav">
+        <a href="#fix">What's broken?</a>
+        <a href="#video">Free video inspection</a>
+        <a href="#deals">Deals</a>
+        <a href="#reviews">Reviews</a>
+      </nav>
+      <a class="btn btn-lime" href="tel:+17609085076">Call now</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="pill">Oceanside · Murrieta · 26 years family-owned</p>
+          <h1>Leak, heater, or AC? <span>One call fixes all three.</span></h1>
+          <p class="lede">Plumbing, heating, and air from one licensed, insured, family-run crew. Flat-rate, upfront pricing, and a 100% satisfaction guarantee.</p>
+          <div class="hero-cta">
+            <a class="btn btn-lime btn-lg" href="#fix">Tell us what's broken</a>
+            <a class="btn btn-outline btn-lg" href="#video">Free video inspection</a>
+          </div>
+          <ul class="trust">
+            <li><img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/09/pipes-icon.svg" alt="" width="28" height="28">Flat-rate, upfront pricing</li>
+            <li><img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/09/leaks-finds-icon.svg" alt="" width="28" height="28">Fully licensed &amp; insured</li>
+            <li><span class="stars">★★★★★</span>4.9 · 507 Google reviews</li>
+          </ul>
+        </div>
+        <div class="hero-photo">
+          <img class="photo" src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2024/12/artime-tech-fixing-ac-unit.jpg.webp" alt="Airtime technician repairing an outdoor AC unit" width="1200" height="1000">
+          <img class="robot" src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2024/12/robot.png.webp" alt="Airtime robot mascot giving a thumbs up" width="589" height="466">
+        </div>
+      </div>
+    </section>
+
+    <section id="fix" class="fix">
+      <div class="wrap">
+        <h2 class="center">What's broken? Tap one.</h2>
+        <p class="center sub">We'll send the right tech the first time.</p>
+        <div class="fix-grid" role="group" aria-label="Choose a problem">
+          <button class="fix-card" data-trade="Plumbing" data-issue="Leak"><img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/09/leaks-finds-icon.svg" alt="" width="48" height="48"><b>Leak</b><span>Hidden leaks, drips, wet walls</span></button>
+          <button class="fix-card" data-trade="Plumbing" data-issue="Water heater"><img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/09/water-heater-icon.svg" alt="" width="48" height="48"><b>Water heater</b><span>No hot water, tank or tankless</span></button>
+          <button class="fix-card" data-trade="Plumbing" data-issue="Pipes / drain"><img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/09/pipes-icon.svg" alt="" width="48" height="48"><b>Pipes &amp; drains</b><span>Clogs, slow drains, repipes</span></button>
+          <button class="fix-card hvac" data-trade="HVAC" data-issue="No cool"><span class="emoji" aria-hidden="true">❄</span><b>No cool</b><span>AC repair or replacement</span></button>
+          <button class="fix-card hvac" data-trade="HVAC" data-issue="No heat"><span class="emoji" aria-hidden="true">🔥</span><b>No heat</b><span>Furnace or heat pump</span></button>
+          <button class="fix-card hvac" data-trade="HVAC" data-issue="Weird noise"><span class="emoji" aria-hidden="true">〰</span><b>Sounds weird</b><span>HVAC service &amp; repair</span></button>
+        </div>
+
+        <form id="request" class="request" action="#" method="post" hidden>
+          <p class="request-title">Got it: <span id="picked"></span></p>
+          <input type="hidden" name="issue" id="issue">
+          <div class="request-row">
+            <label>Name<input name="name" required autocomplete="name"></label>
+            <label>Phone<input name="phone" type="tel" required autocomplete="tel"></label>
+            <label>City
+              <select name="city" required>
+                <option>Oceanside</option><option>Carlsbad</option><option>Vista</option><option>San Marcos</option><option>Encinitas</option><option>Murrieta / Temecula</option><option>Other</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn btn-blue" type="submit">Request a callback</button>
+          <p class="ok" id="ok">Thanks. Airtime will call you back. Water spreading or no heat with people at home? Call (760) 908-5076 now.</p>
+        </form>
+      </div>
+    </section>
+
+    <section id="video" class="video">
+      <div class="wrap video-grid">
+        <img class="video-photo" src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2024/12/artime-top-view-of-tech-fixing-ac-unit-1024x853.jpg.webp" alt="Airtime technician working inside an AC condenser" loading="lazy">
+        <div>
+          <p class="pill pill-dark">Free · No truck roll</p>
+          <h2>Not sure what's wrong? Show us on a video call.</h2>
+          <p>Schedule a free video call with the plumbing and HVAC team for a remote inspection. We'll look at the issue with you live, answer your questions, and help you decide what to do next.</p>
+          <a class="btn btn-lime btn-lg" href="tel:+17609085076">Schedule a video call</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="reviews">
+      <div class="wrap">
+        <h2 class="center">The names on the review are the techs at your door.</h2>
+        <div class="review-grid">
+          <figure><span class="stars">★★★★★</span><blockquote>"My mother-in-law's 25yo heater stopped working. We called a number of companies for bids. We chose to work with Airtime and the next morning they had the new heater installed."</blockquote><figcaption>Jenny H.</figcaption></figure>
+          <figure><span class="stars">★★★★★</span><blockquote>"Dylan and Brayton came out to my home, and were very thorough and polite. They also noticed the insulation on my unit outside was tore up, and they took care of it as part of their service."</blockquote><figcaption>Veronica S.</figcaption></figure>
+          <figure><span class="stars">★★★★★</span><blockquote>"Wayne is always a pleasure to work with. He scheduled me for the day and time I requested. Brayten did the tuneup and was very personable, respectful, and knowledgeable."</blockquote><figcaption>Mike D.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="crew">
+      <div class="wrap crew-grid">
+        <div>
+          <h2>Family-owned. 26 years. A whole fleet of green vans.</h2>
+          <p>Airtime brings the experience, knowledge, and equipment to repair any HVAC or plumbing system, and will tell you honestly whether yours is worth repairing or needs replacing.</p>
+          <ul class="why">
+            <li>Reliable service</li><li>24/7 customer service</li><li>All major brands</li><li>100% satisfaction guaranteed</li>
+          </ul>
+        </div>
+        <img class="crew-photo" src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/10/IMG_2839-e1759864895807.jpg" alt="The Airtime team standing in front of their service vans" loading="lazy">
+      </div>
+    </section>
+
+    <section id="deals" class="deals">
+      <div class="wrap deals-grid">
+        <img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2026/11/airtime-59-furnace-tune-up-coupon-v5.jpg.webp" alt="$59 furnace tune-up coupon from Airtime" loading="lazy">
+        <div>
+          <h2 class="dark">Heating season special.</h2>
+          <p class="dark-sub">$59 furnace tune-up. Ask about offer details when you call.</p>
+          <a class="btn btn-blue btn-lg" href="tel:+17609085076">Call to claim</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-row">
+      <img src="https://airtimeplumbingheatingandair.com/wp-content/uploads/2025/11/Airtime-Logo_Updated.svg" alt="Airtime Plumbing, Heating &amp; Air" width="120" height="50">
+      <p>4607 Allende Ave, Oceanside, CA 92057 · (760) 908-5076 · Mon–Fri 7am–5pm, Sat 8am–12pm · 24/7 emergency</p>
+    </div>
+  </footer>
+
+  <div class="mobile-cta">
+    <a class="btn btn-lime" href="tel:+17609085076">Call</a>
+    <a class="btn btn-blue" href="#fix">What's broken?</a>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
